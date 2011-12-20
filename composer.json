@@ -16,7 +16,8 @@
     },
 
     "require": {
-        "webfactory/navigation": "1.0.3"
+        "symfony/http-kernel": "2.0.*",
+        "webfactory/navigation": "1.0.4"
     }
 
 }

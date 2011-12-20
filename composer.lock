@@ -1,1 +1,1 @@
-[{"package":"webfactory\/tree","version":"1.0.2"},{"package":"webfactory\/navigation","version":"1.0.3"}]
+[{"package":"symfony\/event-dispatcher","version":"2.0.7"},{"package":"symfony\/http-foundation","version":"2.0.7"},{"package":"symfony\/http-kernel","version":"2.0.7"},{"package":"webfactory\/tree","version":"1.0.3"},{"package":"webfactory\/navigation","version":"1.0.4"}]
