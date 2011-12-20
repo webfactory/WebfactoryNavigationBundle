@@ -11,9 +11,9 @@
     </parameters>
 
     <services>
-        <service id="webfactory.navigation.mapper" class="%webfactory.navigation.mapper.class%" hidden="true" />
+        <service id="webfactory.navigation.mapper" class="%webfactory.navigation.mapper.class%" public="false" />
 
-        <service id="webfactory.navigation.tree" class="%webfactory.navigation.tree.class%" hidden="true">
+        <service id="webfactory.navigation.tree" class="%webfactory.navigation.tree.class%" public="false">
             <argument type="service" id="webfactory.navigation.mapper" />
         </service>
 
@@ -21,7 +21,7 @@
             <argument type="service" id="webfactory.navigation.tree" />
         </service>
 
-        <service id="webfactory.navigation.twig_extension" class="%webfactory.navigation.twig_extension.class%" hidden="true">
+        <service id="webfactory.navigation.twig_extension" class="%webfactory.navigation.twig_extension.class%" public="false">
             <tag name="twig.extension" />
         </service>
     </services>
