@@ -1,0 +1,22 @@
+{
+
+    "name": "webfactory/navigation-bundle",
+    "autoload": {
+        "psr-0": { "Webfactory\\Bundle\\NavigationBundle": "" }
+    },
+    "target-dir": "Webfactory/Bundle/NavigationBundle",
+
+
+    "repositories": {
+        "webfactory": {
+            "composer": {
+                "url": "http://composer.webfactory.de"
+            }
+        }
+    },
+
+    "require": {
+        "webfactory/navigation": "1.0.3"
+    }
+
+}
