@@ -8,6 +8,7 @@
         <parameter key="webfactory.navigation.tree.class">Webfactory\Tree\Cache\Cache</parameter>
         <parameter key="webfactory.navigation.mapper.class">Webfactory\Tree\ActiveNode\Mapper</parameter>
         <parameter key="webfactory.navigation.factory.class">Webfactory\Bundle\NavigationBundle\Navigation\Factory</parameter>
+        <parameter key="webfactory.navigation.twig_extension.class">Webfactory\Bundle\NavigationBundle\Twig\Extension</parameter>
     </parameters>
 
     <services>
