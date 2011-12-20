@@ -15,7 +15,7 @@
     <services>
         <service id="webfactory.navigation.mapper" class="%webfactory.navigation.mapper.class%" public="false" />
 
-        <service id="webfactory.navigation.tree" class="%webfactory.navigation.tree.class%" public="false">
+        <service id="webfactory.navigation.tree" class="%webfactory.navigation.tree.class%">
             <argument type="service" id="webfactory.navigation.mapper" />
         </service>
 
