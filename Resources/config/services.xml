@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="webfactory.navigation.tree.class">Webfactory\Tree\Cache\Cache</parameter>
+        <parameter key="webfactory.navigation.mapper.class">Webfactory\Tree\ActiveNode\Mapper</parameter>
+        <parameter key="webfactory.navigation.factory.class">Webfactory\Bundle\NavigationBundle\Navigation\Factory</parameter>
+    </parameters>
+
+    <services>
+        <service id="webfactory.navigation.mapper" class="%webfactory.navigation.mapper.class%" hidden="true" />
+
+        <service id="webfactory.navigation.tree" class="%webfactory.navigation.tree.class%" hidden="true">
+            <argument type="service" id="webfactory.navigation.mapper" />
+        </service>
+
+        <service id="webfactory.navigation.factory" class="%webfactory.navigation.factory.class%">
+            <argument type="service" id="webfactory.navigation.tree" />
+        </service>
+
+        <service id="webfactory.navigation.twig_extension" class="%webfactory.navigation.twig_extension.class%" hidden="true">
+            <tag name="twig.extension" />
+        </service>
+    </services>
+</container>
