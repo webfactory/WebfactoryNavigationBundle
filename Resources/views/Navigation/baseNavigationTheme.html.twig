@@ -1,0 +1,51 @@
+
+{% block navigation_level %}
+    {% if nodes %}
+        <ul class="{{ navigation_level_class(navigation, nodes, level) }}">
+            {% for node in nodes %}
+                {{ navigation_container(navigation, node, level) }}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
+
+{% block navigation_container %}
+    <li class="{{ navigation_container_class(navigation, node, level) }}">
+        {{ navigation_link(navigation, node, level) }}
+        {{ navigation_level(navigation, navigation.childNodes(node), level + 1) }}
+    </li>
+{% endblock %}
+
+{% block navigation_link %}
+    {%- if not navigation.active(node) -%}
+        <a href="{{ navigation_url(navigation, node, level) }}" class="{{ navigation_link_class(navigation, node, level) }}">{{ navigation_text(navigation, node, level) }}</a>
+    {%- else -%}
+        <span class="{{ navigation_link_class(navigation, node, level) }}">{{ navigation_text(navigation, node, level) }}</span>
+    {%- endif -%}
+{% endblock %}
+
+{%- block navigation_url -%}
+    {{ node.url }}
+{%- endblock -%}
+
+{%- block navigation_text -%}
+    {{ node.caption }}
+{%- endblock -%}
+
+{%- block navigation_level_class -%}
+    nav-{{ level }}
+{%- endblock -%}
+
+{%- block navigation_container_class -%}
+    {%- if navigation.active(node) -%}
+        nav-active
+    {%- elseif navigation.onActivePath(node) -%}
+        nav-active-path
+    {%- else -%}
+        nav-item
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block navigation_link_class -%}
+    nav-text
+{%- endblock -%}

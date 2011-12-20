@@ -9,6 +9,7 @@
         <parameter key="webfactory.navigation.mapper.class">Webfactory\Tree\ActiveNode\Mapper</parameter>
         <parameter key="webfactory.navigation.factory.class">Webfactory\Bundle\NavigationBundle\Navigation\Factory</parameter>
         <parameter key="webfactory.navigation.twig_extension.class">Webfactory\Bundle\NavigationBundle\Twig\Extension</parameter>
+        <parameter key="webfactory.navigation.default_theme.file">WebfactoryNavigationBundle:Navigation:baseNavigationTheme.html.twig</parameter>
     </parameters>
 
     <services>
@@ -23,6 +24,9 @@
         </service>
 
         <service id="webfactory.navigation.twig_extension" class="%webfactory.navigation.twig_extension.class%" public="false">
+            <argument type="collection">
+                <argument>%webfactory.navigation.default_theme.file%</argument>
+            </argument>
             <tag name="twig.extension" />
         </service>
     </services>

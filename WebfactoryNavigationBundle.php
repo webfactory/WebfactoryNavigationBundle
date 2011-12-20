@@ -7,9 +7,4 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Webfactory\Bundle\NavigationBundle\DependencyInjection\Compiler\UrlGeneratorPass;
 
 class WebfactoryNavigationBundle extends Bundle {
-
-    public function build(ContainerBuilder $container) {
-        $container->addCompilerPass(new UrlGeneratorPass());
-    }
-
 }
