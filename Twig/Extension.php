@@ -78,21 +78,23 @@ class Extension extends \Twig_Extension {
         return $this->renderBlock($navigation, 'navigation_level_class', $variables);
     }
 
-    public function renderNavigationContainer(NavigationInterface $navigation, NodeInterface $node, $level) {
+    public function renderNavigationContainer(NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
-            'level' => $level
+            'level' => $level,
+            'loop' => $loop
         );
 
         return $this->renderBlock($navigation, 'navigation_container', $variables);
     }
 
-    public function renderNavigationContainerClass(NavigationInterface $navigation, NodeInterface $node, $level) {
+    public function renderNavigationContainerClass(NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
-            'level' => $level
+            'level' => $level,
+            'loop' => $loop
         );
 
         return $this->renderBlock($navigation, 'navigation_container_class', $variables);

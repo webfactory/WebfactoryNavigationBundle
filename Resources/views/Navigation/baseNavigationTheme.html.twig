@@ -3,14 +3,14 @@
     {% if nodes %}
         <ul class="{{ navigation_level_class(navigation, nodes, level) }}">
             {% for node in nodes %}
-                {{ navigation_container(navigation, node, level) }}
+                {{ navigation_container(navigation, node, level, loop) }}
             {% endfor %}
         </ul>
     {% endif %}
 {% endblock %}
 
 {% block navigation_container %}
-    <li class="{{ navigation_container_class(navigation, node, level) }}">
+    <li class="{{ navigation_container_class(navigation, node, level, loop) }}">
         {{ navigation_link(navigation, node, level) }}
         {{ navigation_level(navigation, navigation.childNodes(node), level + 1) }}
     </li>
@@ -36,15 +36,23 @@
     nav-{{ level }}
 {%- endblock -%}
 
-{%- block navigation_container_class -%}
-    {%- if navigation.active(node) -%}
+{% block navigation_container_class %}{% spaceless %}
+    {% if navigation.active(node) %}
         nav-active
-    {%- elseif navigation.onActivePath(node) -%}
+    {% elseif navigation.onActivePath(node) %}
         nav-active-path
-    {%- else -%}
+    {% else %}
         nav-item
-    {%- endif -%}
-{%- endblock -%}
+    {% endif %}
+{% endspaceless %} {%spaceless%}
+    {% if loop.first %}
+        first-child
+    {% endif %}
+{% endspaceless %} {% spaceless %}
+    {% if loop.last %}
+        last-child
+    {% endif %}
+{% endspaceless %}{% endblock %}
 
 {%- block navigation_link_class -%}
     nav-text
