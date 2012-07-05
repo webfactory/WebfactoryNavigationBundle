@@ -7,17 +7,16 @@
     "target-dir": "Webfactory/Bundle/NavigationBundle",
 
 
-    "repositories": {
-        "webfactory": {
-            "composer": {
-                "url": "http://composer.webfactory.de"
-            }
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "composer.webfactory.de"
         }
-    },
+    ],
 
     "require": {
         "symfony/framework-bundle": "2.*",
-        "webfactory/navigation": "1.0.6"
+        "webfactory/navigation": "1.0.7"
     }
 
 }
