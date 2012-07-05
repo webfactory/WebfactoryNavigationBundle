@@ -52,7 +52,7 @@
     {% if loop.last %}
         nav-item-last
     {% endif %}
-{% endspaceless %}{% endblock %}
+{% endspaceless %} nav-item-{{ level }}{% endblock %}
 
 {%- block navigation_link_class -%}
     nav-text
