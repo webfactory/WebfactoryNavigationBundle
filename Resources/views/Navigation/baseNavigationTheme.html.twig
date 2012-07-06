@@ -52,6 +52,14 @@
     {% if loop.last %}
         nav-item-last
     {% endif %}
+{% endspaceless %} {% spaceless %}
+    {% if navigation.expanded(node) %}
+        nav-item-expanded nav-item-expanded-{{ level }}
+    {% endif %}
+{% endspaceless %} {% spaceless %}
+    {% if navigation.parent(node) %}
+        nav-item-parent nav-item-parent-{{ level }}
+    {% endif %}
 {% endspaceless %} nav-item-{{ level }}{% endblock %}
 
 {%- block navigation_link_class -%}
