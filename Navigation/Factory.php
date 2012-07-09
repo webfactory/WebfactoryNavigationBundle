@@ -5,6 +5,7 @@ namespace Webfactory\Bundle\NavigationBundle\Navigation;
 use Webfactory\Tree\Cache\Cache;
 use Webfactory\Tree\ActiveNode\ActiveNodeInterface;
 use Webfactory\Navigation\Subtree;
+use Webfactory\Navigation\Breadcrumbs;
 use Webfactory\Navigation\NodeList;
 
 class Factory {
@@ -21,6 +22,10 @@ class Factory {
 
     public function createNodeList() {
         return new NodeList($this->tree);
+    }
+
+    public function createBreadcrumbs(ActiveNodeInterface $rootNode) {
+        return new Breadcrumbs($this->tree, $rootNode);
     }
 
 }

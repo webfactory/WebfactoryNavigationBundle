@@ -16,7 +16,7 @@
 
     "require": {
         "symfony/framework-bundle": "2.*",
-        "webfactory/navigation": "1.0.8"
+        "webfactory/navigation": "1.0.9"
     }
 
 }
