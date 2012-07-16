@@ -46,11 +46,11 @@
     {% endif %}
 {% endspaceless %} {%spaceless%}
     {% if loop.first %}
-        nav-item-first
+        nav-item-first nav-item-first-{{ level }}
     {% endif %}
 {% endspaceless %} {% spaceless %}
     {% if loop.last %}
-        nav-item-last
+        nav-item-last nav-item-last-{{ level }}
     {% endif %}
 {% endspaceless %} {% spaceless %}
     {% if navigation.expanded(node) %}
