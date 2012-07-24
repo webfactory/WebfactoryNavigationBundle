@@ -1,67 +1,58 @@
 
-{% block navigation_level %}
+{% block navigation_list %}
     {% if nodes %}
-        <ul class="{{ navigation_level_class(navigation, nodes, level, parentNode) }}">
+        <ul class="{{ navigation_list_class(navigation, nodes, level, parentNode) }}">
             {% for node in nodes %}
-                {{ navigation_container(navigation, node, level, loop) }}
+                {{ navigation_item(navigation, node, level, loop) }}
             {% endfor %}
         </ul>
     {% endif %}
 {% endblock %}
 
-{% block navigation_container %}
-    <li class="{{ navigation_container_class(navigation, node, level, loop) }}">
-        {{ navigation_link(navigation, node, level) }}
-        {{ navigation_level(navigation, navigation.childNodes(node), level + 1, node) }}
+{%- block navigation_list_class -%}
+    nl-{{ level }}
+{%- endblock -%}
+
+{% block navigation_item %}
+    <li class="{{ navigation_item_class(navigation, node, level, loop) }}">
+        {{ navigation_text(navigation, node, level) }}
+        {{ navigation_list(navigation, navigation.childNodes(node), level + 1, node) }}
     </li>
 {% endblock %}
 
-{% block navigation_link %}
+{% block navigation_item_class %}{% spaceless %}
+    {% set classes = [] %}
+    {% if navigation.active(node) %}{% set classes = classes | merge(['a']) %}{% endif %}
+    {% if navigation.onActivePath(node) %}{% set classes = classes | merge(['ap']) %}{% endif %}
+    {% if loop.first %}{% set classes = classes | merge(['f']) %}{% endif %}
+    {% if loop.last %}{% set classes = classes | merge(['l']) %}{% endif %}
+    {% if navigation.parent(node) %}{% set classes = classes | merge(['p']) %}{% endif %}
+    {% endspaceless %}ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
+        {% set class = set | sort | join('-') %}
+        {% endspaceless %}{% if not class is empty %}{% spaceless %}
+            ni-{{ class }}-{{ level }}
+            {% endspaceless %}{% if not loop.last %} {% endif %}{% spaceless %}
+        {% endspaceless %}{% endif %}{% spaceless %}
+    {% endspaceless %}{% endfor %}{% spaceless %}
+{% endspaceless %}{% endblock %}
+
+{% block navigation_text %}
     {%- if not navigation.active(node) -%}
-        <a href="{{ navigation_url(navigation, node, level) }}" class="{{ navigation_link_class(navigation, node, level) }}">{{ navigation_text(navigation, node, level) }}</a>
+        <a href="{{ navigation_url(navigation, node, level) }}" class="{{ navigation_text_class(navigation, node, level) }}">{{ navigation_caption(navigation, node, level) }}</a>
     {%- else -%}
-        <span class="{{ navigation_link_class(navigation, node, level) }}">{{ navigation_text(navigation, node, level) }}</span>
+        <span class="{{ navigation_text_class(navigation, node, level) }}">{{ navigation_caption(navigation, node, level) }}</span>
     {%- endif -%}
 {% endblock %}
+
+{%- block navigation_text_class -%}
+    nt-{{ level }}
+{%- endblock -%}
 
 {%- block navigation_url -%}
     {{ node.url }}
 {%- endblock -%}
 
-{%- block navigation_text -%}
+{%- block navigation_caption -%}
     {{ node.caption }}
 {%- endblock -%}
 
-{%- block navigation_level_class -%}
-    nav-{{ level }}
-{%- endblock -%}
-
-{% block navigation_container_class %}{% spaceless %}
-    {% if navigation.active(node) %}
-        nav-active
-    {% elseif navigation.onActivePath(node) %}
-        nav-active-path
-    {% else %}
-        nav-item
-    {% endif %}
-{% endspaceless %} {%spaceless%}
-    {% if loop.first %}
-        nav-item-first nav-item-first-{{ level }}
-    {% endif %}
-{% endspaceless %} {% spaceless %}
-    {% if loop.last %}
-        nav-item-last nav-item-last-{{ level }}
-    {% endif %}
-{% endspaceless %} {% spaceless %}
-    {% if navigation.expanded(node) %}
-        nav-item-expanded nav-item-expanded-{{ level }}
-    {% endif %}
-{% endspaceless %} {% spaceless %}
-    {% if navigation.parent(node) %}
-        nav-item-parent nav-item-parent-{{ level }}
-    {% endif %}
-{% endspaceless %} nav-item-{{ level }}{% endblock %}
-
-{%- block navigation_link_class -%}
-    nav-text nav-text-{{ level }}
-{%- endblock -%}

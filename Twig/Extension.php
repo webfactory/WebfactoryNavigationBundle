@@ -42,23 +42,39 @@ class Extension extends \Twig_Extension {
 
     public function getFunctions() {
         return array(
+            'power_set' => new \Twig_Function_Method($this, 'getPowerSet'),
             'navigation' =>  new \Twig_Function_Method($this, 'renderNavigation', array('is_safe' => array('all'))),
-            'navigation_level' => new \Twig_Function_Method($this, 'renderNavigationLevel', array('is_safe' => array('all'))),
-            'navigation_level_class' => new \Twig_Function_Method($this, 'renderNavigationLevelClass'),
-            'navigation_container' => new \Twig_Function_Method($this, 'renderNavigationContainer', array('is_safe' => array('all'))),
-            'navigation_container_class' => new \Twig_Function_Method($this, 'renderNavigationContainerClass'),
-            'navigation_link' => new \Twig_Function_Method($this, 'renderNavigationLink', array('is_safe' => array('all'))),
-            'navigation_link_class' => new \Twig_Function_Method($this, 'renderNavigationLinkClass'),
+            'navigation_list' => new \Twig_Function_Method($this, 'renderNavigationList', array('is_safe' => array('all'))),
+            'navigation_list_class' => new \Twig_Function_Method($this, 'renderNavigationListClass'),
+            'navigation_item' => new \Twig_Function_Method($this, 'renderNavigationItem', array('is_safe' => array('all'))),
+            'navigation_item_class' => new \Twig_Function_Method($this, 'renderNavigationItemClass'),
+            'navigation_text' => new \Twig_Function_Method($this, 'renderNavigationText', array('is_safe' => array('all'))),
+            'navigation_text_class' => new \Twig_Function_Method($this, 'renderNavigationTextClass'),
             'navigation_url' => new \Twig_Function_Method($this, 'renderNavigationUrl'),
-            'navigation_text' => new \Twig_Function_Method($this, 'renderNavigationText', array('is_safe' => array('all')))
+            'navigation_caption' => new \Twig_Function_Method($this, 'renderNavigationCaption', array('is_safe' => array('all')))
         );
+    }
+
+    public function getPowerSet(array $baseSet) {
+        $count = count($baseSet);
+        $members = pow(2, $count);
+        $powerSet = array();
+        for ($i = 0; $i < $members; $i++) {
+            $b = sprintf("%0".$count."b", $i);
+            $out = array();
+            for ($j = 0; $j < $count; $j++) {
+                if ($b{$j} == '1') $out[] = $baseSet[$j];
+            }
+            $powerSet[] = $out;
+        }
+        return $powerSet;
     }
 
     public function renderNavigation(NavigationInterface $navigation) {
-        return $this->renderNavigationLevel($navigation, $navigation->getRootNodes(), 0, null);
+        return $this->renderNavigationList($navigation, $navigation->getRootNodes(), 0, null);
     }
 
-    public function renderNavigationLevel(NavigationInterface $navigation, array $nodes, $level, NodeInterface $parentNode = null) {
+    public function renderNavigationList(NavigationInterface $navigation, array $nodes, $level, NodeInterface $parentNode = null) {
         $variables = array(
             'navigation' => $navigation,
             'nodes' => $nodes,
@@ -66,10 +82,10 @@ class Extension extends \Twig_Extension {
             'parentNode' => $parentNode
         );
 
-        return $this->renderBlock($navigation, 'navigation_level', $variables);
+        return $this->renderBlock($navigation, 'navigation_list', $variables);
     }
 
-    public function renderNavigationLevelClass(NavigationInterface $navigation, array $nodes, $level, NodeInterface $parentNode = null) {
+    public function renderNavigationListClass(NavigationInterface $navigation, array $nodes, $level, NodeInterface $parentNode = null) {
         $variables = array(
             'navigation' => $navigation,
             'nodes' => $nodes,
@@ -77,10 +93,10 @@ class Extension extends \Twig_Extension {
             'parentNode' => $parentNode
         );
 
-        return $this->renderBlock($navigation, 'navigation_level_class', $variables);
+        return $this->renderBlock($navigation, 'navigation_list_class', $variables);
     }
 
-    public function renderNavigationContainer(NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
+    public function renderNavigationItem(NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
@@ -88,10 +104,10 @@ class Extension extends \Twig_Extension {
             'loop' => $loop
         );
 
-        return $this->renderBlock($navigation, 'navigation_container', $variables);
+        return $this->renderBlock($navigation, 'navigation_item', $variables);
     }
 
-    public function renderNavigationContainerClass(NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
+    public function renderNavigationItemClass(NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
@@ -99,27 +115,27 @@ class Extension extends \Twig_Extension {
             'loop' => $loop
         );
 
-        return $this->renderBlock($navigation, 'navigation_container_class', $variables);
+        return $this->renderBlock($navigation, 'navigation_item_class', $variables);
     }
 
-    public function renderNavigationLink(NavigationInterface $navigation, NodeInterface $node, $level) {
+    public function renderNavigationText(NavigationInterface $navigation, NodeInterface $node, $level) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
             'level' => $level
         );
 
-        return $this->renderBlock($navigation, 'navigation_link', $variables);
+        return $this->renderBlock($navigation, 'navigation_text', $variables);
     }
 
-    public function renderNavigationLinkClass(NavigationInterface $navigation, NodeInterface $node, $level) {
+    public function renderNavigationTextClass(NavigationInterface $navigation, NodeInterface $node, $level) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
             'level' => $level
         );
 
-        return $this->renderBlock($navigation, 'navigation_link_class', $variables);
+        return $this->renderBlock($navigation, 'navigation_text_class', $variables);
     }
 
     public function renderNavigationUrl(NavigationInterface $navigation, NodeInterface $node, $level) {
@@ -132,14 +148,14 @@ class Extension extends \Twig_Extension {
         return $this->renderBlock($navigation, 'navigation_url', $variables);
     }
 
-    public function renderNavigationText(NavigationInterface $navigation, NodeInterface $node, $level) {
+    public function renderNavigationCaption(NavigationInterface $navigation, NodeInterface $node, $level) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
             'level' => $level
         );
 
-        return $this->renderBlock($navigation, 'navigation_text', $variables);
+        return $this->renderBlock($navigation, 'navigation_caption', $variables);
     }
 
     public function renderBlock($navigation, $name, array $variables) {
