@@ -1,7 +1,7 @@
 
 {% block navigation_level %}
     {% if nodes %}
-        <ul class="{{ navigation_level_class(navigation, nodes, level) }}">
+        <ul class="{{ navigation_level_class(navigation, nodes, level, parentNode) }}">
             {% for node in nodes %}
                 {{ navigation_container(navigation, node, level, loop) }}
             {% endfor %}
@@ -12,7 +12,7 @@
 {% block navigation_container %}
     <li class="{{ navigation_container_class(navigation, node, level, loop) }}">
         {{ navigation_link(navigation, node, level) }}
-        {{ navigation_level(navigation, navigation.childNodes(node), level + 1) }}
+        {{ navigation_level(navigation, navigation.childNodes(node), level + 1, node) }}
     </li>
 {% endblock %}
 
