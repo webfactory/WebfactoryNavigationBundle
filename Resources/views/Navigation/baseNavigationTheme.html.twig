@@ -53,10 +53,6 @@
         nav-item-last nav-item-last-{{ level }}
     {% endif %}
 {% endspaceless %} {% spaceless %}
-    {% if navigation.expanded(node) %}
-        nav-item-expanded nav-item-expanded-{{ level }}
-    {% endif %}
-{% endspaceless %} {% spaceless %}
     {% if navigation.parent(node) %}
         nav-item-parent nav-item-parent-{{ level }}
     {% endif %}
