@@ -45,12 +45,12 @@ class Extension extends \Twig_Extension {
             'power_set' => new \Twig_Function_Method($this, 'getPowerSet'),
             'navigation' =>  new \Twig_Function_Method($this, 'renderNavigation', array('is_safe' => array('all'))),
             'navigation_list' => new \Twig_Function_Method($this, 'renderNavigationList', array('is_safe' => array('all'))),
-            'navigation_list_class' => new \Twig_Function_Method($this, 'renderNavigationListClass'),
+            'navigation_list_class' => new \Twig_Function_Method($this, 'renderNavigationListClass', array('is_safe' => array('all'))),
             'navigation_item' => new \Twig_Function_Method($this, 'renderNavigationItem', array('is_safe' => array('all'))),
-            'navigation_item_class' => new \Twig_Function_Method($this, 'renderNavigationItemClass'),
+            'navigation_item_class' => new \Twig_Function_Method($this, 'renderNavigationItemClass', array('is_safe' => array('all'))),
             'navigation_text' => new \Twig_Function_Method($this, 'renderNavigationText', array('is_safe' => array('all'))),
-            'navigation_text_class' => new \Twig_Function_Method($this, 'renderNavigationTextClass'),
-            'navigation_url' => new \Twig_Function_Method($this, 'renderNavigationUrl'),
+            'navigation_text_class' => new \Twig_Function_Method($this, 'renderNavigationTextClass', array('is_safe' => array('all'))),
+            'navigation_url' => new \Twig_Function_Method($this, 'renderNavigationUrl', array('is_safe' => array('all'))),
             'navigation_caption' => new \Twig_Function_Method($this, 'renderNavigationCaption', array('is_safe' => array('all')))
         );
     }
