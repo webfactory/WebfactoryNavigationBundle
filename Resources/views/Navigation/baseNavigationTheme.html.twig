@@ -10,7 +10,7 @@
 {% endblock %}
 
 {%- block navigation_list_class -%}
-    nl-{{ level }}
+    nl nl-{{ level }}
 {%- endblock -%}
 
 {% block navigation_item %}
@@ -27,7 +27,7 @@
     {% if loop.first %}{% set classes = classes | merge(['f']) %}{% endif %}
     {% if loop.last %}{% set classes = classes | merge(['l']) %}{% endif %}
     {% set classes = classes | merge( [(navigation.parent(node) ? 'p' : 'np' )] ) %}
-    {% endspaceless %}ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
+    {% endspaceless %}ni ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
         {% set class = set | sort | join('-') %}
         {% endspaceless %}{% if not class is empty %}{% spaceless %}
             ni-{{ class }}-{{ level }}
@@ -45,7 +45,7 @@
 {% endblock %}
 
 {%- block navigation_text_class -%}
-    nt-{{ level }}
+    nt nt-{{ level }}
 {%- endblock -%}
 
 {%- block navigation_url -%}
