@@ -23,9 +23,9 @@
 {% block navigation_item_class %}{% spaceless %}
     {% set classes = [] %}
     {% set classes = classes | merge( [(navigation.active(node) ? 'a' : 'na')] ) %}
-    {% if navigation.onActivePath(node) %}{% set classes = classes | merge(['ap']) %}{% endif %}
-    {% if loop.first %}{% set classes = classes | merge(['f']) %}{% endif %}
-    {% if loop.last %}{% set classes = classes | merge(['l']) %}{% endif %}
+    {% set classes = classes | merge( [(navigation.onActivePath(node) ? 'ap' : 'nap')] ) %}
+    {% set classes = classes | merge( [(loop.first ? 'f' : 'nf')] ) %}
+    {% set classes = classes | merge( [(loop.last ? 'l' : 'nl')] ) %}
     {% set classes = classes | merge( [(navigation.parent(node) ? 'p' : 'np' )] ) %}
     {% endspaceless %}ni ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
         {% set class = set | sort | join('-') %}
