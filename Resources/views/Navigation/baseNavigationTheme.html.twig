@@ -10,7 +10,7 @@
 {% endblock %}
 
 {%- block navigation_list_class -%}
-    nl-{{ level }}
+    nl nl-{{ level }}
 {%- endblock -%}
 
 {% block navigation_item %}
@@ -22,12 +22,12 @@
 
 {% block navigation_item_class %}{% spaceless %}
     {% set classes = [] %}
-    {% if navigation.active(node) %}{% set classes = classes | merge(['a']) %}{% endif %}
-    {% if navigation.onActivePath(node) %}{% set classes = classes | merge(['ap']) %}{% endif %}
-    {% if loop.first %}{% set classes = classes | merge(['f']) %}{% endif %}
-    {% if loop.last %}{% set classes = classes | merge(['l']) %}{% endif %}
-    {% if navigation.parent(node) %}{% set classes = classes | merge(['p']) %}{% endif %}
-    {% endspaceless %}ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
+    {% set classes = classes | merge( [(navigation.active(node) ? 'a' : 'na')] ) %}
+    {% set classes = classes | merge( [(navigation.onActivePath(node) ? 'ap' : 'nap')] ) %}
+    {% set classes = classes | merge( [(loop.first ? 'f' : 'nf')] ) %}
+    {% set classes = classes | merge( [(loop.last ? 'l' : 'nl')] ) %}
+    {% set classes = classes | merge( [(navigation.parent(node) ? 'p' : 'np' )] ) %}
+    {% endspaceless %}ni ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
         {% set class = set | sort | join('-') %}
         {% endspaceless %}{% if not class is empty %}{% spaceless %}
             ni-{{ class }}-{{ level }}
@@ -45,7 +45,7 @@
 {% endblock %}
 
 {%- block navigation_text_class -%}
-    nt-{{ level }}
+    nt nt-{{ level }}
 {%- endblock -%}
 
 {%- block navigation_url -%}
