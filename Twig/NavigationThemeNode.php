@@ -11,7 +11,7 @@ class NavigationThemeNode extends \Twig_Node {
     public function compile(\Twig_Compiler $compiler) {
         $compiler
             ->addDebugInfo($this)
-            ->write('echo $this->env->getExtension(\'webfactory_navigation_twig_extension\')->setTheme(')
+            ->write('echo $this->env->getExtension(\'webfactory_navigation_theme_extension\')->setTheme(')
             ->subcompile($this->getNode('navigation'))
             ->raw(', array(')
         ;

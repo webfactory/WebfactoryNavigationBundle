@@ -1,12 +1,10 @@
 
 {% block navigation_list %}
-    {% if nodes %}
-        <ul class="{{ navigation_list_class(navigation, nodes, level, parentNode) }}">
+        <ul class="{{ navigation_list_class(themeRoot, nodes, level, parentNode) }}">
             {% for node in nodes %}
-                {{ navigation_item(navigation, node, level, loop) }}
+                {{ navigation_item(themeRoot, node, level, maxLevels, expandedLevels, loop) }}
             {% endfor %}
         </ul>
-    {% endif %}
 {% endblock %}
 
 {%- block navigation_list_class -%}
@@ -14,19 +12,21 @@
 {%- endblock -%}
 
 {% block navigation_item %}
-    <li class="{{ navigation_item_class(navigation, node, level, loop) }}">
-        {{ navigation_text(navigation, node, level) }}
-        {{ navigation_list(navigation, navigation.childNodes(node), level + 1, node) }}
+    {% if node.visible %}
+    <li class="{{ navigation_item_class(themeRoot, node, level, loop) }}">
+        {{ navigation_text(themeRoot, node, level) }}
+        {{ navigation_list(themeRoot, node.children, level + 1, maxLevels, expandedLevels, node) }}
     </li>
+    {% endif %}
 {% endblock %}
 
 {% block navigation_item_class %}{% spaceless %}
     {% set classes = [] %}
-    {% set classes = classes | merge( [(navigation.active(node) ? 'a' : 'na')] ) %}
-    {% set classes = classes | merge( [(navigation.onActivePath(node) ? 'ap' : 'nap')] ) %}
+    {% set classes = classes | merge( [(node.isActiveNode ? 'a' : 'na')] ) %}
+    {% set classes = classes | merge( [(node.isActivePath ? 'ap' : 'nap')] ) %}
     {% set classes = classes | merge( [(loop.first ? 'f' : 'nf')] ) %}
     {% set classes = classes | merge( [(loop.last ? 'l' : 'nl')] ) %}
-    {% set classes = classes | merge( [(navigation.parent(node) ? 'p' : 'np' )] ) %}
+    {% set classes = classes | merge( [(node.hasChildren ? 'p' : 'np' )] ) %}
     {% endspaceless %}ni ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
         {% set class = set | sort | join('-') %}
         {% endspaceless %}{% if not class is empty %}{% spaceless %}
@@ -37,10 +37,10 @@
 {% endspaceless %}{% endblock %}
 
 {% block navigation_text %}
-    {%- if not navigation.active(node) -%}
-        <a href="{{ navigation_url(navigation, node, level) }}" class="{{ navigation_text_class(navigation, node, level) }}">{{ navigation_caption(navigation, node, level) }}</a>
+    {%- if not node.isActiveNode -%}
+        <a href="{{ navigation_url(themeRoot, node, level) }}" class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</a>
     {%- else -%}
-        <span class="{{ navigation_text_class(navigation, node, level) }}">{{ navigation_caption(navigation, node, level) }}</span>
+        <span class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</span>
     {%- endif -%}
 {% endblock %}
 

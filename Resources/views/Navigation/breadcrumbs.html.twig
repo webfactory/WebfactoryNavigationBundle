@@ -1,0 +1,22 @@
+{% if breadcrumbs is defined %}
+{% if breadcrumbs|length > 1 %}
+<div class="breadcrumb-wrapper">
+    <span class="breadcrumb-label">{% trans %}Sie sind hier:{% endtrans %}</span>
+    <ul class="breadcrumbs" role="navigation">
+        {% for node in breadcrumbs %}
+        {% if (node.breadcrumbsVisible is defined and node.breadcrumbsVisible) or node.visible %}
+        <li class="breadcrumb">
+            {% if loop.first %}
+            <a class="breadcrumb-link breadcrumb-link-first" href="{{ node.url }}">{{ node.caption }}</a> /
+            {% elseif not node.activeNode %}
+                <a class="breadcrumb-link" href="{{ node.url }}">{{ node.caption }}</a> /
+            {% else %}
+                <span class="breadcrumb-text">{{ node.caption }}</span>
+            {% endif %}
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endif %}
