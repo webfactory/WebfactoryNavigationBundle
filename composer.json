@@ -15,7 +15,7 @@
     ],
 
     "require": {
-        "webfactory/wfdmeta-bundle": "1.0.*"
+        "webfactory/wfdmeta-bundle": "2.1.*"
     }
 
 }
