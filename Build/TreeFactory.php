@@ -15,6 +15,7 @@ class TreeFactory {
     protected $logger;
     protected $tableDeps = array();
     protected $_tree;
+    protected $nodeActivationParameters;
 
     public function __construct(Provider $metaProvider, ContainerInterface $container, LoggerInterface $logger) {
         $this->metaProvider = $metaProvider;
@@ -24,6 +25,10 @@ class TreeFactory {
 
     public function addTableDependency($tables) {
         $this->tableDeps += array_fill_keys((array)$tables, true);
+    }
+
+    public function setNodeActivationParameters(array $params) {
+        $this->nodeActivationParameters = $params;
     }
 
     public function debug($msg) {
@@ -42,10 +47,7 @@ class TreeFactory {
                     $ts
             );
 
-            if ($cache->isFresh()) {
-                $this->debug("Using a cached tree");
-                $this->_tree = require $cache;
-            } else {
+            if (!$cache->isFresh()) {
 
                 $cs = new \Webfactory\Bundle\WfdMetaBundle\Util\CriticalSection();
                 $cs->setLogger($this->logger);
@@ -54,26 +56,35 @@ class TreeFactory {
                 $cs->execute(__FILE__, function () use ($self, $cache) {
 
                     if (!$cache->isFresh()) {
-                        $self->dumpIntoCache($cache);
+                        $self->debug("Building the tree");
+                        $self->buildTreeCache($cache);
+                        $self->debug("Finished building the tree");
                     } else {
-                        $self->debug("Using a cached tree, but had to wait for it to be built by someone else");
-                        $this->_tree = require $cache;
+                        $self->debug("Had to wait for the cache to be initialized by another process");
                     }
                 });
+            }
+
+            if (!$this->_tree) {
+                $this->debug("Loading the cached tree");
+                $this->_tree = require $cache;
+                $this->debug("Finished loading the cached tree");
+            }
+
+            if ($this->nodeActivationParameters && ($node = $this->_tree->find($this->nodeActivationParameters))) {
+                $node->setActive();
             }
         }
 
         return $this->_tree;
     }
 
-    public function dumpIntoCache(ConfigCache $cache) {
-        $this->debug("Building the tree");
+    public function buildTreeCache(ConfigCache $cache) {
         $this->_tree = new Tree();
         // Dynamic (runtime) lookup:
         $dispatcher = $this->container->get('webfactory_navigation.tree_factory.dispatcher');
         $dispatcher->start($this->_tree);
         $cache->write("<?php return unserialize(<<<EOD\n" . serialize($this->_tree) . "\nEOD\n);", $dispatcher->getResources());
-        $this->debug("Finished building the tree");
     }
 
 

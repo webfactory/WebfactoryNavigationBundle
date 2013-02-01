@@ -35,7 +35,7 @@
         <service
                 id="webfactory_navigation.active_node_event_listener"
                 class="Webfactory\Bundle\NavigationBundle\EventListener\ActiveNodeEventListener">
-                <argument type="service" id="webfactory_navigation.tree"/>
+                <argument type="service" id="webfactory_navigation.tree_factory"/>
                 <tag name="kernel.event_listener" event="kernel.controller" />
         </service>
 

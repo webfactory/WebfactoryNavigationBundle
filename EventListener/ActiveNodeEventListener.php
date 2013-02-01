@@ -2,24 +2,22 @@
 
 namespace Webfactory\Bundle\NavigationBundle\EventListener;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Webfactory\Bundle\NavigationBundle\Tree\Tree;
+use Webfactory\Bundle\NavigationBundle\Build\TreeFactory;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class ActiveNodeEventListener {
 
-    protected $tree;
+    /** @var TreeFactory */
+    protected $factory;
 
-    public function __construct(Tree $tree) {
-        $this->tree = $tree;
+    public function __construct(TreeFactory $factory) {
+        $this->factory = $factory;
     }
 
     public function onKernelController(FilterControllerEvent $event) {
         if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
-
             $req = $event->getRequest();
-            if ($node = $this->tree->find($req->attributes->all())) {
-                $node->setActive();
-            }
+            $this->factory->setNodeActivationParameters($req->attributes->all());
         }
     }
 }
