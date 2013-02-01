@@ -67,11 +67,11 @@ class NavigationThemeExtension extends \Twig_Extension {
     }
 
     public function renderNavigation(Node $node, $maxLevels, $expandedLevels) {
-        return $this->renderNavigationList($node, $node->getChildren(), 1, $maxLevels, $expandedLevels, $node);
+        return $this->renderNavigationList($node, $node->getChildren(), 0, $maxLevels, $expandedLevels, $node);
     }
 
     public function renderNavigationList(Node $themeRoot, array $nodes, $level, $maxLevels, $expandedLevels, Node $parentNode = null) {
-        if ($nodes && $level <= $maxLevels && ($level <= $expandedLevels || $parentNode->isActivePath())) {
+        if ($nodes && $level < $maxLevels && ($level < $expandedLevels || $parentNode->isActivePath())) {
             return $this->renderBlock($themeRoot, 'navigation_list', get_defined_vars());
         }
     }
