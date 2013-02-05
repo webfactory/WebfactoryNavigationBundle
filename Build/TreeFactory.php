@@ -16,11 +16,13 @@ class TreeFactory {
     protected $tableDeps = array();
     protected $_tree;
     protected $nodeActivationParameters;
+    protected $stopwatch;
 
     public function __construct(Provider $metaProvider, ContainerInterface $container, LoggerInterface $logger) {
         $this->metaProvider = $metaProvider;
         $this->container = $container;
         $this->logger = $logger;
+        if ($container->has('debug.stopwatch')) $this->stopwatch = $container->get('debug.stopwatch');
     }
 
     public function addTableDependency($tables) {
@@ -36,8 +38,17 @@ class TreeFactory {
             $this->logger->debug("$msg (PID " . getmypid() . ", microtime " . microtime() . ")");
     }
 
+    protected function startTiming($sectionName) {
+        if ($this->stopwatch) return $this->stopwatch->start("webfactory/navigation-bundle: " . $sectionName);
+    }
+
+    protected function stopTiming($watch) {
+        if ($watch) $watch->stop();
+    }
+
     public function getTree() {
         if (!$this->_tree) {
+
             $container = $this->container;
             $ts = $this->metaProvider->getLastTouched(array_keys($this->tableDeps));
 
@@ -47,10 +58,16 @@ class TreeFactory {
                     $ts
             );
 
-            if (!$cache->isFresh()) {
+            $_watch = $this->startTiming('Checking whether the cache is fresh');
+            $fresh = $cache->isFresh();
+            $this->stopTiming($_watch);
+
+            if (!$fresh) {
 
                 $cs = new \Webfactory\Bundle\WfdMetaBundle\Util\CriticalSection();
                 $cs->setLogger($this->logger);
+
+                $_watch = $this->startTiming('Critical section');
 
                 $self = $this;
                 $cs->execute(__FILE__, function () use ($self, $cache) {
@@ -63,17 +80,26 @@ class TreeFactory {
                         $self->debug("Had to wait for the cache to be initialized by another process");
                     }
                 });
+
+                $this->stopTiming($_watch);
             }
 
             if (!$this->_tree) {
                 $this->debug("Loading the cached tree");
+                $_watch = $this->startTiming('Loading a cached tree');
                 $this->_tree = require $cache;
+                $this->stopTiming($_watch);
                 $this->debug("Finished loading the cached tree");
             }
 
-            if ($this->nodeActivationParameters && ($node = $this->_tree->find($this->nodeActivationParameters))) {
-                $node->setActive();
+            if ($this->nodeActivationParameters) {
+                $_watch = $this->startTiming('Finding active node');
+                if ($node = $this->_tree->find($this->nodeActivationParameters)) {
+                    $node->setActive();
+                }
+                $this->stopTiming($_watch);
             }
+
         }
 
         return $this->_tree;
