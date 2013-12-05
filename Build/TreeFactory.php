@@ -7,26 +7,28 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Config\ConfigCache;
 use Webfactory\Bundle\WfdMetaBundle\Util\ExpirableConfigCache;
+use Webfactory\Bundle\WfdMetaBundle\MetaQuery;
 
 class TreeFactory {
 
-    protected $metaProvider;
+    /** @var MetaQuery */
+    protected $metaQuery;
+
     protected $container;
     protected $logger;
-    protected $tableDeps = array();
     protected $_tree;
     protected $nodeActivationParameters;
     protected $stopwatch;
 
-    public function __construct(Provider $metaProvider, ContainerInterface $container, LoggerInterface $logger) {
-        $this->metaProvider = $metaProvider;
+    public function __construct(MetaQuery $metaQuery, ContainerInterface $container, LoggerInterface $logger) {
+        $this->metaQuery = $metaQuery;
         $this->container = $container;
         $this->logger = $logger;
         if ($container->has('debug.stopwatch')) $this->stopwatch = $container->get('debug.stopwatch');
     }
 
     public function addTableDependency($tables) {
-        $this->tableDeps += array_fill_keys((array)$tables, true);
+        $this->metaQuery->addTable($tables);
     }
 
     public function setNodeActivationParameters(array $params) {
@@ -50,12 +52,11 @@ class TreeFactory {
         if (!$this->_tree) {
 
             $container = $this->container;
-            $ts = $this->metaProvider->getLastTouched(array_keys($this->tableDeps));
 
             $cache = new ExpirableConfigCache(
                     $container->getParameter('kernel.cache_dir') . "/webfactory_navigation/tree.php",
                     $container->getParameter('kernel.debug'),
-                    $ts
+                    $this->metaQuery->getLastTouched()
             );
 
             $_watch = $this->startTiming('Checking whether the cache is fresh');
