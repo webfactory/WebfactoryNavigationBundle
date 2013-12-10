@@ -16,12 +16,6 @@
 
     "require": {
         "webfactory/wfdmeta-bundle": "~2.2"
-    },
-
-    "extra": {
-        "branch-alias": {
-            "dev-default": "2.1.x-dev"
-        }
     }
 
 }
