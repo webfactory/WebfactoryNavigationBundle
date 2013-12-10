@@ -6,10 +6,14 @@ class Finder {
     protected $reverseIndex = array();
     protected $requireCount = array();
     protected $objects = array();
+    protected $idToHash = array();
 
     public function add($object, array $requirements) {
-        $id = count($this->objects);
-        $this->objects[$id] = $object;
+        $hash = spl_object_hash($object);
+        $this->objects[$hash] = $object;
+
+        $id = count($this->idToHash);
+        $this->idToHash[$id] = $hash;
 
         foreach ($requirements as $key => $value) {
             $r = "$key=$value";
@@ -47,7 +51,7 @@ class Finder {
         }
 
         if ($bestId !== null) {
-            return $this->objects[$bestId];
+            return $this->objects[$this->idToHash[$bestId]];
         }
     }
 }

@@ -30,9 +30,14 @@ class Node implements \ArrayAccess {
         return $this->tree;
     }
 
-    public function activateOn(array $requirements) {
+    public function index(array $requirements) {
         $this->tree->addFindIndex($this, $requirements);
         return $this;
+    }
+
+    /** @deprecated */
+    public function activateOn(array $requirements) {
+        return $this->index($requirements);
     }
 
     public function set($name, $value) {
