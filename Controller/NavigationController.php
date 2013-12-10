@@ -20,7 +20,7 @@ class NavigationController extends Controller {
                 'expandedLevels' => $expandedLevels
             ));
         } else {
-            return new \Symfony\Component\HttpFoundation\Response();
+            return new \Symfony\Component\HttpFoundation\Response(' ## Navigation:tree($root => ' . json_encode($root) . ' could not find the node ##');
         }
     }
 
