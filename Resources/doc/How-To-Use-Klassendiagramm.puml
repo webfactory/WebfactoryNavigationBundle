@@ -1,0 +1,57 @@
+@startuml
+
+MetaQuery --o TreeFactory
+LoggerInterface --o TreeFactory
+
+TreeFactory -.-> Tree: creates
+TreeFactory -.-> Dispatcher: gets
+
+ContainerInterface --o TreeFactory
+ContainerInterface -.-> Director : creates
+ContainerInterface -.-> Dispatcher: creates
+
+Director -.-> Tree: operiert auf
+Director -.-> Context: operiert auf
+Director -.-> Context: creates
+Director -.-> Node: creates
+
+Tree o-- Node
+
+Dispatcher o-- Context
+Dispatcher *-- Director
+
+class TreeFactory {
+  +getTree():Tree
+}
+
+class Tree {
+  +addRoot(Node)
+}
+
+class Director {
+  +build(Context, Tree, Dispatcher)
+}
+
+class Dispatcher {
+  +search(Context)
+}
+
+class Context {
+  +change():Context
+}
+
+class Node {
+  +set(key, value)
+  +addChild(Node)
+  +setTree(Tree)
+}
+
+
+
+
+skinparam monochrome true
+hide circle
+hide empty methods
+hide empty fields
+
+@enduml
