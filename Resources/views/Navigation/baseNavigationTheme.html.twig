@@ -1,10 +1,17 @@
 
 {% block navigation_list %}
+    {% set mindestensEinSichtbaresChild = false %}
+    {% for node in nodes if node.visible %}
+        {% set mindestensEinSichtbaresChild = true %}
+    {% endfor %}
+
+    {% if mindestensEinSichtbaresChild == true %}
         <ul class="{{ navigation_list_class(themeRoot, nodes, level, parentNode) }}">
             {% for node in nodes %}
                 {{ navigation_item(themeRoot, node, level, maxLevels, expandedLevels, loop) }}
             {% endfor %}
         </ul>
+    {% endif %}
 {% endblock %}
 
 {%- block navigation_list_class -%}
