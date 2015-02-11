@@ -3,9 +3,22 @@
 namespace Webfactory\Bundle\NavigationBundle\Tree;
 
 class Node implements \ArrayAccess {
-    protected $children = array(), $parent = null;
-    protected $data = array('visible' => false, 'breadcrumbsVisible' => false, 'url' => false, 'caption' => '');
-    /** @var Tree */ protected $tree;
+    /**
+     * @var Node[]
+     */
+    protected $children = array();
+
+    /**
+     * @var Node|null
+     */
+    protected $parent = null;
+
+    protected $data = array('visible' => false, 'breadcrumbsVisible' => true, 'url' => false, 'caption' => '');
+
+    /**
+     * @var Tree
+     */
+    protected $tree;
 
     public function addChild(Node $n = null) {
         if ($n === null)
@@ -59,6 +72,18 @@ class Node implements \ArrayAccess {
 
     public function hasChildren() {
         return (bool) $this->children;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasVisibleChildren() {
+        foreach ($this->children as $childNode) {
+            if ($childNode->get('visible') === true) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function hasAncestor(Node $ancestor) {
