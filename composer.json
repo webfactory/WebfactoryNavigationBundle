@@ -2,17 +2,8 @@
 
     "name": "webfactory/navigation-bundle",
     "autoload": {
-        "psr-0": { "Webfactory\\Bundle\\NavigationBundle": "" }
+        "psr-4": { "Webfactory\\Bundle\\NavigationBundle\\": "" }
     },
-    "target-dir": "Webfactory/Bundle/NavigationBundle",
-
-
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "composer.webfactory.de"
-        }
-    ],
 
     "require": {
         "webfactory/wfdmeta-bundle": "~2.2"
