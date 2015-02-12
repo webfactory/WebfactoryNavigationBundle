@@ -1,6 +1,10 @@
 <?php
 
 namespace Webfactory\Bundle\NavigationBundle\Build;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
+use Webfactory\Bundle\NavigationBundle\Event\TreeInitializedEvent;
 use Webfactory\Bundle\WfdMetaBundle\Provider;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -11,28 +15,39 @@ use Webfactory\Bundle\WfdMetaBundle\MetaQuery;
 
 class TreeFactory {
 
+    protected $cacheFile;
+    protected $debug;
+
     /** @var MetaQuery */
     protected $metaQuery;
 
-    protected $container;
+    /** @var LoggerInterface */
     protected $logger;
+
+    /** @var Tree */
     protected $_tree;
-    protected $nodeActivationParameters;
+
+    /** @var Stopwatch */
     protected $stopwatch;
 
-    public function __construct(MetaQuery $metaQuery, ContainerInterface $container, LoggerInterface $logger) {
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
+
+    /** @var ContainerInterface */
+    protected $container;
+
+    public function __construct($cacheFile, $debug, MetaQuery $metaQuery, ContainerInterface $container, EventDispatcherInterface $eventDispatcher = null, LoggerInterface $logger = null, Stopwatch $stopwatch = null) {
+        $this->cacheFile = $cacheFile;
+        $this->debug = $debug;
         $this->metaQuery = $metaQuery;
         $this->container = $container;
+        $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
-        if ($container->has('debug.stopwatch')) $this->stopwatch = $container->get('debug.stopwatch');
+        $this->stopwatch = $stopwatch;
     }
 
     public function addTableDependency($tables) {
         $this->metaQuery->addTable($tables);
-    }
-
-    public function setNodeActivationParameters(array $params) {
-        $this->nodeActivationParameters = $params;
     }
 
     public function debug($msg) {
@@ -51,11 +66,9 @@ class TreeFactory {
     public function getTree() {
         if (!$this->_tree) {
 
-            $container = $this->container;
-
             $cache = new ExpirableConfigCache(
-                    $container->getParameter('kernel.cache_dir') . "/webfactory_navigation/tree.php",
-                    $container->getParameter('kernel.debug'),
+                    $this->cacheFile,
+                    $this->debug,
                     $this->metaQuery->getLastTouched()
             );
 
@@ -93,14 +106,9 @@ class TreeFactory {
                 $this->debug("Finished loading the cached tree");
             }
 
-            if ($this->nodeActivationParameters) {
-                $_watch = $this->startTiming('Finding active node');
-                if ($node = $this->_tree->find($this->nodeActivationParameters)) {
-                    $node->setActive();
-                }
-                $this->stopTiming($_watch);
+            if ($this->eventDispatcher) {
+                $this->eventDispatcher->dispatch('webfactory_navigation.tree_initialized', new TreeInitializedEvent($this->_tree));
             }
-
         }
 
         return $this->_tree;

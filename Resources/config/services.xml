@@ -21,9 +21,13 @@
         <service
                 id="webfactory_navigation.tree_factory"
                 class="Webfactory\Bundle\NavigationBundle\Build\TreeFactory">
+            <argument>%kernel.cache_dir%/webfactory_navigation/tree.php</argument>
+            <argument>%kernel.debug%</argument>
             <argument type="service" id="webfactory_navigation.tree_factory.meta_query"/>
             <argument type="service" id="service_container"/>
+            <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="logger" on-invalid="null" />
+            <argument type="service" id="debug.stopwatch" on-invalid="null"/>
             <tag name="monolog.logger" channel="webfactory_navigation" />
         </service>
 
@@ -35,10 +39,9 @@
                 />
 
         <service
-                id="webfactory_navigation.active_node_event_listener"
-                class="Webfactory\Bundle\NavigationBundle\EventListener\ActiveNodeEventListener">
-                <argument type="service" id="webfactory_navigation.tree_factory"/>
-                <tag name="kernel.event_listener" event="kernel.controller" />
+                class="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener">
+                <argument type="service" id="request_stack"/>
+                <tag name="kernel.event_listener" event="webfactory_navigation.tree_initialized" method="initializeTree"/>
         </service>
 
         <service id="webfactory_navigation.twig_theme_extension"

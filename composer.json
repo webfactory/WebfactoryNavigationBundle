@@ -1,12 +1,10 @@
 {
-
-    "name": "webfactory/navigation-bundle",
-    "autoload": {
-        "psr-4": { "Webfactory\\Bundle\\NavigationBundle\\": "" }
-    },
-
-    "require": {
-        "webfactory/wfdmeta-bundle": "~2.2"
-    }
-
+  "name": "webfactory/navigation-bundle",
+  "autoload": {
+    "psr-4": {"Webfactory\\Bundle\\NavigationBundle\\": ""}
+  },
+  "require": {
+    "webfactory/wfdmeta-bundle": "~2.2",
+    "symfony/http-foundation": "~2.4"
+  }
 }
