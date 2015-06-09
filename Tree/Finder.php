@@ -33,6 +33,9 @@ class Finder {
         $bestId = null;
 
         foreach ($provided as $key => $value) {
+            if (is_string($value) === false) {
+                continue;
+            }
             $p = "$key=$value";
             if (isset($this->reverseIndex[$p])) {
                 foreach ($this->reverseIndex[$p] as $match) {
