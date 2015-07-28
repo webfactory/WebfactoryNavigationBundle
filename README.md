@@ -1,4 +1,21 @@
-= webfactory/navigation-bundle Version 1.* =
+# navigation-bundle #
+
+
+## Motivation ##
+
+## Installation ##
+The bundle is installed like any other Symfony2 bundle.
+
+## Credits, Copyright and License ##
+
+This project was started at webfactory GmbH, Bonn.
+
+- <http://www.webfactory.de>
+- <http://twitter.com/webfactory>
+
+Copyright 2015 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).
+
+## webfactory/navigation-bundle Version 1.* ##
 
 webfactory/navigation-bundle 1.* enthält den Code, um webfactory/navigation(1.*)-basierte
 Navigationen in Symfony-Projekten zu rendern. Für das Rendering von Bäumen
@@ -26,7 +43,7 @@ Wir haben uns darüber hinweggeholfen, indem die End-Projekte, die Navigationen 
 ausgeben möchten, diese Ausgabe immer mittels eines standalone-embedded Controller durchführen mussten, dessen
 Ausgabe dann per ESI gecached werden konnte.
 
-= webfactory/navigation-bundle Version 2.* =
+## webfactory/navigation-bundle Version 2.* ##
 
 Dieses Version fasst zunächst die Definition des Baumes und die Ausgabe einschließlich der Haken und Ösen (TM)
 zur Symfony-Integration in einem Bundle zusammen (keine externen Abhängigkeiten mehr), um das Leben in der Entwicklung
