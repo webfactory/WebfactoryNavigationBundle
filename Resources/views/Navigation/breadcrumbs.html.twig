@@ -4,13 +4,13 @@
         <ul class="breadcrumbs">
             {% for node in breadcrumbs %}
                 {% if node.caption|trim is not empty and ((node.breadcrumbsVisible is defined and node.breadcrumbsVisible) or node.visible) %}
-                <li class="breadcrumb {% if loop.first %}breadcrumb-first{% endif %}">
-                    {% if not node.activeNode %}
-                        <a class="breadcrumb-link" href="{{ node.url }}">{{ node.caption }}</a> /
-                    {% else %}
-                        <span class="breadcrumb-text">{{ node.caption }}</span>
-                    {% endif %}
-                </li>
+                    <li class="breadcrumb {% if loop.first %}breadcrumb-first{% endif %}">
+                        {% if not node.activeNode %}
+                            <a class="breadcrumb-link" href="{{ node.url }}">{{ node.caption }}</a> /
+                        {% else %}
+                            <span class="breadcrumb-text">{{ node.caption }}</span>
+                        {% endif %}
+                    </li>
                 {% endif %}
             {% endfor %}
         </ul>

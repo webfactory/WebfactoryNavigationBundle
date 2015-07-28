@@ -2,51 +2,62 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Tree;
 
-class Tree {
+class Tree
+{
     protected $roots = array();
     protected $identities = array();
     protected $finder;
     protected $activeNode = null, $activePath = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->finder = new Finder();
     }
 
-    public function addRoot(Node $r = null) {
-        if ($r === null)
+    public function addRoot(Node $r = null)
+    {
+        if ($r === null) {
             $r = new Node();
+        }
         $this->roots[] = $r;
         $r->setTree($this);
 
         return $r;
     }
 
-    public function getRootNodes() {
+    public function getRootNodes()
+    {
         return $this->roots;
     }
 
-    public function addFindIndex(Node $n, array $requirements) {
+    public function addFindIndex(Node $n, array $requirements)
+    {
         $this->finder->add($n, $requirements);
     }
 
-    public function find(array $provisions) {
+    public function find(array $provisions)
+    {
         return $this->finder->lookup($provisions);
     }
 
-    public function setActiveNode(Node $n) {
+    public function setActiveNode(Node $n)
+    {
         $this->activeNode = $this->activePath = $n;
     }
 
-    public function setActivePath(Node $n) {
+    public function setActivePath(Node $n)
+    {
         $this->activeNode = null;
         $this->activePath = $n;
     }
 
-    public function getActiveNode() {
+    public function getActiveNode()
+    {
         return $this->activeNode;
     }
 
-    public function getActivePath() {
+    public function getActivePath()
+    {
         return $this->activePath;
     }
 }

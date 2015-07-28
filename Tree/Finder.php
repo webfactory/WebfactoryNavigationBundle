@@ -2,13 +2,15 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Tree;
 
-class Finder {
+class Finder
+{
     protected $reverseIndex = array();
     protected $requireCount = array();
     protected $objects = array();
     protected $idToHash = array();
 
-    public function add($object, array $requirements) {
+    public function add($object, array $requirements)
+    {
         $hash = spl_object_hash($object);
         $this->objects[$hash] = $object;
 
@@ -27,7 +29,8 @@ class Finder {
         $this->requireCount[$id] = count($requirements);
     }
 
-    public function lookup($provided) {
+    public function lookup($provided)
+    {
         $remainingCount = array();
         $maxMatch = 0;
         $bestId = null;
@@ -40,8 +43,9 @@ class Finder {
             if (isset($this->reverseIndex[$p])) {
                 foreach ($this->reverseIndex[$p] as $match) {
 
-                    if (!isset($remainingCount[$match]))
+                    if (!isset($remainingCount[$match])) {
                         $remainingCount[$match] = $this->requireCount[$match];
+                    }
 
                     $s = --$remainingCount[$match];
 

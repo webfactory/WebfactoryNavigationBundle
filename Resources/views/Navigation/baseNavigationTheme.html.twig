@@ -1,4 +1,3 @@
-
 {% block navigation_list %}
     {% set mindestensEinSichtbaresChild = false %}
     {% for node in nodes if node.visible %}
@@ -20,10 +19,10 @@
 
 {% block navigation_item %}
     {% if node.visible %}
-    <li class="{{ navigation_item_class(themeRoot, node, level, loop) }}">
-        {{ navigation_text(themeRoot, node, level) }}
-        {{ navigation_list(themeRoot, node.children, level + 1, maxLevels, expandedLevels, node) }}
-    </li>
+        <li class="{{ navigation_item_class(themeRoot, node, level, loop) }}">
+            {{ navigation_text(themeRoot, node, level) }}
+            {{ navigation_list(themeRoot, node.children, level + 1, maxLevels, expandedLevels, node) }}
+        </li>
     {% endif %}
 {% endblock %}
 
@@ -35,18 +34,19 @@
     {% set classes = classes | merge( [(loop.first ? 'f' : 'nf')] ) %}
     {% set classes = classes | merge( [(loop.last ? 'l' : 'nl')] ) %}
     {% set classes = classes | merge( [(node.hasVisibleChildren ? 'p' : 'np' )] ) %}
-    {% endspaceless %}ni ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
-        {% set class = set | sort | join('-') %}
-        {% endspaceless %}{% if not class is empty %}{% spaceless %}
-            ni-{{ class }}-{{ level }}
-            {% endspaceless %}{% if not loop.last %} {% endif %}{% spaceless %}
-        {% endspaceless %}{% endif %}{% spaceless %}
-    {% endspaceless %}{% endfor %}{% spaceless %}
+{% endspaceless %}ni ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
+    {% set class = set | sort | join('-') %}
+{% endspaceless %}{% if not class is empty %}{% spaceless %}
+    ni-{{ class }}-{{ level }}
+{% endspaceless %}{% if not loop.last %} {% endif %}{% spaceless %}
+{% endspaceless %}{% endif %}{% spaceless %}
+{% endspaceless %}{% endfor %}{% spaceless %}
 {% endspaceless %}{% endblock %}
 
 {% block navigation_text %}
     {%- if not node.isActiveNode and navigation_url(themeRoot, node, level) -%}
-        <a href="{{ navigation_url(themeRoot, node, level) }}" class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</a>
+        <a href="{{ navigation_url(themeRoot, node, level) }}"
+           class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</a>
     {%- else -%}
         <span class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</span>
     {%- endif -%}

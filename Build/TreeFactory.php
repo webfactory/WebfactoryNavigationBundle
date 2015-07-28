@@ -1,6 +1,7 @@
-<?php
+F<?php
 
 namespace Webfactory\Bundle\NavigationBundle\Build;
+
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -13,7 +14,8 @@ use Symfony\Component\Config\ConfigCache;
 use Webfactory\Bundle\WfdMetaBundle\Util\ExpirableConfigCache;
 use Webfactory\Bundle\WfdMetaBundle\MetaQuery;
 
-class TreeFactory {
+class TreeFactory
+{
 
     protected $cacheFile;
     protected $debug;
@@ -36,7 +38,15 @@ class TreeFactory {
     /** @var ContainerInterface */
     protected $container;
 
-    public function __construct($cacheFile, $debug, MetaQuery $metaQuery, ContainerInterface $container, EventDispatcherInterface $eventDispatcher = null, LoggerInterface $logger = null, Stopwatch $stopwatch = null) {
+    public function __construct(
+        $cacheFile,
+        $debug,
+        MetaQuery $metaQuery,
+        ContainerInterface $container,
+        EventDispatcherInterface $eventDispatcher = null,
+        LoggerInterface $logger = null,
+        Stopwatch $stopwatch = null
+    ) {
         $this->cacheFile = $cacheFile;
         $this->debug = $debug;
         $this->metaQuery = $metaQuery;
@@ -46,30 +56,40 @@ class TreeFactory {
         $this->stopwatch = $stopwatch;
     }
 
-    public function addTableDependency($tables) {
+    public function addTableDependency($tables)
+    {
         $this->metaQuery->addTable($tables);
     }
 
-    public function debug($msg) {
-        if ($this->logger)
-            $this->logger->debug("$msg (PID " . getmypid() . ", microtime " . microtime() . ")");
+    public function debug($msg)
+    {
+        if ($this->logger) {
+            $this->logger->debug("$msg (PID ".getmypid().", microtime ".microtime().")");
+        }
     }
 
-    protected function startTiming($sectionName) {
-        if ($this->stopwatch) return $this->stopwatch->start("webfactory/navigation-bundle: " . $sectionName);
+    protected function startTiming($sectionName)
+    {
+        if ($this->stopwatch) {
+            return $this->stopwatch->start("webfactory/navigation-bundle: ".$sectionName);
+        }
     }
 
-    protected function stopTiming($watch) {
-        if ($watch) $watch->stop();
+    protected function stopTiming($watch)
+    {
+        if ($watch) {
+            $watch->stop();
+        }
     }
 
-    public function getTree() {
+    public function getTree()
+    {
         if (!$this->_tree) {
 
             $cache = new ExpirableConfigCache(
-                    $this->cacheFile,
-                    $this->debug,
-                    $this->metaQuery->getLastTouched()
+                $this->cacheFile,
+                $this->debug,
+                $this->metaQuery->getLastTouched()
             );
 
             $_watch = $this->startTiming('Checking whether the cache is fresh');
@@ -107,20 +127,22 @@ class TreeFactory {
             }
 
             if ($this->eventDispatcher) {
-                $this->eventDispatcher->dispatch('webfactory_navigation.tree_initialized', new TreeInitializedEvent($this->_tree));
+                $this->eventDispatcher->dispatch('webfactory_navigation.tree_initialized',
+                    new TreeInitializedEvent($this->_tree));
             }
         }
 
         return $this->_tree;
     }
 
-    public function buildTreeCache(ConfigCache $cache) {
+    public function buildTreeCache(ConfigCache $cache)
+    {
         $this->_tree = new Tree();
         // Dynamic (runtime) lookup:
         $dispatcher = $this->container->get('webfactory_navigation.tree_factory.dispatcher');
         $dispatcher->start($this->_tree);
-        $cache->write("<?php return unserialize(<<<EOD\n" . serialize($this->_tree) . "\nEOD\n);", $dispatcher->getResources());
+        $cache->write("<?php return unserialize(<<<EOD\n".serialize($this->_tree)."\nEOD\n);",
+            $dispatcher->getResources());
     }
-
 
 }

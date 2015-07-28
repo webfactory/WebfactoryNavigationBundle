@@ -2,9 +2,11 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
-class NavigationThemeTokenParser extends \Twig_TokenParser {
+class NavigationThemeTokenParser extends \Twig_TokenParser
+{
 
-    public function parse(\Twig_Token $token) {
+    public function parse(\Twig_Token $token)
+    {
         $lineNumber = $token->getLine();
         $stream = $this->parser->getStream();
 
@@ -19,7 +21,8 @@ class NavigationThemeTokenParser extends \Twig_TokenParser {
         return new NavigationThemeNode($navigation, new \Twig_Node($resources), $lineNumber, $this->getTag());
     }
 
-    public function getTag() {
+    public function getTag()
+    {
         return 'navigation_theme';
     }
 

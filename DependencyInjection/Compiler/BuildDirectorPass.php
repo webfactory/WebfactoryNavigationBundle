@@ -5,9 +5,11 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
-class BuildDirectorPass implements CompilerPassInterface {
+class BuildDirectorPass implements CompilerPassInterface
+{
 
-    public function process(ContainerBuilder $container) {
+    public function process(ContainerBuilder $container)
+    {
 
         if (false === $container->hasDefinition('webfactory_navigation.tree_factory.dispatcher')) {
             return;

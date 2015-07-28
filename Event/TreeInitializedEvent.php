@@ -4,7 +4,8 @@ namespace Webfactory\Bundle\NavigationBundle\Event;
 use Symfony\Component\EventDispatcher\Event;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
-class TreeInitializedEvent extends Event {
+class TreeInitializedEvent extends Event
+{
 
     /** @var Tree */
     protected $tree;
