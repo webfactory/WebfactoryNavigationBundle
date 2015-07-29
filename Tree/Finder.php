@@ -42,7 +42,7 @@ class Finder
         $bestId = null;
 
         foreach ($provided as $key => $value) {
-            if (is_string($value) === false) {
+            if (is_array($value) || (string) $value != $value) {
                 continue;
             }
             $p = "$key=$value";
