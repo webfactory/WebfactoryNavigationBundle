@@ -10,11 +10,22 @@ namespace Webfactory\Bundle\NavigationBundle\Tree;
 
 class Finder
 {
+    /** @var array(string => int[])  */
     protected $reverseIndex = array();
+
+    /** @var int[] */
     protected $requireCount = array();
+
+    /** @var Node[] */
     protected $objects = array();
+
+    /** @var string[] */
     protected $idToHash = array();
 
+    /**
+     * @param Node $object
+     * @param array $requirements
+     */
     public function add($object, array $requirements)
     {
         $hash = spl_object_hash($object);
@@ -35,6 +46,10 @@ class Finder
         $this->requireCount[$id] = count($requirements);
     }
 
+    /**
+     * @param string|array|object $provided
+     * @return Node|null
+     */
     public function lookup($provided)
     {
         $remainingCount = array();
@@ -42,7 +57,7 @@ class Finder
         $bestId = null;
 
         foreach ($provided as $key => $value) {
-            if (is_array($value) || (string) $value != $value) {
+            if (is_array($value) || is_object($value) || (string) $value != $value) {
                 continue;
             }
             $p = "$key=$value";
