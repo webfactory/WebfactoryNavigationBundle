@@ -75,9 +75,13 @@ class Node implements \ArrayAccess
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @return mixed|null
+     */
     public function get($name)
     {
-        return @$this->data[$name];
+        return isset($this->data[$name]) ? $this->data[$name] : null;
     }
 
     public function getParent()
