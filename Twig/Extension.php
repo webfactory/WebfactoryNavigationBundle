@@ -3,15 +3,15 @@
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
 use Webfactory\Bundle\NavigationBundle\Navigation\NodeInterface;
-use Webfactory\Bundle\NavigationBundle\Navigation\UrlGeneratorInterface;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Webfactory\Navigation\NavigationInterface;
 
 class Extension extends \Twig_Extension {
 
-    protected $environment;
     protected $resources;
+
+    /** @var  \Twig_Template */
     protected $template;
+
     protected $themes;
     protected $blocks;
 
@@ -23,10 +23,6 @@ class Extension extends \Twig_Extension {
 
     public function getName() {
         return 'webfactory_navigation_twig_extension';
-    }
-
-    public function initRuntime(\Twig_Environment $environment) {
-        $this->environment = $environment;
     }
 
     public function getTokenParsers() {
@@ -41,24 +37,24 @@ class Extension extends \Twig_Extension {
     }
 
     public function getFunctions() {
-        return array(
-            'navigation' =>  new \Twig_Function_Method($this, 'renderNavigation', array('is_safe' => array('all'))),
-            'navigation_level' => new \Twig_Function_Method($this, 'renderNavigationLevel', array('is_safe' => array('all'))),
-            'navigation_level_class' => new \Twig_Function_Method($this, 'renderNavigationLevelClass'),
-            'navigation_container' => new \Twig_Function_Method($this, 'renderNavigationContainer', array('is_safe' => array('all'))),
-            'navigation_container_class' => new \Twig_Function_Method($this, 'renderNavigationContainerClass'),
-            'navigation_link' => new \Twig_Function_Method($this, 'renderNavigationLink', array('is_safe' => array('all'))),
-            'navigation_link_class' => new \Twig_Function_Method($this, 'renderNavigationLinkClass'),
-            'navigation_url' => new \Twig_Function_Method($this, 'renderNavigationUrl'),
-            'navigation_text' => new \Twig_Function_Method($this, 'renderNavigationText', array('is_safe' => array('all')))
-        );
+        return [
+            new \Twig_SimpleFunction('navigation', [$this, 'renderNavigation'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_level', [$this, 'renderNavigationLevel'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_level_class', [$this, 'renderNavigationLevelClass'], ['needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_container', [$this, 'renderNavigationContainer'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_container_class', [$this, 'renderNavigationContainerClass'], ['needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_link', [$this, 'renderNavigationLink'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_link_class', [$this, 'renderNavigationLinkClass'], ['needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_url', [$this, 'renderNavigationUrl'], ['needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_text', [$this, 'renderNavigationText'], ['is_safe' => ['all'], 'needs_environment' => true]),
+        ];
     }
 
-    public function renderNavigation(NavigationInterface $navigation) {
-        return $this->renderNavigationLevel($navigation, $navigation->getRootNodes(), 0, null);
+    public function renderNavigation(\Twig_Environment $env, NavigationInterface $navigation) {
+        return $this->renderNavigationLevel($env, $navigation, $navigation->getRootNodes(), 0, null);
     }
 
-    public function renderNavigationLevel(NavigationInterface $navigation, array $nodes, $level, NodeInterface $parentNode = null) {
+    public function renderNavigationLevel(\Twig_Environment $env, NavigationInterface $navigation, array $nodes, $level, NodeInterface $parentNode = null) {
         $variables = array(
             'navigation' => $navigation,
             'nodes' => $nodes,
@@ -66,10 +62,10 @@ class Extension extends \Twig_Extension {
             'parentNode' => $parentNode
         );
 
-        return $this->renderBlock($navigation, 'navigation_level', $variables);
+        return $this->renderBlock($env, $navigation, 'navigation_level', $variables);
     }
 
-    public function renderNavigationLevelClass(NavigationInterface $navigation, array $nodes, $level, NodeInterface $parentNode = null) {
+    public function renderNavigationLevelClass(\Twig_Environment $env, NavigationInterface $navigation, array $nodes, $level, NodeInterface $parentNode = null) {
         $variables = array(
             'navigation' => $navigation,
             'nodes' => $nodes,
@@ -77,10 +73,10 @@ class Extension extends \Twig_Extension {
             'parentNode' => $parentNode
         );
 
-        return $this->renderBlock($navigation, 'navigation_level_class', $variables);
+        return $this->renderBlock($env, $navigation, 'navigation_level_class', $variables);
     }
 
-    public function renderNavigationContainer(NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
+    public function renderNavigationContainer(\Twig_Environment $env, NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
@@ -88,10 +84,10 @@ class Extension extends \Twig_Extension {
             'loop' => $loop
         );
 
-        return $this->renderBlock($navigation, 'navigation_container', $variables);
+        return $this->renderBlock($env, $navigation, 'navigation_container', $variables);
     }
 
-    public function renderNavigationContainerClass(NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
+    public function renderNavigationContainerClass(\Twig_Environment $env, NavigationInterface $navigation, NodeInterface $node, $level, $loop) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
@@ -99,55 +95,55 @@ class Extension extends \Twig_Extension {
             'loop' => $loop
         );
 
-        return $this->renderBlock($navigation, 'navigation_container_class', $variables);
+        return $this->renderBlock($env, $navigation, 'navigation_container_class', $variables);
     }
 
-    public function renderNavigationLink(NavigationInterface $navigation, NodeInterface $node, $level) {
+    public function renderNavigationLink(\Twig_Environment $env, NavigationInterface $navigation, NodeInterface $node, $level) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
             'level' => $level
         );
 
-        return $this->renderBlock($navigation, 'navigation_link', $variables);
+        return $this->renderBlock($env, $navigation, 'navigation_link', $variables);
     }
 
-    public function renderNavigationLinkClass(NavigationInterface $navigation, NodeInterface $node, $level) {
+    public function renderNavigationLinkClass(\Twig_Environment $env, NavigationInterface $navigation, NodeInterface $node, $level) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
             'level' => $level
         );
 
-        return $this->renderBlock($navigation, 'navigation_link_class', $variables);
+        return $this->renderBlock($env, $navigation, 'navigation_link_class', $variables);
     }
 
-    public function renderNavigationUrl(NavigationInterface $navigation, NodeInterface $node, $level) {
+    public function renderNavigationUrl(\Twig_Environment $env, NavigationInterface $navigation, NodeInterface $node, $level) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
             'level' => $level
         );
 
-        return $this->renderBlock($navigation, 'navigation_url', $variables);
+        return $this->renderBlock($env, $navigation, 'navigation_url', $variables);
     }
 
-    public function renderNavigationText(NavigationInterface $navigation, NodeInterface $node, $level) {
+    public function renderNavigationText(\Twig_Environment $env, NavigationInterface $navigation, NodeInterface $node, $level) {
         $variables = array(
             'navigation' => $navigation,
             'node' => $node,
             'level' => $level
         );
 
-        return $this->renderBlock($navigation, 'navigation_text', $variables);
+        return $this->renderBlock($env, $navigation, 'navigation_text', $variables);
     }
 
-    public function renderBlock($navigation, $name, array $variables) {
+    public function renderBlock(\Twig_Environment $env, $navigation, $name, array $variables) {
         if (!$this->template) {
-            $this->template = $this->environment->loadTemplate(reset($this->resources));
+            $this->template = $env->loadTemplate(reset($this->resources));
         }
 
-        $blocks = $this->getBlocks($navigation);
+        $blocks = $this->getBlocks($env, $navigation);
 
         ob_start();
         $this->template->displayBlock($name, $variables, $blocks);
@@ -156,7 +152,7 @@ class Extension extends \Twig_Extension {
         return $html;
     }
 
-    protected function getBlocks(NavigationInterface $navigation) {
+    protected function getBlocks(\Twig_Environment $env, NavigationInterface $navigation) {
         if (!$this->blocks->contains($navigation)) {
 
             $resources = $this->resources;
@@ -169,7 +165,7 @@ class Extension extends \Twig_Extension {
 
             foreach ($resources as $resource) {
                 if (!$resource instanceof \Twig_Template) {
-                    $resource = $this->environment->loadTemplate($resource);
+                    $resource = $env->loadTemplate($resource);
                 }
                 $resourceBlocks = array();
                 do {
