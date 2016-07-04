@@ -51,5 +51,10 @@
             <tag name="twig.extension"/>
         </service>
 
+        <service class="Webfactory\Bundle\NavigationBundle\Command\DumpTreeCommand">
+            <argument type="service" id="webfactory_navigation.tree"/>
+            <tag name="console.command"/>
+        </service>
+
     </services>
 </container>
