@@ -31,12 +31,10 @@
             <tag name="monolog.logger" channel="webfactory_navigation"/>
         </service>
 
-        <service
-                id="webfactory_navigation.tree"
-                factory-service="webfactory_navigation.tree_factory"
-                factory-method="getTree"
-                class="Webfactory\Bundle\NavigationBundle\Tree\Tree"
-                />
+        <service id="webfactory_navigation.tree" class="Webfactory\Bundle\NavigationBundle\Tree\Tree">
+            <factory service="webfactory_navigation.tree_factory"
+                     method="getTree" />
+        </service>
 
         <service
                 class="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener">
