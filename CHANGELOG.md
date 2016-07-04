@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 2.4.0
+-------------
+ 
+ * Neues Kommando webfactory:navigation:dump-tree zur Ausgabe des gesamten Baums
+   auf der Konsole.
+
+ * Neues Kommando webfactory:navigation:lookup-node zum Testen des Node-Lookups
+   über key-value-Paare.
+
 Version 2.3.0
 -------------
 
