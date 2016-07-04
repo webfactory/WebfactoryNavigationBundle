@@ -84,6 +84,16 @@ class Node implements \ArrayAccess
         return isset($this->data[$name]) ? $this->data[$name] : null;
     }
 
+    /**
+     * Returns all data stored in this node.
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
     public function getParent()
     {
         return $this->parent;
