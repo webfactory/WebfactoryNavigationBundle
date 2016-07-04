@@ -1,33 +1,18 @@
 <?php
 namespace Webfactory\Bundle\NavigationBundle\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Webfactory\Bundle\NavigationBundle\Tree\Node;
-use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
-class DumpTreeCommand extends Command
+class DumpTreeCommand extends TreeCommand
 {
-    /**
-     * @var Tree
-     */
-    private $tree;
-
-    private $properties = ['caption', 'visible', 'url', 'route', 'routeParameters'];
-
-    public function __construct(Tree $tree)
+    protected function configure()
     {
-        parent::__construct();
-        $this->tree = $tree;
+        $this
+            ->setName('webfactory:navigation:dump-tree')
+            ->setDescription('Dumps the current navigation tree');
     }
-
-     protected function configure()
-     {
-         $this
-             ->setName('webfactory:navigation:dump-tree')
-             ->setDescription('Dumps the current navigation tree');
-     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -44,9 +29,7 @@ class DumpTreeCommand extends Command
 
         $children = $n->getChildren();
 
-        foreach ($this->properties as $property) {
-            $value = $n->get($property);
-
+        foreach ($n->getData() as $property => $value) {
             if ($first) {
                 $output->writeln(str_repeat(' |  ', $depth) . ' |');
                 $sep = str_repeat(' |  ', $depth) . ' +-- ';
@@ -56,22 +39,10 @@ class DumpTreeCommand extends Command
 
             $output->writeln("$sep$property = {$this->formatValue($value)}");
             $first = false;
-
         }
 
         foreach ($children as $child) {
             $this->dumpNode($child, $output, $depth + 1);
-        }
-    }
-
-    private function formatValue($value)
-    {
-        if (is_string($value) || is_int($value)) {
-            return $value;
-        } else if (is_bool($value)) {
-            return $value ? 'true' : 'false';
-        } else {
-            return json_encode($value);
         }
     }
 }

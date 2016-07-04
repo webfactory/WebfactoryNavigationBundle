@@ -56,5 +56,10 @@
             <tag name="console.command"/>
         </service>
 
+        <service class="Webfactory\Bundle\NavigationBundle\Command\LookupNodeCommand">
+            <argument type="service" id="webfactory_navigation.tree"/>
+            <tag name="console.command"/>
+        </service>
+
     </services>
 </container>
