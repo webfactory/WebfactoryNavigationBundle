@@ -10,9 +10,8 @@ namespace Webfactory\Bundle\NavigationBundle\Twig;
 
 use Webfactory\Bundle\NavigationBundle\Tree\Node;
 
-class NavigationThemeExtension extends \Twig_Extension
+class NavigationThemeExtension extends \Twig_Extension implements \Twig_Extension_InitRuntimeInterface
 {
-
     protected $environment;
     protected $resources;
     protected $template;

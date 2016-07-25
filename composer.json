@@ -5,6 +5,7 @@
   },
   "require": {
     "webfactory/wfdmeta-bundle": "~2.2",
-    "symfony/symfony": "~2.6"
+    "symfony/symfony": "~2.6",
+    "twig/twig": "^1.23"
   }
 }
