@@ -51,24 +51,16 @@ class NavigationThemeExtension extends \Twig_Extension implements \Twig_Extensio
     public function getFunctions()
     {
         return array(
-            'power_set' => new \Twig_Function_Method($this, 'getPowerSet'),
-            'navigation' => new \Twig_Function_Method($this, 'renderNavigation', array('is_safe' => array('all'))),
-            'navigation_list' => new \Twig_Function_Method($this, 'renderNavigationList',
-                array('is_safe' => array('all'))),
-            'navigation_list_class' => new \Twig_Function_Method($this, 'renderNavigationListClass',
-                array('is_safe' => array('all'))),
-            'navigation_item' => new \Twig_Function_Method($this, 'renderNavigationItem',
-                array('is_safe' => array('all'))),
-            'navigation_item_class' => new \Twig_Function_Method($this, 'renderNavigationItemClass',
-                array('is_safe' => array('all'))),
-            'navigation_text' => new \Twig_Function_Method($this, 'renderNavigationText',
-                array('is_safe' => array('all'))),
-            'navigation_text_class' => new \Twig_Function_Method($this, 'renderNavigationTextClass',
-                array('is_safe' => array('all'))),
-            'navigation_url' => new \Twig_Function_Method($this, 'renderNavigationUrl',
-                array('is_safe' => array('all'))),
-            'navigation_caption' => new \Twig_Function_Method($this, 'renderNavigationCaption',
-                array('is_safe' => array('all')))
+            new \Twig_SimpleFunction('power_set', array($this, 'getPowerSet')),
+            new \Twig_SimpleFunction('navigation', array($this, 'renderNavigation'), array('is_safe' => array('all'))),
+            new \Twig_SimpleFunction('navigation_list', array($this, 'renderNavigationList'), array('is_safe' => array('all'))),
+            new \Twig_SimpleFunction('navigation_list_class', array($this, 'renderNavigationListClass'), array('is_safe' => array('all'))),
+            new \Twig_SimpleFunction('navigation_item', array($this, 'renderNavigationItem'), array('is_safe' => array('all'))),
+            new \Twig_SimpleFunction('navigation_item_class', array($this, 'renderNavigationItemClass'), array('is_safe' => array('all'))),
+            new \Twig_SimpleFunction('navigation_text', array($this, 'renderNavigationText'), array('is_safe' => array('all'))),
+            new \Twig_SimpleFunction('navigation_text_class', array($this, 'renderNavigationTextClass'), array('is_safe' => array('all'))),
+            new \Twig_SimpleFunction('navigation_url', array($this, 'renderNavigationUrl'), array('is_safe' => array('all'))),
+            new \Twig_SimpleFunction('navigation_caption', array($this, 'renderNavigationCaption'), array('is_safe' => array('all')))
         );
     }
 
