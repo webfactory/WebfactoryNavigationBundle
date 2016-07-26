@@ -28,7 +28,7 @@ class LookupNodeCommand extends TreeCommand
             $provisions[$key] = $value;
         }
 
-        if ($node = $this->tree->find($provisions)) {
+        if ($node = $this->getTree()->find($provisions)) {
             $output->writeln("Found a matching node:");
             foreach ($node->getData() as $key => $value) {
                 $output->writeln("\t$key = {$this->formatValue($value)}");

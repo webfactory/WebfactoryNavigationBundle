@@ -2,20 +2,28 @@
 namespace Webfactory\Bundle\NavigationBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Webfactory\Bundle\NavigationBundle\Build\TreeFactory;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
 class TreeCommand extends Command
 {
-
     /**
-     * @var Tree
+     * @var TreeFactory
      */
-    protected $tree;
+    protected $treeFactory;
 
-    public function __construct(Tree $tree)
+    public function __construct(TreeFactory $treeFactory)
     {
         parent::__construct();
-        $this->tree = $tree;
+        $this->treeFactory = $treeFactory;
+    }
+
+    /**
+     * @return Tree
+     */
+    protected function getTree()
+    {
+        return $this->treeFactory->getTree();
     }
 
     protected function formatValue($value)

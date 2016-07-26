@@ -16,7 +16,7 @@ class DumpTreeCommand extends TreeCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $roots = $this->tree->getRootNodes();
+        $roots = $this->getTree()->getRootNodes();
 
         foreach ($roots as $root) {
             $this->dumpNode($root, $output);

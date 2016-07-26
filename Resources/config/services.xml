@@ -52,12 +52,12 @@
         </service>
 
         <service class="Webfactory\Bundle\NavigationBundle\Command\DumpTreeCommand">
-            <argument type="service" id="webfactory_navigation.tree"/>
+            <argument type="service" id="webfactory_navigation.tree_factory"/>
             <tag name="console.command"/>
         </service>
 
         <service class="Webfactory\Bundle\NavigationBundle\Command\LookupNodeCommand">
-            <argument type="service" id="webfactory_navigation.tree"/>
+            <argument type="service" id="webfactory_navigation.tree_factory"/>
             <tag name="console.command"/>
         </service>
 
