@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 2.4.1
+-------------
+
+ * Deprecation notice für neuere Twig-Versionen vermeiden
+ 
+ * Zugriff auf den Baum beim Start von bin/console vermeiden. Das könnte zu Zugriffen
+   auf eine möglicherweise noch nicht initialisierte Datenbank führen.
+    
 Version 2.4.0
 -------------
  
