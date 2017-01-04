@@ -43,14 +43,13 @@
 {% endspaceless %}{% endfor %}{% spaceless %}
 {% endspaceless %}{% endblock %}
 
-{% block navigation_text %}
+{%- block navigation_text -%}
     {%- if not node.isActiveNode and navigation_url(themeRoot, node, level) -%}
-        <a href="{{ navigation_url(themeRoot, node, level) }}"
-           class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</a>
+        <a href="{{ navigation_url(themeRoot, node, level) }}" class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</a>
     {%- else -%}
         <span class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</span>
     {%- endif -%}
-{% endblock %}
+{%- endblock -%}
 
 {%- block navigation_text_class -%}
     nt nt-{{ level }}
