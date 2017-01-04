@@ -127,7 +127,7 @@ class TreeFactory
             if (!$this->_tree) {
                 $this->debug("Loading the cached tree");
                 $_watch = $this->startTiming('Loading a cached tree');
-                $this->_tree = require $cache;
+                $this->_tree = require $cache->getPath();
                 $this->stopTiming($_watch);
                 $this->debug("Finished loading the cached tree");
             }

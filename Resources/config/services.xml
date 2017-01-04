@@ -12,7 +12,7 @@
     <services>
         <service
                 id="webfactory_navigation.tree_factory.dispatcher"
-                scope="prototype"
+                shared="false"
                 class="Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher">
         </service>
 
