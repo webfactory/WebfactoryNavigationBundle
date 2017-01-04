@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 2.5.0
+-------------
+
+ * Neue NavigationController::ancestryAction zur Ausgabe von Teilbäumen z. B. der 
+   dritten und vierten Navigationsebene oberhalb des aktiven Knotens.
+ * Verbesserung whitespace-control um ausgegebenes HTML
+ 
 Version 2.4.1
 -------------
 
@@ -23,7 +30,7 @@ Version 2.3.0
 
  * webfactory_navigation.tree_initialized-Event über den regulüren EventDispatcher verteilen, sobald der Baum erzeugt wurde.
    Damit können Klienten den Baum verändern/erzeugen/ergänzen - und zwar genau in dem Moment, wo er erstmals benötigt wird.
-   Details zur Verwendung in 3677ff13b448.
+   Details zur Verwendung in 818daa580f243344b183e67438dea3592eb24b8a.
 
 
     
