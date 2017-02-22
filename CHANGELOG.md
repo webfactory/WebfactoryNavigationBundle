@@ -1,6 +1,16 @@
 Changelog
 =========
 
+Version 2.6.0
+-------------
+
+ * Neue Twig Function `navigation_active_at_level(level)` gibt den
+   \Webfactory\Bundle\NavigationBundle\Tree\Node zurück, der auf der
+   gegebenen Ebene aktiv ist. Damit lässt sich beispielsweise prüfen,
+   ob dieser Knoten in der Navigation dargestellt (sichtbar) ist. Lässt
+   sich auch verwenden, um mit NavigationController::navigationAction
+   die dort wurzelnde Navigation auszugeben.
+   
 Version 2.5.0
 -------------
 
