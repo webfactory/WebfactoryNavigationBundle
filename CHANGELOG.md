@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 2.7.0
+-------------
+
+ * Neue Twig Function `navigation_find(provisions)` findet von Twig
+   aus einen Knoten im Navigationsbaum. Lässt sich zum Beispiel verwenden,
+   wenn an einer Stelle gezielt ausgewählte Knoten nebeneinander ausgegeben
+   werden sollen (Side- oder Extra-Navs).
+
 Version 2.6.0
 -------------
 

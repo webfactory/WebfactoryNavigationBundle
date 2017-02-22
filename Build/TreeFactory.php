@@ -88,6 +88,9 @@ class TreeFactory
         }
     }
 
+    /**
+     * @return Tree
+     */
     public function getTree()
     {
         if (!$this->_tree) {

@@ -2,6 +2,7 @@
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
 use Webfactory\Bundle\NavigationBundle\Build\TreeFactory;
+use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
 class NavigationExtension extends \Twig_Extension
 {
@@ -22,6 +23,7 @@ class NavigationExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('navigation_active_at_level', [$this, 'getNavigationActiveAtLevel']),
+            new \Twig_SimpleFunction('navigation_find', [$this, 'findNode']),
         ];
     }
 
@@ -34,13 +36,32 @@ class NavigationExtension extends \Twig_Extension
      */
     public function getNavigationActiveAtLevel($level)
     {
-        $tree = $this->treeFactory->getTree();
-        $path = $tree->getActiveNode()->getPath();
+        $path = $this->getTree()->getActiveNode()->getPath();
 
         if (isset($path[$level])) {
             return $path[$level];
         }
 
         return null;
+    }
+
+    /**
+     * Finds a node indexed in the tree. See \Webfactory\Bundle\NavigationBundle\Tree\Tree::find.
+     *
+     * @param array $provisions Parameters used to look up the node.
+     *
+     * @return null|\Webfactory\Bundle\NavigationBundle\Tree\Node
+     */
+    public function findNode(array $provisions)
+    {
+        return $this->getTree()->find($provisions);
+    }
+
+    /**
+     * @return Tree
+     */
+    private function getTree()
+    {
+        return $this->treeFactory->getTree();
     }
 }
