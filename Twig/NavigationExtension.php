@@ -2,6 +2,7 @@
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
 use Webfactory\Bundle\NavigationBundle\Build\TreeFactory;
+use Webfactory\Bundle\NavigationBundle\Tree\Node;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
 class NavigationExtension extends \Twig_Extension
@@ -24,7 +25,29 @@ class NavigationExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFunction('navigation_active_at_level', [$this, 'getNavigationActiveAtLevel']),
             new \Twig_SimpleFunction('navigation_find', [$this, 'findNode']),
+            new \Twig_SimpleFunction('navigation_active_node', [$this, 'getActiveNode']),
+            new \Twig_SimpleFunction('navigation_active_path', [$this, 'getActivePath']),
         ];
+    }
+
+    /**
+     * Returns the currently active tree node.
+     *
+     * @return Node
+     */
+    public function getActiveNode()
+    {
+        return $this->getTree()->getActiveNode();
+    }
+
+    /**
+     * Returns the currently active "path" node.
+     *
+     * @return Node
+     */
+    public function getActivePath()
+    {
+        return $this->getTree()->getActivePath();
     }
 
     /**

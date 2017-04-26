@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 2.8.0
+-------------
+
+ * Neue Twig Functions `navigation_active_node()` und `navigation_active_path()` 
+   zum Zugirff auf den aktiven Navigationsknoten bzw. den nächstgelegenen Knoten
+   auf dem aktiven Pfad.
+
 Version 2.7.0
 -------------
 
