@@ -45,7 +45,7 @@ class BuildDispatcher
 
     public function getResources()
     {
-        return $this->resources;
+        return array_unique($this->resources);
     }
 
 }

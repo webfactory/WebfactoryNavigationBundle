@@ -8,26 +8,22 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Build;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\Config\ConfigCacheFactoryInterface;
+use Symfony\Component\Config\ConfigCacheInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Webfactory\Bundle\NavigationBundle\Event\TreeInitializedEvent;
-use Webfactory\Bundle\WfdMetaBundle\Provider;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
-use Symfony\Component\Config\ConfigCache;
-use Webfactory\Bundle\WfdMetaBundle\Util\ExpirableConfigCache;
-use Webfactory\Bundle\WfdMetaBundle\MetaQuery;
 
 class TreeFactory
 {
+    /** @var ConfigCacheFactoryInterface */
+    private $configCacheFactory;
 
-    protected $cacheFile;
-    protected $debug;
-
-    /** @var MetaQuery */
-    protected $metaQuery;
+    private $cacheFile;
 
     /** @var LoggerInterface */
     protected $logger;
@@ -45,26 +41,19 @@ class TreeFactory
     protected $container;
 
     public function __construct(
+        ConfigCacheFactoryInterface $configCacheFactory,
         $cacheFile,
-        $debug,
-        MetaQuery $metaQuery,
         ContainerInterface $container,
         EventDispatcherInterface $eventDispatcher = null,
         LoggerInterface $logger = null,
         Stopwatch $stopwatch = null
     ) {
+        $this->configCacheFactory = $configCacheFactory;
         $this->cacheFile = $cacheFile;
-        $this->debug = $debug;
-        $this->metaQuery = $metaQuery;
         $this->container = $container;
         $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
         $this->stopwatch = $stopwatch;
-    }
-
-    public function addTableDependency($tables)
-    {
-        $this->metaQuery->addTable($tables);
     }
 
     public function debug($msg)
@@ -94,38 +83,12 @@ class TreeFactory
     public function getTree()
     {
         if (!$this->_tree) {
-
-            $cache = new ExpirableConfigCache(
-                $this->cacheFile,
-                $this->debug,
-                $this->metaQuery->getLastTouched()
-            );
-
-            $_watch = $this->startTiming('Checking whether the cache is fresh');
-            $fresh = $cache->isFresh();
-            $this->stopTiming($_watch);
-
-            if (!$fresh) {
-
-                $cs = new \Webfactory\Bundle\WfdMetaBundle\Util\CriticalSection();
-                $cs->setLogger($this->logger);
-
-                $_watch = $this->startTiming('Critical section');
-
-                $self = $this;
-                $cs->execute(__FILE__, function () use ($self, $cache) {
-
-                    if (!$cache->isFresh()) {
+            $self = $this;
+            $cache = $this->configCacheFactory->cache($this->cacheFile, function (ConfigCacheInterface $cache) use ($self) {
                         $self->debug("Building the tree");
                         $self->buildTreeCache($cache);
                         $self->debug("Finished building the tree");
-                    } else {
-                        $self->debug("Had to wait for the cache to be initialized by another process");
-                    }
-                });
-
-                $this->stopTiming($_watch);
-            }
+            });
 
             if (!$this->_tree) {
                 $this->debug("Loading the cached tree");
@@ -144,7 +107,7 @@ class TreeFactory
         return $this->_tree;
     }
 
-    public function buildTreeCache(ConfigCache $cache)
+    public function buildTreeCache(ConfigCacheInterface $cache)
     {
         $this->_tree = new Tree();
         // Dynamic (runtime) lookup:

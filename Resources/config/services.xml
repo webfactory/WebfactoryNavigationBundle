@@ -16,14 +16,11 @@
                 class="Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher">
         </service>
 
-        <service id="webfactory_navigation.tree_factory.meta_query" parent="webfactory_wfd_meta.meta_query"/>
-
         <service
                 id="webfactory_navigation.tree_factory"
                 class="Webfactory\Bundle\NavigationBundle\Build\TreeFactory">
+            <argument type="service" id="config_cache_factory" />
             <argument>%kernel.cache_dir%/webfactory_navigation/tree.php</argument>
-            <argument>%kernel.debug%</argument>
-            <argument type="service" id="webfactory_navigation.tree_factory.meta_query"/>
             <argument type="service" id="service_container"/>
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="logger" on-invalid="null"/>
