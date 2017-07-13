@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## Version 3.1.0
+
+* Execute BuildDirectors ordered by their priority.
+
 ## Version 3.0.0
 
 * Config-Einstellung `refresh_tree_for_tables`/`wfd_meta_refresh` und  Service `webfactory_navigation.tree_factory.meta_query` entfernt. Um zu bestimmen, von welchen Dingen der `Tree` abhängt, ist es jetzt nicht mehr notwendig, diese Konfigurationseinstellungen zu nutzen. Erzeuge stattdessen geeignete `ResourceInterface`-Instanzen wie z. B. `\Webfactory\Bundle\WfdMetaBundle\Config\DoctrineEntityClassResource` oder `\Webfactory\Bundle\WfdMetaBundle\Config\WfdTableResource` aus dem `WebfactoryWfdMetaBundle` (ab ^3.0.0) und füge sie dem `BuildDispatcher` hinzu, während der Baum gebaut wird. Hintergrund: Das `WebfactoryWfdMetaBundle` kann jetzt solche Resourcen über den `ConfigCacheFactory`-Mechanismus auswerten und den Cache zur Laufzeit neu erstellen. Dieses Bundle hier wird damit die Abhängigkeit vom `WebfactoryWfdMeta`-Bundle los.

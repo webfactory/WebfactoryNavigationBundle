@@ -13,29 +13,29 @@ use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
 class BuildDispatcher
 {
-    protected $directors = array();
-    protected $resources = array();
+    protected $directors = [];
+    protected $resources = [];
     protected $queue;
 
-    public function addDirector(BuildDirector $m, $priority = 100)
+    public function addDirector(BuildDirector $director, $priority = 100)
     {
-        // TODO: Implement priority handling
-        $this->directors[] = $m;
+        $this->directors[$priority][] = $director;
     }
 
     public function start(Tree $tree)
     {
-        $this->queue = array(new BuildContext(array()));
-        while ($c = array_shift($this->queue)) {
-            foreach ($this->directors as $m) {
-                $m->build($c, $tree, $this);
+        $directorsOrderedByPriority = $this->getDirectorsOrderedByPriority();
+        $this->queue = [new BuildContext([])];
+        while ($context = array_shift($this->queue)) {
+            foreach ($directorsOrderedByPriority as $director) {
+                $director->build($context, $tree, $this);
             }
         }
     }
 
-    public function search(BuildContext $c)
+    public function search(BuildContext $context)
     {
-        $this->queue[] = $c;
+        $this->queue[] = $context;
     }
 
     public function addResource(ResourceInterface $resource)
@@ -46,6 +46,21 @@ class BuildDispatcher
     public function getResources()
     {
         return array_unique($this->resources);
+    }
+
+    /**
+     * @return BuildDirector[]
+     */
+    private function getDirectorsOrderedByPriority()
+    {
+        krsort($this->directors, SORT_NUMERIC);
+        $buildDirectorsOrderedByPriority = [];
+
+        foreach($this->directors as $directors) {
+            $buildDirectorsOrderedByPriority = array_merge($buildDirectorsOrderedByPriority, $directors);
+        }
+
+        return $buildDirectorsOrderedByPriority;
     }
 
 }
