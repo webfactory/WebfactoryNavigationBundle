@@ -8,13 +8,14 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Build;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\ConfigCacheFactoryInterface;
 use Symfony\Component\Config\ConfigCacheInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Component\Stopwatch\StopwatchEvent;
 use Webfactory\Bundle\NavigationBundle\Event\TreeInitializedEvent;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
@@ -63,14 +64,20 @@ class TreeFactory
         }
     }
 
+    /**
+     * @param $sectionName
+     * @return null|StopwatchEvent
+     */
     protected function startTiming($sectionName)
     {
         if ($this->stopwatch) {
             return $this->stopwatch->start("webfactory/navigation-bundle: ".$sectionName);
         }
+
+        return null;
     }
 
-    protected function stopTiming($watch)
+    protected function stopTiming(StopwatchEvent $watch = null)
     {
         if ($watch) {
             $watch->stop();
