@@ -4,8 +4,6 @@ namespace Webfactory\Bundle\NavigationBundle\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Webfactory\Bundle\NavigationBundle\Tree\Node;
-use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
 class LookupNodeCommand extends TreeCommand
 {

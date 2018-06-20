@@ -9,7 +9,6 @@
 namespace Webfactory\Bundle\NavigationBundle\Event;
 
 use Symfony\Component\HttpFoundation\RequestStack;
-use Webfactory\Bundle\NavigationBundle\Event\TreeInitializedEvent;
 
 class ActiveNodeEventListener
 {

@@ -9,7 +9,6 @@
 namespace Webfactory\Bundle\NavigationBundle\Build;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\ConfigCacheFactoryInterface;
 use Symfony\Component\Config\ConfigCacheInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
