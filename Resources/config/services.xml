@@ -10,15 +10,9 @@
     </parameters>
 
     <services>
-        <service
-                id="webfactory_navigation.tree_factory.dispatcher"
-                shared="false"
-                class="Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher">
-        </service>
+        <service id="webfactory_navigation.tree_factory.dispatcher" shared="false" class="Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher" public="true" />
 
-        <service
-                id="webfactory_navigation.tree_factory"
-                class="Webfactory\Bundle\NavigationBundle\Build\TreeFactory">
+        <service id="webfactory_navigation.tree_factory" class="Webfactory\Bundle\NavigationBundle\Build\TreeFactory">
             <argument type="service" id="config_cache_factory" />
             <argument>%kernel.cache_dir%/webfactory_navigation/tree.php</argument>
             <argument type="service" id="service_container"/>
@@ -28,29 +22,23 @@
             <tag name="monolog.logger" channel="webfactory_navigation"/>
         </service>
 
-        <service id="webfactory_navigation.tree" class="Webfactory\Bundle\NavigationBundle\Tree\Tree">
-            <factory service="webfactory_navigation.tree_factory"
-                     method="getTree" />
+        <service id="webfactory_navigation.tree" class="Webfactory\Bundle\NavigationBundle\Tree\Tree" public="true">
+            <factory service="webfactory_navigation.tree_factory" method="getTree" />
         </service>
 
-        <service
-                class="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener">
+        <service class="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener">
             <argument type="service" id="request_stack"/>
             <tag name="kernel.event_listener" event="webfactory_navigation.tree_initialized" method="initializeTree"/>
         </service>
 
-        <service id="webfactory_navigation.twig_theme_extension"
-                 class="%webfactory_navigation.twig_theme_extension.class%"
-                 public="false">
+        <service id="webfactory_navigation.twig_theme_extension" class="%webfactory_navigation.twig_theme_extension.class%" public="false">
             <argument type="collection">
                 <argument>%webfactory_navigation.default_theme.file%</argument>
             </argument>
             <tag name="twig.extension"/>
         </service>
 
-        <service id="webfactory_navigation.twig_extension"
-                 class="Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension"
-                 public="false">
+        <service id="webfactory_navigation.twig_extension" class="Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension" public="false">
             <argument type="service" id="webfactory_navigation.tree_factory"/>
             <tag name="twig.extension"/>
         </service>
