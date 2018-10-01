@@ -26,7 +26,7 @@
             <factory service="webfactory_navigation.tree_factory" method="getTree" />
         </service>
 
-        <service class="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener">
+        <service id="webfactory_navigation.event.active_node_event_listener" class="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener">
             <argument type="service" id="request_stack"/>
             <tag name="kernel.event_listener" event="webfactory_navigation.tree_initialized" method="initializeTree"/>
         </service>
@@ -43,12 +43,12 @@
             <tag name="twig.extension"/>
         </service>
 
-        <service class="Webfactory\Bundle\NavigationBundle\Command\DumpTreeCommand">
+        <service id="webfactory_navigation.command.dump_tree_command" class="Webfactory\Bundle\NavigationBundle\Command\DumpTreeCommand">
             <argument type="service" id="webfactory_navigation.tree_factory"/>
             <tag name="console.command"/>
         </service>
 
-        <service class="Webfactory\Bundle\NavigationBundle\Command\LookupNodeCommand">
+        <service id="webfactory_navigation.command.lookup_node_command" class="Webfactory\Bundle\NavigationBundle\Command\LookupNodeCommand">
             <argument type="service" id="webfactory_navigation.tree_factory"/>
             <tag name="console.command"/>
         </service>
