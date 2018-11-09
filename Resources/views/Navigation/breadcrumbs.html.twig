@@ -6,7 +6,7 @@
                 {% if node.caption|trim is not empty and ((node.breadcrumbsVisible is defined and node.breadcrumbsVisible) or node.visible) %}
                     <li class="breadcrumb {% if loop.first %}breadcrumb-first{% endif %}">
                         {% if not node.activeNode %}
-                            <a class="breadcrumb-link" href="{{ node.url }}">{{ node.caption }}</a> /
+                            <a class="breadcrumb-link" href="{{ node.url }}">{% block breadcrumbs_caption %}{{ node.caption }}{% endblock %}</a> /
                         {% else %}
                             <span class="breadcrumb-text">{{ node.caption }}</span>
                         {% endif %}
