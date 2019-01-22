@@ -1,12 +1,21 @@
 {
-  "name": "webfactory/navigation-bundle",
+    "name": "webfactory/navigation-bundle",
 
-  "autoload": {
-    "psr-4": {"Webfactory\\Bundle\\NavigationBundle\\": ""}
-  },
+    "autoload": {
+        "psr-4": {
+            "Webfactory\\Bundle\\NavigationBundle\\": ""
+        }
+    },
 
-  "require": {
-    "symfony/symfony": "^2.8 | ^3.0",
-    "twig/twig": "^1.26"
-  }
+    "require": {
+        "symfony/config": "^2.8|^3.4",
+        "symfony/console": "^2.8|^3.4",
+        "symfony/dependency-injection": "^2.8|^3.4",
+        "symfony/event-dispatcher": "^2.8|^3.4",
+        "symfony/framework-bundle": "^2.8|^3.4",
+        "symfony/http-foundation": "^2.8|^3.4",
+        "symfony/http-kernel": "^2.8|^3.4",
+        "symfony/stopwatch": "^2.8|^3.4",
+        "twig/twig": "^1.26"
+    }
 }
