@@ -59,7 +59,13 @@ class NavigationExtension extends \Twig_Extension
      */
     public function getNavigationActiveAtLevel($level)
     {
-        $path = $this->getTree()->getActiveNode()->getPath();
+        $activeNode = $this->getTree()->getActiveNode();
+
+        if (!$activeNode) {
+            return null;
+        }
+
+        $path = $activeNode->getPath();
 
         if (isset($path[$level])) {
             return $path[$level];
