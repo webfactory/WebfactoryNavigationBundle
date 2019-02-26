@@ -8,6 +8,7 @@
     },
 
     "require": {
+        "ocramius/proxy-manager": "^1.0|^2.2",
         "symfony/config": "^2.8|^3.4",
         "symfony/console": "^2.8|^3.4",
         "symfony/dependency-injection": "^2.8|^3.4",
@@ -15,7 +16,12 @@
         "symfony/framework-bundle": "^2.8|^3.4",
         "symfony/http-foundation": "^2.8|^3.4",
         "symfony/http-kernel": "^2.8|^3.4",
+        "symfony/proxy-manager-bridge": "^2.0|^3.0",
         "symfony/stopwatch": "^2.8|^3.4",
         "twig/twig": "^1.26"
+    },
+
+    "config": {
+        "sort-packages": true
     }
 }

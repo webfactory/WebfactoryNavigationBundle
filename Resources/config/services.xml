@@ -22,7 +22,7 @@
             <tag name="monolog.logger" channel="webfactory_navigation"/>
         </service>
 
-        <service id="webfactory_navigation.tree" class="Webfactory\Bundle\NavigationBundle\Tree\Tree" public="true">
+        <service id="webfactory_navigation.tree" class="Webfactory\Bundle\NavigationBundle\Tree\Tree" public="true" lazy="true">
             <factory service="webfactory_navigation.tree_factory" method="getTree" />
         </service>
 
