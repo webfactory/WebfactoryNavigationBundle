@@ -14,13 +14,13 @@ class NavigationThemeExtension extends \Twig_Extension
 {
     protected $resources;
 
-    /** @var  \Twig_Template */
+    /** @var \Twig_Template */
     protected $template;
 
     protected $themes;
     protected $blocks;
 
-    public function __construct(array $resources = array())
+    public function __construct(array $resources = [])
     {
         $this->resources = $resources;
         $this->themes = new \SplObjectStorage();
@@ -34,9 +34,9 @@ class NavigationThemeExtension extends \Twig_Extension
 
     public function getTokenParsers()
     {
-        return array(
+        return [
             new NavigationThemeTokenParser(),
-        );
+        ];
     }
 
     public function setTheme(Node $themeRoot, array $resources)
@@ -47,30 +47,30 @@ class NavigationThemeExtension extends \Twig_Extension
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('power_set', array($this, 'getPowerSet')),
-            new \Twig_SimpleFunction('navigation', array($this, 'renderNavigation'), array('is_safe' => array('all'), 'needs_environment' => true)),
-            new \Twig_SimpleFunction('navigation_list', array($this, 'renderNavigationList'), array('is_safe' => array('all'), 'needs_environment' => true)),
-            new \Twig_SimpleFunction('navigation_list_class', array($this, 'renderNavigationListClass'), array('is_safe' => array('all'), 'needs_environment' => true)),
-            new \Twig_SimpleFunction('navigation_item', array($this, 'renderNavigationItem'), array('is_safe' => array('all'), 'needs_environment' => true)),
-            new \Twig_SimpleFunction('navigation_item_class', array($this, 'renderNavigationItemClass'), array('is_safe' => array('all'), 'needs_environment' => true)),
-            new \Twig_SimpleFunction('navigation_text', array($this, 'renderNavigationText'), array('is_safe' => array('all'), 'needs_environment' => true)),
-            new \Twig_SimpleFunction('navigation_text_class', array($this, 'renderNavigationTextClass'), array('is_safe' => array('all'), 'needs_environment' => true)),
-            new \Twig_SimpleFunction('navigation_url', array($this, 'renderNavigationUrl'), array('is_safe' => array('all'), 'needs_environment' => true)),
-            new \Twig_SimpleFunction('navigation_caption', array($this, 'renderNavigationCaption'), array('is_safe' => array('all'), 'needs_environment' => true))
-        );
+        return [
+            new \Twig_SimpleFunction('power_set', [$this, 'getPowerSet']),
+            new \Twig_SimpleFunction('navigation', [$this, 'renderNavigation'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_list', [$this, 'renderNavigationList'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_list_class', [$this, 'renderNavigationListClass'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_item', [$this, 'renderNavigationItem'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_item_class', [$this, 'renderNavigationItemClass'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_text', [$this, 'renderNavigationText'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_text_class', [$this, 'renderNavigationTextClass'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_url', [$this, 'renderNavigationUrl'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new \Twig_SimpleFunction('navigation_caption', [$this, 'renderNavigationCaption'], ['is_safe' => ['all'], 'needs_environment' => true]),
+        ];
     }
 
     public function getPowerSet(array $baseSet)
     {
-        $count = count($baseSet);
+        $count = \count($baseSet);
         $members = pow(2, $count);
-        $powerSet = array();
-        for ($i = 0; $i < $members; $i++) {
-            $b = sprintf("%0".$count."b", $i);
-            $out = array();
-            for ($j = 0; $j < $count; $j++) {
-                if ($b{$j} == '1') {
+        $powerSet = [];
+        for ($i = 0; $i < $members; ++$i) {
+            $b = sprintf('%0'.$count.'b', $i);
+            $out = [];
+            for ($j = 0; $j < $count; ++$j) {
+                if ('1' == $b[$j]) {
                     $out[] = $baseSet[$j];
                 }
             }
@@ -150,23 +150,22 @@ class NavigationThemeExtension extends \Twig_Extension
     protected function getBlocks(\Twig_Environment $env, Node $themeRoot)
     {
         if (!$this->blocks->contains($themeRoot)) {
-
             $resources = $this->resources;
 
             if (isset($this->themes[$themeRoot])) {
                 $resources = array_merge($resources, $this->themes[$themeRoot]);
             }
 
-            $blocks = array();
+            $blocks = [];
 
             foreach ($resources as $resource) {
                 if (!$resource instanceof \Twig_Template) {
                     $resource = $env->loadTemplate($resource);
                 }
-                $resourceBlocks = array();
+                $resourceBlocks = [];
                 do {
                     $resourceBlocks = array_merge($resource->getBlocks(), $resourceBlocks);
-                } while (false !== $resource = $resource->getParent(array()));
+                } while (false !== $resource = $resource->getParent([]));
                 $blocks = array_merge($blocks, $resourceBlocks);
             }
 
@@ -177,5 +176,4 @@ class NavigationThemeExtension extends \Twig_Extension
 
         return $blocks;
     }
-
 }

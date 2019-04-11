@@ -59,18 +59,19 @@ class TreeFactory
     public function debug($msg)
     {
         if ($this->logger) {
-            $this->logger->debug("$msg (PID ".getmypid().", microtime ".microtime().")");
+            $this->logger->debug("$msg (PID ".getmypid().', microtime '.microtime().')');
         }
     }
 
     /**
      * @param $sectionName
-     * @return null|StopwatchEvent
+     *
+     * @return StopwatchEvent|null
      */
     protected function startTiming($sectionName)
     {
         if ($this->stopwatch) {
-            return $this->stopwatch->start("webfactory/navigation-bundle: ".$sectionName);
+            return $this->stopwatch->start('webfactory/navigation-bundle: '.$sectionName);
         }
 
         return null;
@@ -91,17 +92,17 @@ class TreeFactory
         if (!$this->_tree) {
             $self = $this;
             $cache = $this->configCacheFactory->cache($this->cacheFile, function (ConfigCacheInterface $cache) use ($self) {
-                        $self->debug("Building the tree");
-                        $self->buildTreeCache($cache);
-                        $self->debug("Finished building the tree");
+                $self->debug('Building the tree');
+                $self->buildTreeCache($cache);
+                $self->debug('Finished building the tree');
             });
 
             if (!$this->_tree) {
-                $this->debug("Loading the cached tree");
+                $this->debug('Loading the cached tree');
                 $_watch = $this->startTiming('Loading a cached tree');
                 $this->_tree = require $cache->getPath();
                 $this->stopTiming($_watch);
-                $this->debug("Finished loading the cached tree");
+                $this->debug('Finished loading the cached tree');
             }
 
             if ($this->eventDispatcher) {
@@ -122,5 +123,4 @@ class TreeFactory
         $cache->write("<?php return unserialize(<<<EOD\n".serialize($this->_tree)."\nEOD\n);",
             $dispatcher->getResources());
     }
-
 }

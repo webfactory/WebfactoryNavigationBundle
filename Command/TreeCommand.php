@@ -1,4 +1,5 @@
 <?php
+
 namespace Webfactory\Bundle\NavigationBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -28,9 +29,9 @@ class TreeCommand extends Command
 
     protected function formatValue($value)
     {
-        if (is_string($value) || is_int($value)) {
+        if (\is_string($value) || \is_int($value)) {
             return $value;
-        } else if (is_bool($value)) {
+        } elseif (\is_bool($value)) {
             return $value ? 'true' : 'false';
         } else {
             return json_encode($value);

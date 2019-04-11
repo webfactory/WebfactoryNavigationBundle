@@ -18,10 +18,10 @@ class NavigationController extends Controller
     /**
      * Renders the navigation tree, starting at a given root node.
      *
-     * @param array|Node $root           An array of key-values pairs that will be passed to the
+     * @param array|Node $root           an array of key-values pairs that will be passed to the
      *                                   \Webfactory\Bundle\NavigationBundle\Tree\Tree::find method to look up the root
-     *                                   node.
-     * @param int        $maxLevels      The maximum number of tree levels (starting from the specified root) to draw.
+     *                                   node
+     * @param int        $maxLevels      the maximum number of tree levels (starting from the specified root) to draw
      * @param int        $expandedLevels The number of levels to always draw expanded (i. e. showing all nodes).
      * @param string     $template       Reference to the Twig template to use
      *
@@ -32,22 +32,21 @@ class NavigationController extends Controller
         $maxLevels = 1,
         $expandedLevels = 1,
         $template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig'
-    )
-    {
-        if (is_array($root)) {
+    ) {
+        if (\is_array($root)) {
             $node = $this->getTree()->find($root);
             if (!$node) {
-                return new Response(' ## Navigation:tree($root => ' . json_encode($root) . ' could not find the node ##');
+                return new Response(' ## Navigation:tree($root => '.json_encode($root).' could not find the node ##');
             }
-        } else if (!($root instanceof Node)) {
+        } elseif (!($root instanceof Node)) {
             throw new \InvalidArgumentException("The 'root' parameter must either be an array or a tree Node.");
         } else {
             $node = $root;
         }
 
         return $this->render($template, [
-            'root'           => $node,
-            'maxLevels'      => $maxLevels,
+            'root' => $node,
+            'maxLevels' => $maxLevels,
             'expandedLevels' => $expandedLevels,
         ]);
     }
@@ -68,10 +67,10 @@ class NavigationController extends Controller
      * the root of the tree. It will then pick the ancestor node at the $startLevel level and use it as the root
      * for a tree $maxLevels deep and unconditionally expanded at the first $expandedLevels levels.
      *
-     * @param        $startLevel      The level (counted from the root, which is 0) to start the tree at.
-     * @param int    $maxLevels       The maximum number of tree levels (starting from the specified root) to draw.
-     * @param int    $expandedLevels  The number of levels to always draw expanded (i. e. showing all nodes).
-     * @param string $template        Reference to the Twig template to use
+     * @param        $startLevel     the level (counted from the root, which is 0) to start the tree at
+     * @param int    $maxLevels      the maximum number of tree levels (starting from the specified root) to draw
+     * @param int    $expandedLevels The number of levels to always draw expanded (i. e. showing all nodes).
+     * @param string $template       Reference to the Twig template to use
      *
      * @return Response
      */
@@ -113,5 +112,4 @@ class NavigationController extends Controller
     {
         return $this->get('webfactory_navigation.tree');
     }
-
 }

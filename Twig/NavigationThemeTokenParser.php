@@ -10,14 +10,13 @@ namespace Webfactory\Bundle\NavigationBundle\Twig;
 
 class NavigationThemeTokenParser extends \Twig_TokenParser
 {
-
     public function parse(\Twig_Token $token)
     {
         $lineNumber = $token->getLine();
         $stream = $this->parser->getStream();
 
         $navigation = $this->parser->getExpressionParser()->parseExpression();
-        $resources = array();
+        $resources = [];
         do {
             $resources[] = $this->parser->getExpressionParser()->parseExpression();
         } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
@@ -31,5 +30,4 @@ class NavigationThemeTokenParser extends \Twig_TokenParser
     {
         return 'navigation_theme';
     }
-
 }

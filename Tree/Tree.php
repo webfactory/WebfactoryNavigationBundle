@@ -10,8 +10,8 @@ namespace Webfactory\Bundle\NavigationBundle\Tree;
 
 class Tree
 {
-    protected $roots = array();
-    protected $identities = array();
+    protected $roots = [];
+    protected $identities = [];
     protected $finder;
 
     /**
@@ -39,7 +39,7 @@ class Tree
 
     public function addRoot(Node $r = null)
     {
-        if ($r === null) {
+        if (null === $r) {
             $r = new Node();
         }
         $this->roots[] = $r;
@@ -86,7 +86,7 @@ class Tree
     }
 
     /**
-     * @return Node|null Returns the currently active node, if available.
+     * @return Node|null returns the currently active node, if available
      */
     public function getActiveNode()
     {

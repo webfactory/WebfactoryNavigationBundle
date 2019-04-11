@@ -25,6 +25,7 @@ class BuildContext
 
     /**
      * @param array<string, mixed> $params
+     *
      * @return BuildContext
      */
     public function change(array $params)
@@ -34,11 +35,11 @@ class BuildContext
 
     /**
      * @param string $name
+     *
      * @return mixed|null
      */
     public function get($name)
     {
         return isset($this->params[$name]) ? $this->params[$name] : null;
     }
-
 }

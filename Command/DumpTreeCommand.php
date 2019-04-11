@@ -1,4 +1,5 @@
 <?php
+
 namespace Webfactory\Bundle\NavigationBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,10 +39,10 @@ class DumpTreeCommand extends TreeCommand
         if (!$this->shortOutput) {
             foreach ($n->getData() as $property => $value) {
                 if ($first) {
-                    $output->writeln(str_repeat(' |  ', $depth) . ' |');
-                    $sep = str_repeat(' |  ', $depth) . ' +-- ';
+                    $output->writeln(str_repeat(' |  ', $depth).' |');
+                    $sep = str_repeat(' |  ', $depth).' +-- ';
                 } else {
-                    $sep = str_repeat(' |  ', $depth + 1) . ' ';
+                    $sep = str_repeat(' |  ', $depth + 1).' ';
                 }
 
                 $output->writeln("$sep$property = {$this->formatValue($value)}");
@@ -49,7 +50,7 @@ class DumpTreeCommand extends TreeCommand
             }
         } else {
             $mode = $n->get('visible') ? 'info' : 'comment';
-            $sep = str_repeat(' |  ', $depth) . ' +-- ';
+            $sep = str_repeat(' |  ', $depth).' +-- ';
             $output->writeln("<$mode>$sep{$n->get('caption')} [{$n->get('url')}]</$mode>");
         }
 

@@ -10,14 +10,13 @@ namespace Webfactory\Bundle\NavigationBundle\Twig;
 
 class NavigationThemeNode extends \Twig_Node
 {
-
     public function __construct(
         \Twig_NodeInterface $navigation,
         \Twig_NodeInterface $resources,
         $lineNumber,
         $tag = null
     ) {
-        parent::__construct(array('navigation' => $navigation, 'resources' => $resources), array(), $lineNumber, $tag);
+        parent::__construct(['navigation' => $navigation, 'resources' => $resources], [], $lineNumber, $tag);
     }
 
     public function compile(\Twig_Compiler $compiler)

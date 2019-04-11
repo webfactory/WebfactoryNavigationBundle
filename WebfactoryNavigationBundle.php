@@ -14,10 +14,8 @@ use Webfactory\Bundle\NavigationBundle\DependencyInjection\Compiler\BuildDirecto
 
 class WebfactoryNavigationBundle extends Bundle
 {
-
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new BuildDirectorPass());
     }
-
 }

@@ -32,12 +32,12 @@ class Node implements \ArrayAccess
      *
      * @param Node|null $n The node to add as a child. If null, a new Node will be created (and returned).
      *
-     * @return Node Returns the given or newly created node, for use in fluent notations.
+     * @return Node returns the given or newly created node, for use in fluent notations
      */
-    public function addChild(Node $n = null)
+    public function addChild(self $n = null)
     {
-        if ($n === null) {
-            $n = new Node();
+        if (null === $n) {
+            $n = new self();
         }
 
         $this->children[] = $n;
@@ -62,7 +62,7 @@ class Node implements \ArrayAccess
      *
      * @param array $requirements An array of key-value-pairs used for indexing. If a later call to \Webfactory\Bundle\NavigationBundle\Tree\Tree::find passes at least these key-value-pairs, the node will be found.
      *
-     * @return $this The node itself, for use in fluent notations.
+     * @return $this the node itself, for use in fluent notations
      */
     public function index(array $requirements)
     {
@@ -80,10 +80,10 @@ class Node implements \ArrayAccess
     /**
      * Sets a value on this node.
      *
-     * @param string $name The value's name.
-     * @param mixed $value The value's value.
+     * @param string $name  the value's name
+     * @param mixed  $value the value's value
      *
-     * @return $this The node itself, for use in fluent notations.
+     * @return $this the node itself, for use in fluent notations
      */
     public function set($name, $value)
     {
@@ -95,9 +95,9 @@ class Node implements \ArrayAccess
     /**
      * Gets a value stored in this node.
      *
-     * @param string $name Name of the value to get.
+     * @param string $name name of the value to get
      *
-     * @return mixed|null The value, or null if the $name is unknown.
+     * @return mixed|null the value, or null if the $name is unknown
      */
     public function get($name)
     {
@@ -115,7 +115,7 @@ class Node implements \ArrayAccess
     }
 
     /**
-     * @return null|Node Returns the parent node.
+     * @return Node|null returns the parent node
      */
     public function getParent()
     {
@@ -123,11 +123,11 @@ class Node implements \ArrayAccess
     }
 
     /**
-     * @return Node[] The array of all Nodes from the root towards this node.
+     * @return Node[] the array of all Nodes from the root towards this node
      */
     public function getPath()
     {
-        if ($this->parent === null) {
+        if (null === $this->parent) {
             return [$this];
         } else {
             $p = $this->parent->getPath();
@@ -138,7 +138,7 @@ class Node implements \ArrayAccess
     }
 
     /**
-     * @return Node[] Returns all child nodes.
+     * @return Node[] returns all child nodes
      */
     public function getChildren()
     {
@@ -146,20 +146,20 @@ class Node implements \ArrayAccess
     }
 
     /**
-     * @return bool Whether the node has child nodes or not.
+     * @return bool whether the node has child nodes or not
      */
     public function hasChildren()
     {
-        return (bool)$this->children;
+        return (bool) $this->children;
     }
 
     /**
-     * @return bool Whether the node has visible child nodes or not.
+     * @return bool whether the node has visible child nodes or not
      */
     public function hasVisibleChildren()
     {
         foreach ($this->children as $childNode) {
-            if ($childNode->get('visible') === true) {
+            if (true === $childNode->get('visible')) {
                 return true;
             }
         }
@@ -170,9 +170,9 @@ class Node implements \ArrayAccess
     /**
      * @param Node $ancestor
      *
-     * @return bool True if the given node is an ancestor of the current node.
+     * @return bool true if the given node is an ancestor of the current node
      */
-    public function hasAncestor(Node $ancestor)
+    public function hasAncestor(self $ancestor)
     {
         return $this->parent && (($this->parent === $ancestor) || $this->parent->hasAncestor($ancestor));
     }
@@ -180,15 +180,15 @@ class Node implements \ArrayAccess
     /**
      * @param Node $descendant
      *
-     * @return bool True if $descendant is a descendant of the current node.
+     * @return bool true if $descendant is a descendant of the current node
      */
-    public function hasDescendant(Node $descendant)
+    public function hasDescendant(self $descendant)
     {
         return $descendant->hasAncestor($this);
     }
 
     /**
-     * @return int Returns the level of this node, with "0" being the root level.
+     * @return int returns the level of this node, with "0" being the root level
      */
     public function getLevel()
     {
@@ -202,7 +202,7 @@ class Node implements \ArrayAccess
     /**
      * Sets this node as the currently "active" (in terms of navigation state) node in the Tree.
      *
-     * @return $this The node itself, for use in fluent notations.
+     * @return $this the node itself, for use in fluent notations
      */
     public function setActive()
     {
@@ -223,7 +223,7 @@ class Node implements \ArrayAccess
      * in "active path" state and, among other things, still provide a clickable link to return
      * to the gallery page.
      *
-     * @return $this The node itself, for use in fluent notations.
+     * @return $this the node itself, for use in fluent notations
      */
     public function setActivePath()
     {
@@ -233,7 +233,7 @@ class Node implements \ArrayAccess
     }
 
     /**
-     * @return bool Whether this is the currently active node in the tree.
+     * @return bool whether this is the currently active node in the tree
      */
     public function isActiveNode()
     {
@@ -241,7 +241,7 @@ class Node implements \ArrayAccess
     }
 
     /**
-     * @return bool Whether this node lies on the path from the Tree root towards the active node.
+     * @return bool whether this node lies on the path from the Tree root towards the active node
      */
     public function isActivePath()
     {
@@ -274,9 +274,8 @@ class Node implements \ArrayAccess
         return $this;
     }
 
-    protected function setParent(Node $p)
+    protected function setParent(self $p)
     {
         $this->parent = $p;
     }
-
 }

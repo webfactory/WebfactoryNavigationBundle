@@ -56,11 +56,10 @@ class BuildDispatcher
         krsort($this->directors, SORT_NUMERIC);
         $buildDirectorsOrderedByPriority = [];
 
-        foreach($this->directors as $directors) {
+        foreach ($this->directors as $directors) {
             $buildDirectorsOrderedByPriority = array_merge($buildDirectorsOrderedByPriority, $directors);
         }
 
         return $buildDirectorsOrderedByPriority;
     }
-
 }

@@ -13,7 +13,6 @@ use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
 class TreeInitializedEvent extends Event
 {
-
     /** @var Tree */
     protected $tree;
 
@@ -29,5 +28,4 @@ class TreeInitializedEvent extends Event
     {
         return $this->tree;
     }
-
 }
