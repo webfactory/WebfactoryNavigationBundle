@@ -8,7 +8,9 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
-class NavigationThemeNode extends \Twig_Node
+use Twig\Node\Node;
+
+class NavigationThemeNode extends Node
 {
     public function __construct(
         \Twig_NodeInterface $navigation,

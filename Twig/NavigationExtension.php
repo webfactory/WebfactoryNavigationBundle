@@ -2,11 +2,13 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 use Webfactory\Bundle\NavigationBundle\Build\TreeFactory;
 use Webfactory\Bundle\NavigationBundle\Tree\Node;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
-class NavigationExtension extends \Twig_Extension
+class NavigationExtension extends AbstractExtension
 {
     /** @var TreeFactory */
     private $treeFactory;
@@ -24,10 +26,10 @@ class NavigationExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('navigation_active_at_level', [$this, 'getNavigationActiveAtLevel']),
-            new \Twig_SimpleFunction('navigation_find', [$this, 'findNode']),
-            new \Twig_SimpleFunction('navigation_active_node', [$this, 'getActiveNode']),
-            new \Twig_SimpleFunction('navigation_active_path', [$this, 'getActivePath']),
+            new TwigFunction('navigation_active_at_level', [$this, 'getNavigationActiveAtLevel']),
+            new TwigFunction('navigation_find', [$this, 'findNode']),
+            new TwigFunction('navigation_active_node', [$this, 'getActiveNode']),
+            new TwigFunction('navigation_active_path', [$this, 'getActivePath']),
         ];
     }
 

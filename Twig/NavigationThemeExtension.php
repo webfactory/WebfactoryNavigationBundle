@@ -8,9 +8,11 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 use Webfactory\Bundle\NavigationBundle\Tree\Node;
 
-class NavigationThemeExtension extends \Twig_Extension
+class NavigationThemeExtension extends AbstractExtension
 {
     protected $resources;
 
@@ -48,16 +50,16 @@ class NavigationThemeExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('power_set', [$this, 'getPowerSet']),
-            new \Twig_SimpleFunction('navigation', [$this, 'renderNavigation'], ['is_safe' => ['all'], 'needs_environment' => true]),
-            new \Twig_SimpleFunction('navigation_list', [$this, 'renderNavigationList'], ['is_safe' => ['all'], 'needs_environment' => true]),
-            new \Twig_SimpleFunction('navigation_list_class', [$this, 'renderNavigationListClass'], ['is_safe' => ['all'], 'needs_environment' => true]),
-            new \Twig_SimpleFunction('navigation_item', [$this, 'renderNavigationItem'], ['is_safe' => ['all'], 'needs_environment' => true]),
-            new \Twig_SimpleFunction('navigation_item_class', [$this, 'renderNavigationItemClass'], ['is_safe' => ['all'], 'needs_environment' => true]),
-            new \Twig_SimpleFunction('navigation_text', [$this, 'renderNavigationText'], ['is_safe' => ['all'], 'needs_environment' => true]),
-            new \Twig_SimpleFunction('navigation_text_class', [$this, 'renderNavigationTextClass'], ['is_safe' => ['all'], 'needs_environment' => true]),
-            new \Twig_SimpleFunction('navigation_url', [$this, 'renderNavigationUrl'], ['is_safe' => ['all'], 'needs_environment' => true]),
-            new \Twig_SimpleFunction('navigation_caption', [$this, 'renderNavigationCaption'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new TwigFunction('power_set', [$this, 'getPowerSet']),
+            new TwigFunction('navigation', [$this, 'renderNavigation'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new TwigFunction('navigation_list', [$this, 'renderNavigationList'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new TwigFunction('navigation_list_class', [$this, 'renderNavigationListClass'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new TwigFunction('navigation_item', [$this, 'renderNavigationItem'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new TwigFunction('navigation_item_class', [$this, 'renderNavigationItemClass'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new TwigFunction('navigation_text', [$this, 'renderNavigationText'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new TwigFunction('navigation_text_class', [$this, 'renderNavigationTextClass'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new TwigFunction('navigation_url', [$this, 'renderNavigationUrl'], ['is_safe' => ['all'], 'needs_environment' => true]),
+            new TwigFunction('navigation_caption', [$this, 'renderNavigationCaption'], ['is_safe' => ['all'], 'needs_environment' => true]),
         ];
     }
 

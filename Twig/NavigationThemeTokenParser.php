@@ -8,7 +8,9 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
-class NavigationThemeTokenParser extends \Twig_TokenParser
+use Twig\TokenParser\AbstractTokenParser;
+
+class NavigationThemeTokenParser extends AbstractTokenParser
 {
     public function parse(\Twig_Token $token)
     {
