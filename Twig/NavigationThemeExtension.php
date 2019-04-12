@@ -8,7 +8,9 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
+use Twig\Template;
 use Twig\TwigFunction;
 use Webfactory\Bundle\NavigationBundle\Tree\Node;
 
@@ -16,7 +18,7 @@ class NavigationThemeExtension extends AbstractExtension
 {
     protected $resources;
 
-    /** @var \Twig_Template */
+    /** @var Template */
     protected $template;
 
     protected $themes;
@@ -27,11 +29,6 @@ class NavigationThemeExtension extends AbstractExtension
         $this->resources = $resources;
         $this->themes = new \SplObjectStorage();
         $this->blocks = new \SplObjectStorage();
-    }
-
-    public function getName()
-    {
-        return 'webfactory_navigation_theme_extension';
     }
 
     public function getTokenParsers()
@@ -82,13 +79,13 @@ class NavigationThemeExtension extends AbstractExtension
         return $powerSet;
     }
 
-    public function renderNavigation(\Twig_Environment $env, Node $node, $maxLevels, $expandedLevels)
+    public function renderNavigation(Environment $env, Node $node, $maxLevels, $expandedLevels)
     {
         return $this->renderNavigationList($env, $node, $node->getChildren(), 0, $maxLevels, $expandedLevels, $node);
     }
 
     public function renderNavigationList(
-        \Twig_Environment $env,
+        Environment $env,
         Node $themeRoot,
         array $nodes,
         $level,
@@ -103,42 +100,42 @@ class NavigationThemeExtension extends AbstractExtension
         return '';
     }
 
-    public function renderNavigationListClass(\Twig_Environment $env, Node $themeRoot, array $nodes, $level, Node $parentNode = null)
+    public function renderNavigationListClass(Environment $env, Node $themeRoot, array $nodes, $level, Node $parentNode = null)
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_list_class', get_defined_vars());
     }
 
-    public function renderNavigationItem(\Twig_Environment $env, Node $themeRoot, Node $node, $level, $maxLevels, $expandedLevels, $loop)
+    public function renderNavigationItem(Environment $env, Node $themeRoot, Node $node, $level, $maxLevels, $expandedLevels, $loop)
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_item', get_defined_vars());
     }
 
-    public function renderNavigationItemClass(\Twig_Environment $env, Node $themeRoot, Node $node, $level, $loop)
+    public function renderNavigationItemClass(Environment $env, Node $themeRoot, Node $node, $level, $loop)
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_item_class', get_defined_vars());
     }
 
-    public function renderNavigationText(\Twig_Environment $env, Node $themeRoot, Node $node, $level)
+    public function renderNavigationText(Environment $env, Node $themeRoot, Node $node, $level)
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_text', get_defined_vars());
     }
 
-    public function renderNavigationTextClass(\Twig_Environment $env, Node $themeRoot, Node $node, $level)
+    public function renderNavigationTextClass(Environment $env, Node $themeRoot, Node $node, $level)
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_text_class', get_defined_vars());
     }
 
-    public function renderNavigationUrl(\Twig_Environment $env, Node $themeRoot, Node $node, $level)
+    public function renderNavigationUrl(Environment $env, Node $themeRoot, Node $node, $level)
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_url', get_defined_vars());
     }
 
-    public function renderNavigationCaption(\Twig_Environment $env, Node $themeRoot, Node $node, $level)
+    public function renderNavigationCaption(Environment $env, Node $themeRoot, Node $node, $level)
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_caption', get_defined_vars());
     }
 
-    public function renderBlock(\Twig_Environment $env, $themeRoot, $name, array $variables)
+    public function renderBlock(Environment $env, $themeRoot, $name, array $variables)
     {
         if (!$this->template) {
             $this->template = $env->loadTemplate(reset($this->resources));
@@ -149,7 +146,7 @@ class NavigationThemeExtension extends AbstractExtension
         return $this->template->renderBlock($name, $variables, $blocks);
     }
 
-    protected function getBlocks(\Twig_Environment $env, Node $themeRoot)
+    protected function getBlocks(Environment $env, Node $themeRoot)
     {
         if (!$this->blocks->contains($themeRoot)) {
             $resources = $this->resources;
@@ -161,7 +158,7 @@ class NavigationThemeExtension extends AbstractExtension
             $blocks = [];
 
             foreach ($resources as $resource) {
-                if (!$resource instanceof \Twig_Template) {
+                if (!$resource instanceof Template) {
                     $resource = $env->loadTemplate($resource);
                 }
                 $resourceBlocks = [];

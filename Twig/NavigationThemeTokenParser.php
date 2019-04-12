@@ -8,11 +8,13 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
+use Twig\Node\Node;
+use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 
 class NavigationThemeTokenParser extends AbstractTokenParser
 {
-    public function parse(\Twig_Token $token)
+    public function parse(Token $token)
     {
         $lineNumber = $token->getLine();
         $stream = $this->parser->getStream();
@@ -21,11 +23,11 @@ class NavigationThemeTokenParser extends AbstractTokenParser
         $resources = [];
         do {
             $resources[] = $this->parser->getExpressionParser()->parseExpression();
-        } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
+        } while (!$stream->test(Token::BLOCK_END_TYPE));
 
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
-        return new NavigationThemeNode($navigation, new \Twig_Node($resources), $lineNumber, $this->getTag());
+        return new NavigationThemeNode($navigation, new Node($resources), $lineNumber, $this->getTag());
     }
 
     public function getTag()

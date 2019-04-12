@@ -8,20 +8,21 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
+use Twig\Compiler;
 use Twig\Node\Node;
 
 class NavigationThemeNode extends Node
 {
     public function __construct(
-        \Twig_NodeInterface $navigation,
-        \Twig_NodeInterface $resources,
+        Node $navigation,
+        Node $resources,
         $lineNumber,
         $tag = null
     ) {
         parent::__construct(['navigation' => $navigation, 'resources' => $resources], [], $lineNumber, $tag);
     }
 
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler
             ->addDebugInfo($this)
