@@ -26,22 +26,24 @@
     {% endif %}
 {% endblock %}
 
-{% block navigation_item_class %}{% spaceless %}
-    {#{{ dump(node) }}#}
-    {% set classes = [] %}
-    {% set classes = classes | merge( [(node.isActiveNode ? 'a' : 'na')] ) %}
-    {% set classes = classes | merge( [(node.isActivePath ? 'ap' : 'nap')] ) %}
-    {% set classes = classes | merge( [(loop.first ? 'f' : 'nf')] ) %}
-    {% set classes = classes | merge( [(loop.last ? 'l' : 'nl')] ) %}
-    {% set classes = classes | merge( [(node.hasVisibleChildren ? 'p' : 'np' )] ) %}
-{% endspaceless %}ni ni-{{ level }} {% for set in power_set(classes) %}{% spaceless %}
-    {% set class = set | sort | join('-') %}
-{% endspaceless %}{% if not class is empty %}{% spaceless %}
-    ni-{{ class }}-{{ level }}
-{% endspaceless %}{% if not loop.last %} {% endif %}{% spaceless %}
-{% endspaceless %}{% endif %}{% spaceless %}
-{% endspaceless %}{% endfor %}{% spaceless %}
-{% endspaceless %}{% endblock %}
+{% block navigation_item_class -%}
+    {%- set classes = [] -%}
+    {%- set classes = classes | merge( [(node.isActiveNode ? 'a' : 'na')] ) -%}
+    {%- set classes = classes | merge( [(node.isActivePath ? 'ap' : 'nap')] ) -%}
+    {%- set classes = classes | merge( [(loop.first ? 'f' : 'nf')] ) -%}
+    {%- set classes = classes | merge( [(loop.last ? 'l' : 'nl')] ) -%}
+    {%- set classes = classes | merge( [(node.hasVisibleChildren ? 'p' : 'np' )] ) -%}
+
+    ni ni-{{ level }}
+
+    {%- for set in power_set(classes) -%}
+        {%- set class = set | sort | join('-') -%}
+        {%- if not class is empty -%}
+            {# keep one space here -> #} ni-{{ class }}-{{ level }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock -%}
+
 
 {%- block navigation_text -%}
     {%- if not node.isActiveNode and navigation_url(themeRoot, node, level) -%}
