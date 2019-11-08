@@ -6,7 +6,8 @@
 
     {% if mindestensEinSichtbaresChild == true %}
         <ul class="{{ navigation_list_class(themeRoot, nodes, level, parentNode) }}">
-            {% for node in nodes %}
+            {% set visibleNodes = nodes |filter(node => node.visible) %}
+            {% for node in visibleNodes %}
                 {{ navigation_item(themeRoot, node, level, maxLevels, expandedLevels, loop) }}
             {% endfor %}
         </ul>
@@ -18,12 +19,10 @@
 {%- endblock -%}
 
 {% block navigation_item %}
-    {% if node.visible %}
-        <li class="{{ navigation_item_class(themeRoot, node, level, loop) }}">
-            {{ navigation_text(themeRoot, node, level) }}
-            {{ navigation_list(themeRoot, node.children, level + 1, maxLevels, expandedLevels, node) }}
-        </li>
-    {% endif %}
+    <li class="{{ navigation_item_class(themeRoot, node, level, loop) }}">
+        {{ navigation_text(themeRoot, node, level) }}
+        {{ navigation_list(themeRoot, node.children, level + 1, maxLevels, expandedLevels, node) }}
+    </li>
 {% endblock %}
 
 {% block navigation_item_class -%}
