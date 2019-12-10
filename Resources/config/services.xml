@@ -12,7 +12,7 @@
     <services>
         <service id="webfactory_navigation.tree_factory.dispatcher" shared="false" class="Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher" public="true" />
 
-        <service id="webfactory_navigation.tree_factory" class="Webfactory\Bundle\NavigationBundle\Build\TreeFactory">
+        <service id="webfactory_navigation.tree_factory" class="Webfactory\Bundle\NavigationBundle\Build\TreeFactory" public="true" lazy="true">
             <argument type="service" id="config_cache_factory" />
             <argument>%kernel.cache_dir%/webfactory_navigation/tree.php</argument>
             <argument type="service" id="service_container"/>
