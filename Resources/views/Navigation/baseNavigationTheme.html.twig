@@ -1,12 +1,9 @@
 {% block navigation_list %}
-    {% set mindestensEinSichtbaresChild = false %}
-    {% for node in nodes if node.visible %}
-        {% set mindestensEinSichtbaresChild = true %}
-    {% endfor %}
+    {# nodes \Webfactory\Bundle\NavigationBundle\Tree\Node[] #}
+    {% set visibleNodes = nodes | filter(node => node.visible) %}
 
-    {% if mindestensEinSichtbaresChild == true %}
-        <ul class="{{ navigation_list_class(themeRoot, nodes, level, parentNode) }}">
-            {% set visibleNodes = nodes |filter(node => node.visible) %}
+    {% if visibleNodes is not empty %}
+        <ul class="{{ navigation_list_class(themeRoot, visibleNodes, level, parentNode) }}">
             {% for node in visibleNodes %}
                 {{ navigation_item(themeRoot, node, level, maxLevels, expandedLevels, loop) }}
             {% endfor %}
@@ -19,10 +16,14 @@
 {%- endblock -%}
 
 {% block navigation_item %}
-    <li class="{{ navigation_item_class(themeRoot, node, level, loop) }}">
-        {{ navigation_text(themeRoot, node, level) }}
-        {{ navigation_list(themeRoot, node.children, level + 1, maxLevels, expandedLevels, node) }}
-    </li>
+    {% if node.visible %}
+        <li class="{{ navigation_item_class(themeRoot, node, level, loop) }}">
+            {{ navigation_text(themeRoot, node, level) }}
+            {{ navigation_list(themeRoot, node.children, level + 1, maxLevels, expandedLevels, node) }}
+        </li>
+    {% else %}
+        {% deprecated 'Passing invisible nodes into the navigation_item block is deprecated. Filter nodes in the navigation_list block.' %}
+    {% endif %}
 {% endblock %}
 
 {% block navigation_item_class -%}
@@ -63,4 +64,3 @@
 {%- block navigation_caption -%}
     {{ node.caption }}
 {%- endblock -%}
-
