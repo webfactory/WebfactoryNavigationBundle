@@ -18,11 +18,6 @@ class NavigationExtension extends AbstractExtension
         $this->treeFactory = $treeFactory;
     }
 
-    public function getName()
-    {
-        return 'webfactory_navigation_extension';
-    }
-
     public function getFunctions()
     {
         return [

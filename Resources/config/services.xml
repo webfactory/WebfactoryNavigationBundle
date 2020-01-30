@@ -5,14 +5,16 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="webfactory_navigation.twig_theme_extension.class">Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension</parameter>
         <parameter key="webfactory_navigation.default_theme.file">WebfactoryNavigationBundle:Navigation:baseNavigationTheme.html.twig</parameter>
     </parameters>
 
     <services>
-        <service id="webfactory_navigation.tree_factory.dispatcher" shared="false" class="Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher" public="true" />
+        <defaults autoconfigure="true" autowire="true" public="false" />
 
-        <service id="webfactory_navigation.tree_factory" class="Webfactory\Bundle\NavigationBundle\Build\TreeFactory" public="true" lazy="true">
+        <service id="Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher" shared="false"/>
+        <service id="webfactory_navigation.tree_factory.dispatcher" alias="Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher" public="true" />
+
+        <service id="Webfactory\Bundle\NavigationBundle\Build\TreeFactory" lazy="true">
             <argument type="service" id="config_cache_factory" />
             <argument>%kernel.cache_dir%/webfactory_navigation/tree.php</argument>
             <argument type="service" id="service_container"/>
@@ -21,37 +23,40 @@
             <argument type="service" id="debug.stopwatch" on-invalid="null"/>
             <tag name="monolog.logger" channel="webfactory_navigation"/>
         </service>
+        <service id="webfactory_navigation.tree_factory" alias="Webfactory\Bundle\NavigationBundle\Build\TreeFactory" public="true" />
 
-        <service id="webfactory_navigation.tree" class="Webfactory\Bundle\NavigationBundle\Tree\Tree" public="true" lazy="true">
-            <factory service="webfactory_navigation.tree_factory" method="getTree" />
+        <service id="Webfactory\Bundle\NavigationBundle\Tree\Tree" lazy="true">
+            <factory service="Webfactory\Bundle\NavigationBundle\Build\TreeFactory" method="getTree" />
         </service>
+        <service id="webfactory_navigation.tree" alias="Webfactory\Bundle\NavigationBundle\Tree\Tree" public="true" />
 
-        <service id="webfactory_navigation.event.active_node_event_listener" class="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener">
-            <argument type="service" id="request_stack"/>
+        <service id="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener">
             <tag name="kernel.event_listener" event="webfactory_navigation.tree_initialized" method="initializeTree"/>
         </service>
+        <service id="webfactory_navigation.event.active_node_event_listener" alias="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener" />
 
-        <service id="webfactory_navigation.twig_theme_extension" class="%webfactory_navigation.twig_theme_extension.class%" public="false">
+        <service id="Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension">
             <argument type="collection">
                 <argument>%webfactory_navigation.default_theme.file%</argument>
             </argument>
             <tag name="twig.extension"/>
         </service>
+        <service id="webfactory_navigation.twig_theme_extension" alias="Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension" />
 
-        <service id="webfactory_navigation.twig_extension" class="Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension" public="false">
-            <argument type="service" id="webfactory_navigation.tree_factory"/>
+        <service id="Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension">
             <tag name="twig.extension"/>
         </service>
+        <service id="webfactory_navigation.twig_extension" alias="Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension" />
 
-        <service id="webfactory_navigation.command.dump_tree_command" class="Webfactory\Bundle\NavigationBundle\Command\DumpTreeCommand">
-            <argument type="service" id="webfactory_navigation.tree_factory"/>
+        <service id="Webfactory\Bundle\NavigationBundle\Command\DumpTreeCommand">
             <tag name="console.command"/>
         </service>
+        <service id="webfactory_navigation.command.dump_tree_command" alias="Webfactory\Bundle\NavigationBundle\Command\DumpTreeCommand" />
 
-        <service id="webfactory_navigation.command.lookup_node_command" class="Webfactory\Bundle\NavigationBundle\Command\LookupNodeCommand">
-            <argument type="service" id="webfactory_navigation.tree_factory"/>
+        <service id="Webfactory\Bundle\NavigationBundle\Command\LookupNodeCommand">
             <tag name="console.command"/>
         </service>
+        <service id="webfactory_navigation.command.lookup_node_command" alias="Webfactory\Bundle\NavigationBundle\Command\LookupNodeCommand" />
 
     </services>
 </container>
