@@ -8,17 +8,18 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Build;
 
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\ConfigCacheFactoryInterface;
 use Symfony\Component\Config\ConfigCacheInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Stopwatch\StopwatchEvent;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Webfactory\Bundle\NavigationBundle\Event\TreeInitializedEvent;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
-class TreeFactory
+class TreeFactory implements ServiceSubscriberInterface
 {
     /** @var ConfigCacheFactoryInterface */
     private $configCacheFactory;
@@ -39,6 +40,13 @@ class TreeFactory
 
     /** @var ContainerInterface */
     protected $container;
+
+    public static function getSubscribedServices()
+    {
+        return [
+            BuildDispatcher::class
+        ];
+    }
 
     public function __construct(
         ConfigCacheFactoryInterface $configCacheFactory,
@@ -118,7 +126,7 @@ class TreeFactory
     {
         $this->_tree = new Tree();
         // Dynamic (runtime) lookup:
-        $dispatcher = $this->container->get('webfactory_navigation.tree_factory.dispatcher');
+        $dispatcher = $this->container->get(BuildDispatcher::class);
         $dispatcher->start($this->_tree);
         $cache->write("<?php return unserialize(<<<EOD\n".serialize($this->_tree)."\nEOD\n);",
             $dispatcher->getResources());

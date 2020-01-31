@@ -8,13 +8,20 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Webfactory\Bundle\NavigationBundle\Tree\Node;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
-class NavigationController extends Controller
+class NavigationController extends AbstractController
 {
+    public static function getSubscribedServices()
+    {
+        return array_merge(parent::getSubscribedServices(), [
+            Tree::class,
+        ]);
+    }
+
     /**
      * Renders the navigation tree, starting at a given root node.
      *
@@ -105,11 +112,8 @@ class NavigationController extends Controller
         }
     }
 
-    /**
-     * @return Tree
-     */
-    private function getTree()
+    private function getTree(): Tree
     {
-        return $this->get('webfactory_navigation.tree');
+        return $this->container->get(Tree::class);
     }
 }

@@ -11,16 +11,17 @@ namespace Webfactory\Bundle\NavigationBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher;
 
 class BuildDirectorPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('webfactory_navigation.tree_factory.dispatcher')) {
+        if (false === $container->hasDefinition(BuildDispatcher::class)) {
             return;
         }
 
-        $definition = $container->getDefinition('webfactory_navigation.tree_factory.dispatcher');
+        $definition = $container->getDefinition(BuildDispatcher::class);
 
         foreach ($container->findTaggedServiceIds('webfactory_navigation.build_director') as $id => $tags) {
             foreach ($tags as $tag) {
