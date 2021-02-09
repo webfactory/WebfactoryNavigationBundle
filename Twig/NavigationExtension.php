@@ -25,6 +25,7 @@ class NavigationExtension extends AbstractExtension
             new TwigFunction('navigation_find', [$this, 'findNode']),
             new TwigFunction('navigation_active_node', [$this, 'getActiveNode']),
             new TwigFunction('navigation_active_path', [$this, 'getActivePath']),
+            new TwigFunction('additional_navigation_item_classes', [$this, 'getAdditionalNavigationItemClasses']),
         ];
     }
 
@@ -90,5 +91,46 @@ class NavigationExtension extends AbstractExtension
     private function getTree()
     {
         return $this->treeFactory->getTree();
+    }
+
+    public function getAdditionalNavigationItemClasses(Node $node, array $loop, int $level): string
+    {
+        $baseClasses = [
+            $node->isActiveNode() ? 'a' : 'na',
+            $node->isActivePath() ? 'ap' : 'nap',
+            $loop['first'] ? 'f' : 'nf',
+            $loop['last'] ? 'l' : 'nl',
+            $node->hasVisibleChildren() ? 'p' : 'np',
+        ];
+
+        $additionalNavigationItemClasses = [];
+        foreach ($this->getPowerSet($baseClasses) as $set) {
+            sort($set);
+            $classQualifier = implode('-', $set);
+            if ($classQualifier) {
+                $additionalNavigationItemClasses[] = 'ni-'.$classQualifier.'-'.$level;
+            }
+        }
+
+        return implode(' ', $additionalNavigationItemClasses);
+    }
+
+    private function getPowerSet(array $baseSet)
+    {
+        $count = \count($baseSet);
+        $members = pow(2, $count);
+        $powerSet = [];
+        for ($i = 0; $i < $members; ++$i) {
+            $b = sprintf('%0'.$count.'b', $i);
+            $out = [];
+            for ($j = 0; $j < $count; ++$j) {
+                if ('1' == $b[$j]) {
+                    $out[] = $baseSet[$j];
+                }
+            }
+            $powerSet[] = $out;
+        }
+
+        return $powerSet;
     }
 }

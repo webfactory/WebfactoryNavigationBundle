@@ -52,7 +52,8 @@ class NavigationController extends AbstractController
         }
 
         return $this->render($template, [
-            'root' => $node,
+            'node' => $node,
+            'level' => 0,
             'maxLevels' => $maxLevels,
             'expandedLevels' => $expandedLevels,
         ]);

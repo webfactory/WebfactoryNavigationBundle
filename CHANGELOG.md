@@ -1,6 +1,36 @@
 Changelog
 =========
 
+## Version 4.0
+
+* Kompatibilität zu Twig 3
+* BC-Breaks:
+  * Entfallener Twig-Tag: `navigation_theme` (z.B. `{% navigation_theme root "AppBundle:Navigation:navigation.html.twig" %}`).
+    Man kann im Projekt stattdessen direkt `WebfactoryNavigationBundle:Navigation:navigation.html.twig` extenden und
+    blockweise überschreiben. Beispiel:
+      
+    ```
+    {# Datei: src/AppBundle/Resources/views/Navigation/navigation.html.twig #}
+    
+    {% extends "WebfactoryNavigationBundle:Navigation:navigation.html.twig" %}
+        
+    {% block navigation_list %}
+      <nav class="projektspezifische-wrapperklasse">
+        {{ parent() }}
+      </nav>
+    {% endblock %}
+    
+    {%- block navigation_caption -%}
+        {{ node.caption |upper }}
+    {%- endblock -%}
+    ```
+  * Entfallene Twig-Funktionen: `navigation_list`, `navigation_list_class`, `navigation_item`, `navigation_item_class`,
+    `navigation_text`, `navigation_text_class`, `navigation_url`, `navigation_caption`. Funktionsaufrufe durch
+    `{{ block('navigation_list') }}` usw. ersetzen. Ersatzlos entfallen: `power_set`, `navigation`.
+  * Entfallene Services: `webfactory_navigation.twig_theme_extension`, `Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension`
+    (waren vermutlich nur intern genutzt).
+  * Navigation-Templates bekommen vom NavigationController jetzt die Variable `node` statt `root`.
+
 ## Version 3.1.0
 
 * Execute BuildDirectors ordered by their priority.

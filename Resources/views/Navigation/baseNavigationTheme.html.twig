@@ -1,14 +1,20 @@
-{% block navigation_list %}
-    {# nodes \Webfactory\Bundle\NavigationBundle\Tree\Node[] #}
-    {% set visibleNodes = nodes | filter(node => node.visible) %}
-
-    {% if visibleNodes is not empty %}
-        <ul class="{{ navigation_list_class(themeRoot, visibleNodes, level, parentNode) }}">
-            {% for node in visibleNodes %}
-                {{ navigation_item(themeRoot, node, level, maxLevels, expandedLevels, loop) }}
-            {% endfor %}
-        </ul>
+{# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
+{# level int #}
+{# maxLevels int #}
+{# expandedLevels int #}
+{% block navigation_if_visible %}
+    {% set visibleNodes = node.children | filter(node => node.visible) %}
+    {% if visibleNodes is not empty and level < maxLevels and (level < expandedLevels or node.parent.activePath) %}
+        {{ block('navigation_list') }}
     {% endif %}
+{% endblock %}
+
+{% block navigation_list %}
+    <ul class="{{ block('navigation_list_class') }}">
+        {% for node in visibleNodes %}
+            {{ block('navigation_item') }}
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {%- block navigation_list_class -%}
@@ -17,9 +23,12 @@
 
 {% block navigation_item %}
     {% if node.visible %}
-        <li class="{{ navigation_item_class(themeRoot, node, level, loop) }}">
-            {{ navigation_text(themeRoot, node, level) }}
-            {{ navigation_list(themeRoot, node.children, level + 1, maxLevels, expandedLevels, node) }}
+        <li class="{{ block('navigation_item_class') }}">
+            {{ block('navigation_text') }}
+
+            {%- with {level: level + 1} %}
+                {{ block('navigation_if_visible') }}
+            {% endwith %}
         </li>
     {% else %}
         {% deprecated 'Passing invisible nodes into the navigation_item block is deprecated. Filter nodes in the navigation_list block.' %}
@@ -27,29 +36,14 @@
 {% endblock %}
 
 {% block navigation_item_class -%}
-    {%- set classes = [] -%}
-    {%- set classes = classes | merge( [(node.isActiveNode ? 'a' : 'na')] ) -%}
-    {%- set classes = classes | merge( [(node.isActivePath ? 'ap' : 'nap')] ) -%}
-    {%- set classes = classes | merge( [(loop.first ? 'f' : 'nf')] ) -%}
-    {%- set classes = classes | merge( [(loop.last ? 'l' : 'nl')] ) -%}
-    {%- set classes = classes | merge( [(node.hasVisibleChildren ? 'p' : 'np' )] ) -%}
-
-    ni ni-{{ level }}
-
-    {%- for set in power_set(classes) -%}
-        {%- set class = set | sort | join('-') -%}
-        {%- if not class is empty -%}
-            {# keep one space here -> #} ni-{{ class }}-{{ level }}
-        {%- endif -%}
-    {%- endfor -%}
+    ni ni-{{ level }} {{ additional_navigation_item_classes(node, loop, level) }}
 {%- endblock -%}
 
-
 {%- block navigation_text -%}
-    {%- if not node.isActiveNode and navigation_url(themeRoot, node, level) -%}
-        <a href="{{ navigation_url(themeRoot, node, level) }}" class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</a>
+    {%- if not node.isActiveNode and block('navigation_url') -%}
+        <a href="{{ block('navigation_url') }}" class="{{ block('navigation_text_class') }}">{{ block('navigation_caption') }}</a>
     {%- else -%}
-        <span class="{{ navigation_text_class(themeRoot, node, level) }}">{{ navigation_caption(themeRoot, node, level) }}</span>
+        <span class="{{ block('navigation_text_class') }}">{{ block('navigation_caption') }}</span>
     {%- endif -%}
 {%- endblock -%}
 

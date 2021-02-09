@@ -3,11 +3,6 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
-    <parameters>
-        <parameter key="webfactory_navigation.default_theme.file">WebfactoryNavigationBundle:Navigation:baseNavigationTheme.html.twig</parameter>
-    </parameters>
-
     <services>
         <defaults autoconfigure="true" autowire="true" public="false" />
 
@@ -35,14 +30,6 @@
             <tag name="kernel.event_listener" event="webfactory_navigation.tree_initialized" method="initializeTree"/>
         </service>
         <service id="webfactory_navigation.event.active_node_event_listener" alias="Webfactory\Bundle\NavigationBundle\Event\ActiveNodeEventListener" />
-
-        <service id="Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension">
-            <argument type="collection">
-                <argument>%webfactory_navigation.default_theme.file%</argument>
-            </argument>
-            <tag name="twig.extension"/>
-        </service>
-        <service id="webfactory_navigation.twig_theme_extension" alias="Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension" />
 
         <service id="Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension">
             <tag name="twig.extension"/>
