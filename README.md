@@ -15,8 +15,8 @@ Installation
 ... and activate the bundle in your kernel, depending on your Symfony version.
 
 
-Usage
------
+Rendering navigation elements in Twig
+-------------------------------------
 
 ### Simple Navigation List
 
@@ -86,6 +86,76 @@ Example:
     </nav>
 {% endblock %}
 ```    
+
+
+Modifying the NavigationTree
+----------------------------
+
+Implement a `Webfactory\Bundle\NavigationBundle\Build\BuildDirector`. Example:
+
+```php
+<?php
+
+namespace AppBundle\Navigation;
+
+use JMS\ObjectRouting\ObjectRouter;
+use Symfony\Component\Config\Resource\FileResource;
+use Webfactory\Bundle\NavigationBundle\Build\BuildContext;
+use Webfactory\Bundle\NavigationBundle\Build\BuildDirector;
+use Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher;
+use Webfactory\Bundle\NavigationBundle\Tree\Tree;
+use Webfactory\Bundle\WfdMetaBundle\Config\DoctrineEntityClassResource;
+
+final class KeyActionBuildDirector implements BuildDirector
+{
+    /** @var YourEntityRepository */
+    private $repository;
+
+    /** @var ObjectRouter */
+    private $objectRouter;
+
+    public function __construct(YourEntityRepository $repository, ObjectRouter $objectRouter)
+    {
+        $this->repository = $repository;
+        $this->objectRouter = $objectRouter;
+    }
+
+    public function build(BuildContext $context, Tree $tree, BuildDispatcher $dispatcher): void
+    {
+        if (!$this->isInterestedInContext($context)) {
+            return;
+        }
+
+        $this->addTreeCacheExpiryRule($dispatcher);
+
+        foreach ($this->repository->findForMenu() as $entity) {
+            $context->get('node')
+                ->addChild()
+                ->set('caption', $entity->getName())
+                ->set('visible', true)
+                ->set('url', $this->objectRouter->path('detail', $entity));
+        }
+    }
+
+    private function addTreeCacheExpiryRule(BuildDispatcher $dispatcher): void
+    {
+        $dispatcher->addResource(new FileResource(__FILE__));
+        $dispatcher->addResource(new DoctrineEntityClassResource(YourEntity::class));
+    }
+}
+```
+
+Define your implementation as a service and tag it `webfactory_navigation.build_director`. Example:
+
+```xml
+<service class="AppBundle\Navigation\YouEntityBuildDirector">
+    <argument type="service" id="AppBundle\Repository\YourEntityRepository" />
+    <argument type="service" id="JMS\ObjectRouting\ObjectRouter" />
+    <tag name="webfactory_navigation.build_director"/>
+</service>
+```
+
+See `Resources/doc/How-To-Use-Klassendiagramm.puml` for more.
 
 
 Credits, Copyright and License
