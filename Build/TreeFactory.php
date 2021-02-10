@@ -12,8 +12,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\ConfigCacheFactoryInterface;
 use Symfony\Component\Config\ConfigCacheInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 use Webfactory\Bundle\NavigationBundle\Event\TreeInitializedEvent;
@@ -44,7 +44,7 @@ class TreeFactory implements ServiceSubscriberInterface
     public static function getSubscribedServices()
     {
         return [
-            BuildDispatcher::class
+            BuildDispatcher::class,
         ];
     }
 

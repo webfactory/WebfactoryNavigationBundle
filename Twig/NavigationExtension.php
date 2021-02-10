@@ -42,10 +42,10 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
     /**
      * Renders the navigation tree, starting at a given root node.
      *
-     * @param array|Node $root Array of key-values pairs that will be passed to the
-     *                         \Webfactory\Bundle\NavigationBundle\Tree\Tree::find method to look up the root node
-     * @param int $maxLevels Maximum number of tree levels (starting from the specified root) to draw
-     * @param int $expandedLevels Number of levels to always draw expanded (i. e. showing all nodes).
+     * @param array|Node $root           Array of key-values pairs that will be passed to the
+     *                                   \Webfactory\Bundle\NavigationBundle\Tree\Tree::find method to look up the root node
+     * @param int        $maxLevels      Maximum number of tree levels (starting from the specified root) to draw
+     * @param int        $expandedLevels Number of levels to always draw expanded (i. e. showing all nodes).
      */
     public function renderTree(
         Environment $environment,
@@ -108,8 +108,8 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
      * the root of the tree. It will then pick the ancestor node at the $startLevel level and use it as the root
      * for a tree $maxLevels deep and unconditionally expanded at the first $expandedLevels levels.
      *
-     * @param int $startLevel Level (counted from the root, which is 0) to start the tree at
-     * @param int $maxLevels Maximum number of tree levels (starting from the specified root) to draw
+     * @param int $startLevel     Level (counted from the root, which is 0) to start the tree at
+     * @param int $maxLevels      Maximum number of tree levels (starting from the specified root) to draw
      * @param int $expandedLevels Number of levels to always draw expanded (i. e. showing all nodes).
      */
     public function renderAncestry(

@@ -23,8 +23,7 @@ class Finder
     protected $idToHash = [];
 
     /**
-     * @param Node  $object
-     * @param array $requirements
+     * @param Node $object
      */
     public function add($object, array $requirements)
     {
