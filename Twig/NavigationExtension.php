@@ -2,25 +2,35 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Twig;
 
+use Psr\Container\ContainerInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Webfactory\Bundle\NavigationBundle\Build\TreeFactory;
 use Webfactory\Bundle\NavigationBundle\Tree\Node;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
-class NavigationExtension extends AbstractExtension
+class NavigationExtension extends AbstractExtension implements ServiceSubscriberInterface
 {
-    /** @var TreeFactory */
-    private $treeFactory;
+    /** @var ContainerInterface */
+    private $container;
 
-    public function __construct(TreeFactory $treeFactory)
+    public static function getSubscribedServices(): array
     {
-        $this->treeFactory = $treeFactory;
+        return [Tree::class];
+    }
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
     }
 
     public function getFunctions()
     {
         return [
+            new TwigFunction('navigation_tree', [$this, 'renderTree'], ['needs_environment' => true, 'is_safe' => ['html']]),
+            new TwigFunction('navigation_ancestry', [$this, 'renderAncestry'], ['needs_environment' => true, 'is_safe' => ['html']]),
+            new TwigFunction('navigation_breadcrumbs', [$this, 'renderBreadcrumbs'], ['needs_environment' => true, 'is_safe' => ['html']]),
             new TwigFunction('navigation_active_at_level', [$this, 'getNavigationActiveAtLevel']),
             new TwigFunction('navigation_find', [$this, 'findNode']),
             new TwigFunction('navigation_active_node', [$this, 'getActiveNode']),
@@ -30,21 +40,116 @@ class NavigationExtension extends AbstractExtension
     }
 
     /**
-     * Returns the currently active tree node.
+     * Renders the navigation tree, starting at a given root node.
      *
-     * @return Node
+     * @param array|Node $root Array of key-values pairs that will be passed to the
+     *                         \Webfactory\Bundle\NavigationBundle\Tree\Tree::find method to look up the root node
+     * @param int $maxLevels Maximum number of tree levels (starting from the specified root) to draw
+     * @param int $expandedLevels Number of levels to always draw expanded (i. e. showing all nodes).
      */
-    public function getActiveNode()
+    public function renderTree(
+        Environment $environment,
+        $root,
+        int $maxLevels = 1,
+        int $expandedLevels = 1,
+        string $template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig'
+    ): string {
+        $root = $this->getRootNode($root);
+        if (null === $root) {
+            return ' ## navigation_tree: root not found ##';
+        }
+
+        return $environment->render(
+            $template,
+            [
+                'node' => $root,
+                'level' => 0,
+                'maxLevels' => $maxLevels,
+                'expandedLevels' => $expandedLevels,
+            ]
+        );
+    }
+
+    /**
+     * @param array|Node $root Array of key-values pairs that will be passed to the
+     *                         \Webfactory\Bundle\NavigationBundle\Tree\Tree::find method to look up the root node
+     */
+    private function getRootNode($root): ?Node
+    {
+        if ($root instanceof Node) {
+            return $root;
+        }
+
+        if (\is_array($root)) {
+            return $this->getTree()->find($root);
+        }
+
+        throw new \InvalidArgumentException("The 'root' parameter must either be an array or a tree Node.");
+    }
+
+    private function getTree(): Tree
+    {
+        return $this->container->get(Tree::class);
+    }
+
+    /**
+     * Renders a part of the subtree that contains the currently active node.
+     *
+     * This is useful if you need to place different parts of your navigation in different places in your HTML.
+     *
+     * For example, in one location you might need the first two levels of navigation; you would use the
+     * {@link NavigationController::navigation_tree} for that and provide a "root" node.
+     *
+     * Then, in another location, you'd need two additional levels (i. e. the 3rd and 4th levels). In this case, you
+     * cannot use a fixed root node as the subtree that needs to be shown depends on which part of the tree your
+     * currently "active" node is located.
+     *
+     * This is where this action comes into play: It will figure out the path from your currently active node towards
+     * the root of the tree. It will then pick the ancestor node at the $startLevel level and use it as the root
+     * for a tree $maxLevels deep and unconditionally expanded at the first $expandedLevels levels.
+     *
+     * @param int $startLevel Level (counted from the root, which is 0) to start the tree at
+     * @param int $maxLevels Maximum number of tree levels (starting from the specified root) to draw
+     * @param int $expandedLevels Number of levels to always draw expanded (i. e. showing all nodes).
+     */
+    public function renderAncestry(
+        Environment $environment,
+        int $startLevel,
+        int $maxLevels = 1,
+        int $expandedLevels = 1,
+        string $template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig'
+    ): string {
+        $node = $this->getTree()->getActivePath();
+        if (null === $node) {
+            return '';
+        }
+
+        $path = $node->getPath();
+        if (isset($path[$startLevel])) {
+            return $this->renderTree($environment, $path[$startLevel], $maxLevels, $expandedLevels, $template);
+        }
+
+        return '';
+    }
+
+    public function renderBreadcrumbs(
+        Environment $environment,
+        string $template = 'WebfactoryNavigationBundle:Navigation:breadcrumbs.html.twig'
+    ): string {
+        $node = $this->getTree()->getActivePath();
+        if (null === $node) {
+            return '';
+        }
+
+        return $environment->render($template, ['breadcrumbs' => $node->getPath()]);
+    }
+
+    public function getActiveNode(): ?Node
     {
         return $this->getTree()->getActiveNode();
     }
 
-    /**
-     * Returns the currently active "path" node.
-     *
-     * @return Node
-     */
-    public function getActivePath()
+    public function getActivePath(): ?Node
     {
         return $this->getTree()->getActivePath();
     }
@@ -52,14 +157,11 @@ class NavigationExtension extends AbstractExtension
     /**
      * Returns the navigation node which lies on the currently active path at the given level.
      *
-     * @param $level The level of the node to be returned
-     *
-     * @return \Webfactory\Bundle\NavigationBundle\Tree\Node|null A node or null if no node at the given level exists
+     * @param int|null $level The level of the node to be returned
      */
-    public function getNavigationActiveAtLevel($level)
+    public function getNavigationActiveAtLevel(?int $level): ?Node
     {
         $activeNode = $this->getTree()->getActiveNode();
-
         if (!$activeNode) {
             return null;
         }
@@ -77,20 +179,10 @@ class NavigationExtension extends AbstractExtension
      * Finds a node indexed in the tree. See \Webfactory\Bundle\NavigationBundle\Tree\Tree::find.
      *
      * @param array $provisions parameters used to look up the node
-     *
-     * @return \Webfactory\Bundle\NavigationBundle\Tree\Node|null
      */
-    public function findNode(array $provisions)
+    public function findNode(array $provisions): ?Node
     {
         return $this->getTree()->find($provisions);
-    }
-
-    /**
-     * @return Tree
-     */
-    private function getTree()
-    {
-        return $this->treeFactory->getTree();
     }
 
     public function getAdditionalNavigationItemClasses(Node $node, array $loop, int $level): string

@@ -45,11 +45,5 @@
             <tag name="console.command"/>
         </service>
         <service id="webfactory_navigation.command.lookup_node_command" alias="Webfactory\Bundle\NavigationBundle\Command\LookupNodeCommand" />
-
-        <service id="Webfactory\Bundle\NavigationBundle\Controller\NavigationController">
-            <argument type="service" id="Psr\Container\ContainerInterface" />
-            <tag name="container.service_subscriber" />
-        </service>
-
     </services>
 </container>

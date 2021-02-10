@@ -24,12 +24,59 @@ Changelog
         {{ node.caption |upper }}
     {%- endblock -%}
     ```
+
   * Entfallene Twig-Funktionen: `navigation_list`, `navigation_list_class`, `navigation_item`, `navigation_item_class`,
-    `navigation_text`, `navigation_text_class`, `navigation_url`, `navigation_caption`. Funktionsaufrufe durch
-    `{{ block('navigation_list') }}` usw. ersetzen. Ersatzlos entfallen: `power_set`, `navigation`.
+    `navigation_text`, `navigation_text_class`, `navigation_url`, `navigation_caption`. Aufrufe dieser
+    Wrapper-Funktionen wie z.B. `{{ navigation_caption(themeRoot, node, level) }}` durch
+    `{{ block('navigation_caption') }}` (ohne Parameter) ersetzen.
+     
+     Ersatzlos entfallen: `power_set`, `navigation`.
+
   * Entfallene Services: `webfactory_navigation.twig_theme_extension`, `Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension`
     (waren vermutlich nur intern genutzt).
-  * Navigation-Templates bekommen vom NavigationController jetzt die Variable `node` statt `root`.
+
+  * Entfallender Controller: NavigationController. Aufrufe wie folgt ersetzen:
+  
+    alt:
+    ```
+    {{ render(
+      controller(
+        'WebfactoryNavigationBundle:Navigation:tree',
+        {
+          root: {"webfactory_pages.page_id": root_page_id}
+        }
+      )
+    ) }}
+    ```
+    
+    neu: `{{ navigation_tree({"webfactory_pages.page_id": root_page_id}) }}` (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderTree)
+    
+    alt:
+    ```
+    {{ render(
+      controller(
+        'WebfactoryNavigationBundle:Navigation:ancestry',
+        {
+          startLevel: 1
+        }
+      )
+    ) }}
+    ```
+    
+    neu: `{{ navigation_ancestry(1) }}` (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderAncestry)
+    
+    alt:
+    ```
+    {{ render(
+      controller(
+        'WebfactoryNavigationBundle:Navigation:breadcrumbs'
+      )
+    ) }}
+    ```
+    
+    neu: `{{ navigation_breadcrumbs() }}` (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderBreadcrumbs)
+    
+  * Variable im Block navigation_list heißt jetzt `node` statt `root`.
 
 ## Version 3.1.0
 
