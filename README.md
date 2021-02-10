@@ -1,6 +1,12 @@
 WebfactoryNavigationBundle
 ==========================
 
+Symfony Bundle featuring:
+
+- A factory for creating the navigation tree, using BuildDirectors which you can add to, if needed
+- Twig functions for rendering navigation elements (tree, ancestry, breadcrumbs) and inspecting the navigation tree
+
+
 Installation
 ------------
 
