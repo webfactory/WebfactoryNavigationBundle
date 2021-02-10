@@ -62,7 +62,7 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
         return $environment->render(
             $template,
             [
-                'node' => $root,
+                'root' => $root,
                 'level' => 0,
                 'maxLevels' => $maxLevels,
                 'expandedLevels' => $expandedLevels,

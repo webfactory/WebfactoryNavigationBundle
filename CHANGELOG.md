@@ -75,8 +75,6 @@ Changelog
     ```
     
     neu: `{{ navigation_breadcrumbs() }}` (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderBreadcrumbs)
-    
-  * Variable im Block navigation_list heißt jetzt `node` statt `root`.
 
 ## Version 3.1.0
 
