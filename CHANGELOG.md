@@ -76,6 +76,9 @@ Changelog
     
     neu: `{{ navigation_breadcrumbs() }}` (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderBreadcrumbs)
 
+  * Entfallender Parameter `webfactory_navigation.default_theme.file` (war vermutlich nur intern genutzt)
+
+
 ## Version 3.1.0
 
 * Execute BuildDirectors ordered by their priority.
