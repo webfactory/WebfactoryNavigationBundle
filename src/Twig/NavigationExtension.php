@@ -40,10 +40,10 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
     }
 
     /**
-     * Renders the navigation tree, starting at a given root node.
+     * Renders the navigation tree, starting at a root node.
      *
-     * @param array|Node $root           Array of key-values pairs that will be passed to the
-     *                                   \Webfactory\Bundle\NavigationBundle\Tree\Tree::find method to look up the root node
+     * @param array|Node $root           Root node or array of key-values pairs that will be passed to the
+     *                                   \Webfactory\Bundle\NavigationBundle\Tree\Tree::find method to look it up
      * @param int        $maxLevels      Maximum number of tree levels (starting from the specified root) to draw
      * @param int        $expandedLevels Number of levels to always draw expanded (i. e. showing all nodes).
      */
@@ -54,7 +54,10 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
         int $expandedLevels = 1,
         string $template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig'
     ): string {
-        $root = $this->getRootNode($root);
+        if (!($root instanceof Node)) {
+            $root = $this->getTree()->find($root);
+        }
+
         if (null === $root) {
             return ' ## navigation_tree: root not found ##';
         }
@@ -68,23 +71,6 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
                 'expandedLevels' => $expandedLevels,
             ]
         );
-    }
-
-    /**
-     * @param array|Node $root Array of key-values pairs that will be passed to the
-     *                         \Webfactory\Bundle\NavigationBundle\Tree\Tree::find method to look up the root node
-     */
-    private function getRootNode($root): ?Node
-    {
-        if ($root instanceof Node) {
-            return $root;
-        }
-
-        if (\is_array($root)) {
-            return $this->getTree()->find($root);
-        }
-
-        throw new \InvalidArgumentException("The 'root' parameter must either be an array or a tree Node.");
     }
 
     private function getTree(): Tree
