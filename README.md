@@ -22,17 +22,15 @@ Rendering navigation elements in Twig
 
 #### Syntax
 
-    {{ navigation_tree(rootHints, maxLevels=1, expandedLevel=1, template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig') }}
+    {{ navigation_tree(root, maxLevels = 1, expandedLevel = 1, template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig') }}
 
 #### Examples
     
-    {{ navigation_tree({"webfactory_pages.page_id": root_page_id}) }}
+    {{ navigation_tree(root = {"webfactory_pages.page_id": root_page_id}) }}
     
     {{ navigation_tree(
-      {"webfactory_pages.page_id": root_page_id, "_locale": app.request.locale},
-      2,
-      2,
-      'AppBundle:Navigation:navigation.html.twig'
+      root = {"webfactory_pages.page_id": root_page_id, "_locale": app.request.locale},
+      template = 'AppBundle:Navigation:navigation.html.twig'
     ) }}
 
 ### Ancestry List
@@ -41,24 +39,24 @@ An ancestry list is the active path from the given start level to the currently 
 e.g. the third level navigation outside of the regular navigation.
 
 #### Syntax
-    {{ navigation_ancestry(startLevel, maxLevels=1, expandedLevels=1,template='WebfactoryNavigationBundle:Navigation:navigation.html.twig') }}
+    {{ navigation_ancestry(startLevel, maxLevels = 1, expandedLevels = 1, template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig') }}
 
 #### Examples
 
-    {{ navigation_ancestry(1) }}
+    {{ navigation_ancestry(startLevel = 1) }}
     
-    {{ navigation_ancestry(1, 1, 1, 'AppBundle:Navigation:secondaryNav.html.twig') }}
+    {{ navigation_ancestry(startLevel = 1, template = 'AppBundle:Navigation:secondaryNav.html.twig') }}
 
 ### Breadcrumbs
 
 #### Syntax
 
-    {{ navigation_breadcrumbs(template='WebfactoryNavigationBundle:Navigation:breadcrumbs.html.twig') }}
+    {{ navigation_breadcrumbs(template = 'WebfactoryNavigationBundle:Navigation:breadcrumbs.html.twig') }}
 
 #### Examples
 
     {{ navigation_breadcrumbs() }}
-    {{ navigation_breadcrumbs('AppBundle:Navigation:breadcrumbs.html.twig') }}
+    {{ navigation_breadcrumbs(template = 'AppBundle:Navigation:breadcrumbs.html.twig') }}
 
 ### Customisation
 
@@ -71,7 +69,7 @@ Example:
 {# layout.html.twig: #}
 
 ...
-{{ navigation_tree({"webfactory_pages.page_id": root_page_id}, 2, 2, 'AppBundle:Navigation:navigation.html.twig') }}
+{{ navigation_tree(root = {"webfactory_pages.page_id": root_page_id}, template = 'AppBundle:Navigation:navigation.html.twig') }}
 ...
 ```
 

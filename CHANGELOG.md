@@ -37,7 +37,7 @@ Changelog
 
   * Entfallender Controller: NavigationController. Aufrufe wie folgt ersetzen:
   
-    alt:
+    Alt:
     ```
     {{ render(
       controller(
@@ -49,9 +49,13 @@ Changelog
     ) }}
     ```
     
-    neu: `{{ navigation_tree({"webfactory_pages.page_id": root_page_id}) }}` (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderTree)
+    Neu:
+    ```
+    {{ navigation_tree(root = {"webfactory_pages.page_id": root_page_id}) }}
+    ```
+    (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderTree)
     
-    alt:
+    Alt:
     ```
     {{ render(
       controller(
@@ -63,7 +67,11 @@ Changelog
     ) }}
     ```
     
-    neu: `{{ navigation_ancestry(1) }}` (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderAncestry)
+    Neu:
+    ```
+    {{ navigation_ancestry(startLevel = 1) }}
+    ```
+    (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderAncestry)
     
     alt:
     ```
@@ -74,7 +82,11 @@ Changelog
     ) }}
     ```
     
-    neu: `{{ navigation_breadcrumbs() }}` (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderBreadcrumbs)
+    neu:
+     ```
+     {{ navigation_breadcrumbs() }}`
+    ```
+    (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderBreadcrumbs)
 
   * Entfallender Parameter `webfactory_navigation.default_theme.file` (war vermutlich nur intern genutzt)
 
