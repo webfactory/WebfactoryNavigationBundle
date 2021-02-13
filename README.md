@@ -63,7 +63,7 @@ e.g. the third level navigation outside of the regular navigation.
 ### Customisation
 
 For each function mentioned above you can provide a Twig template in which you can extend the base template and
-overwrite each block. Please find the default blocks in `Resources/views/Navigation/navigationBlocks.html.twig`.
+overwrite each block. Please find the default blocks in `src/Resources/views/Navigation/navigationBlocks.html.twig`.
 
 Example:
 
@@ -155,7 +155,7 @@ Define your implementation as a service and tag it `webfactory_navigation.build_
 </service>
 ```
 
-See `Resources/doc/How-To-Use-Klassendiagramm.puml` for more.
+See `src/Resources/doc/How-To-Use-Klassendiagramm.puml` for more.
 
 
 Credits, Copyright and License

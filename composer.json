@@ -3,11 +3,8 @@
 
     "autoload": {
         "psr-4": {
-            "Webfactory\\Bundle\\NavigationBundle\\": ""
-        },
-        "exclude-from-classmap": [
-            "vendor"
-        ]
+            "Webfactory\\Bundle\\NavigationBundle\\": "src"
+        }
     },
 
     "require": {
