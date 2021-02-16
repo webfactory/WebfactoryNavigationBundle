@@ -46,7 +46,21 @@
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
 {% block navigation_item_class -%}
-    ni ni-{{ level }} {{ additional_navigation_item_classes(node, loop, level) }}
+    ni ni-{{ level }}
+
+    {%- set classes = []
+        | merge( [(node.isActiveNode ? 'a' : 'na')] )
+        | merge( [(node.isActivePath ? 'ap' : 'nap')] )
+        | merge( [(loop.first ? 'f' : 'nf')] )
+        | merge( [(loop.last ? 'l' : 'nl')] )
+        | merge( [(node.hasVisibleChildren ? 'p' : 'np' )] )
+    -%}
+    {%- for set in power_set(classes) -%}
+        {%- set class = set | sort | join('-') -%}
+        {%- if not class is empty -%}
+            {# keep one space here -> #} ni-{{ class }}-{{ level }}
+        {%- endif -%}
+    {%- endfor -%}
 {%- endblock -%}
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}

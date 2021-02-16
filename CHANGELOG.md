@@ -30,7 +30,7 @@ Changelog
     Wrapper-Funktionen wie z.B. `{{ navigation_caption(themeRoot, node, level) }}` durch
     `{{ block('navigation_caption') }}` (ohne Parameter) ersetzen.
      
-     Ersatzlos entfallen: `power_set`, `navigation`.
+     Ersatzlos entfallen: `navigation`.
 
   * Entfallene Services: `webfactory_navigation.twig_theme_extension`, `Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension`
     (waren vermutlich nur intern genutzt).
