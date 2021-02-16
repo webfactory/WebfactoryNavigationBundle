@@ -124,8 +124,6 @@ final class KeyActionBuildDirector implements BuildDirector
             return;
         }
 
-        $this->addTreeCacheExpiryRule($dispatcher);
-
         foreach ($this->repository->findForMenu() as $entity) {
             $context->get('node')
                 ->addChild()
@@ -133,9 +131,11 @@ final class KeyActionBuildDirector implements BuildDirector
                 ->set('visible', true)
                 ->set('url', $this->objectRouter->path('detail', $entity));
         }
+
+        $this->addResourcesToTreeCache($dispatcher);
     }
 
-    private function addTreeCacheExpiryRule(BuildDispatcher $dispatcher): void
+    private function addResourcesToTreeCache(BuildDispatcher $dispatcher): void
     {
         $dispatcher->addResource(new FileResource(__FILE__));
         $dispatcher->addResource(new DoctrineEntityClassResource(YourEntity::class));
