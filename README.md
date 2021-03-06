@@ -1,65 +1,167 @@
-# navigation-bundle #
+WebfactoryNavigationBundle
+==========================
+
+Symfony Bundle featuring:
+
+- A factory for creating the navigation tree, using BuildDirectors which you can add to, if needed
+- Twig functions for rendering navigation elements (tree, ancestry, breadcrumbs) and inspecting the navigation tree
 
 
-## Motivation ##
+Installation
+------------
 
-## Installation ##
-The bundle is installed like any other Symfony2 bundle.
+    composer require webfactory/navigation-bundle 
 
-## Credits, Copyright and License ##
+... and activate the bundle in your kernel, depending on your Symfony version.
+
+
+Rendering navigation elements in Twig
+-------------------------------------
+
+### Simple Navigation List
+
+#### Syntax
+
+    {{ navigation_tree(root, maxLevels = 1, expandedLevel = 1, template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig') }}
+
+#### Examples
+    
+    {{ navigation_tree(root = {"webfactory_pages.page_id": root_page_id}) }}
+    
+    {{ navigation_tree(
+      root = {"webfactory_pages.page_id": root_page_id, "_locale": app.request.locale},
+      template = 'AppBundle:Navigation:navigation.html.twig'
+    ) }}
+
+### Ancestry List
+
+An ancestry list is the active path from the given start level to the currently active node. Useful if you want to render
+e.g. the third level navigation outside of the regular navigation.
+
+#### Syntax
+    {{ navigation_ancestry(startLevel, maxLevels = 1, expandedLevels = 1, template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig') }}
+
+#### Examples
+
+    {{ navigation_ancestry(startLevel = 1) }}
+    
+    {{ navigation_ancestry(startLevel = 1, template = 'AppBundle:Navigation:secondaryNav.html.twig') }}
+
+### Breadcrumbs
+
+#### Syntax
+
+    {{ navigation_breadcrumbs(template = 'WebfactoryNavigationBundle:Navigation:breadcrumbs.html.twig') }}
+
+#### Examples
+
+    {{ navigation_breadcrumbs() }}
+    {{ navigation_breadcrumbs(template = 'AppBundle:Navigation:breadcrumbs.html.twig') }}
+
+### Customisation
+
+For each function mentioned above you can provide a Twig template in which you can extend the base template and
+overwrite each block. Please find the default blocks in `src/Resources/views/Navigation/navigationBlocks.html.twig`.
+
+Example:
+
+```twig
+{# layout.html.twig: #}
+
+...
+{{ navigation_tree(root = {"webfactory_pages.page_id": root_page_id}, template = 'AppBundle:Navigation:navigation.html.twig') }}
+...
+```
+
+```twig
+{# AppBundle:Navigation:navigation.html.twig: #}
+
+{% extends "WebfactoryNavigationBundle:Navigation:navigation.html.twig" %}
+
+{% block navigation_list %}
+    <nav class="project-specific-classes">
+        {{ parent() }}
+    </nav>
+{% endblock %}
+```    
+
+
+Modifying the NavigationTree
+----------------------------
+
+Implement a `Webfactory\Bundle\NavigationBundle\Build\BuildDirector`. Example:
+
+```php
+<?php
+
+namespace AppBundle\Navigation;
+
+use JMS\ObjectRouting\ObjectRouter;
+use Symfony\Component\Config\Resource\FileResource;
+use Webfactory\Bundle\NavigationBundle\Build\BuildContext;
+use Webfactory\Bundle\NavigationBundle\Build\BuildDirector;
+use Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher;
+use Webfactory\Bundle\NavigationBundle\Tree\Tree;
+use Webfactory\Bundle\WfdMetaBundle\Config\DoctrineEntityClassResource;
+
+final class KeyActionBuildDirector implements BuildDirector
+{
+    /** @var YourEntityRepository */
+    private $repository;
+
+    /** @var ObjectRouter */
+    private $objectRouter;
+
+    public function __construct(YourEntityRepository $repository, ObjectRouter $objectRouter)
+    {
+        $this->repository = $repository;
+        $this->objectRouter = $objectRouter;
+    }
+
+    public function build(BuildContext $context, Tree $tree, BuildDispatcher $dispatcher): void
+    {
+        if (!$this->isInterestedInContext($context)) {
+            return;
+        }
+
+        foreach ($this->repository->findForMenu() as $entity) {
+            $context->get('node')
+                ->addChild()
+                ->set('caption', $entity->getName())
+                ->set('visible', true)
+                ->set('url', $this->objectRouter->path('detail', $entity));
+        }
+
+        $this->addResourcesToTreeCache($dispatcher);
+    }
+
+    private function addResourcesToTreeCache(BuildDispatcher $dispatcher): void
+    {
+        $dispatcher->addResource(new FileResource(__FILE__));
+        $dispatcher->addResource(new DoctrineEntityClassResource(YourEntity::class));
+    }
+}
+```
+
+Define your implementation as a service and tag it `webfactory_navigation.build_director`. Example:
+
+```xml
+<service class="AppBundle\Navigation\YouEntityBuildDirector">
+    <argument type="service" id="AppBundle\Repository\YourEntityRepository" />
+    <argument type="service" id="JMS\ObjectRouting\ObjectRouter" />
+    <tag name="webfactory_navigation.build_director"/>
+</service>
+```
+
+See `src/Resources/doc/How-To-Use-Klassendiagramm.puml` for more.
+
+
+Credits, Copyright and License
+------------------------------
 
 This project was started at webfactory GmbH, Bonn.
 
-- <http://www.webfactory.de>
-- <http://twitter.com/webfactory>
+- <https://www.webfactory.de>
+- <https://twitter.com/webfactory>
 
-Copyright 2015 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).
-
-## webfactory/navigation-bundle Version 1.* ##
-
-webfactory/navigation-bundle 1.* enthält den Code, um webfactory/navigation(1.*)-basierte
-Navigationen in Symfony-Projekten zu rendern. Für das Rendering von Bäumen
-wird ein Theme bereitgestellt.
-
-webfactory/navigation(1.*) selbst basiert auf webfactory/tree und fügt nur den Code hinzu,
-um Ausschnitte eines solchen Baums zu betrachten - einen zur Navigation teilweise
-ausgeklappten Teilbaum, eine Liste beliebiger Knoten, Breadcrumbs etc.
-
-Das heavy lifting passiert in webfactory/tree. Dessen Ziel ist es, den Aufbau
-einer Navigation möglichst effizient zu gestalten, indem die API das Laden ganzer Teilbäume
-auf einmal ermöglicht. Auf diese Weise wird ein "Gesamtbaum" zusammengesetzt, der allerdings
-nur für den Request lebt (aber eben "schnell" gebaut werden kann).
-
-Das Problem ist, dass es nicht ganz einfach ist, für webfactory/tree effiziente Mapper zu schreiben.
-
-Deshalb ist über die Zeit in webfactory/tree das "ActiveNode" Konzept entstanden, mit dem man nur noch
-Knotenklassen (z. B. für ein Dokument) schreiben muss, die dann jeweils die "nächste" Ebene Knoten anbieten.
-
-Damit ist natürlich die API von webfactory/tree unnötig kompliziert, weil das Teilbaum-basierte
-Laden nicht genutzt wird (aber vorgesehen ist) und gleichzeitig ist die Performance (für die die API so
-kompliziert wurde) wieder zurückfällt (z. B. ein DB-Hit je "Kinder von Dokument X").
-
-Wir haben uns darüber hinweggeholfen, indem die End-Projekte, die Navigationen mit webfactory/navigation-bundle
-ausgeben möchten, diese Ausgabe immer mittels eines standalone-embedded Controller durchführen mussten, dessen
-Ausgabe dann per ESI gecached werden konnte.
-
-## webfactory/navigation-bundle Version 2.* ##
-
-Dieses Version fasst zunächst die Definition des Baumes und die Ausgabe einschließlich der Haken und Ösen (TM)
-zur Symfony-Integration in einem Bundle zusammen (keine externen Abhängigkeiten mehr), um das Leben in der Entwicklung
-zu vereinfachen, bis es mal einen guten Grund zur Aufteilung gibt.
-
-Der Ansatz, wie der Baum aufgebaut wird, ist neu:
-
-Es erfolgt (getrieben von einem Dispatcher) eine Breitensuche. Der aktuelle "Suchkontext" wird dann allen registrieren
-"TreeBuildern" präsentiert, die dann für den Kontext einen oder mehrere Knoten in den Baum einfügen können und/oder neue
-Kontexte zur weiteren Suche bilden.
-
-Nach Abschluss der Suche ist der Baum fertig und wird mit Hilfe von Symfony ConfigCache gesichert. Er steht dann in
-jedem Request in der Form, wie er gebaut wurde, sofort zur Verfügung.
-
-Innerhalb des Requests wird dieser "Prototyp" dann noch modifiziert, z. B. um den aktiven Knoten zu markieren oder auch
-Unterknoten für dynamische Zustände (z. B. von Controllern aus) einzufügen.
-
-Es ist ein Standard-Controller verfügbar, der den Baum als Navigation und als Breadcrumbs rendern kann (non-standalone),
-wobei das Theming anpassbar ist.
+Copyright 2015 - 2021 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).

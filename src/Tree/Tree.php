@@ -65,8 +65,6 @@ class Tree
 
     /**
      * Sets the active Node.
-     *
-     * @param Node $n
      */
     public function setActiveNode(Node $n)
     {
@@ -76,8 +74,6 @@ class Tree
     /**
      * Sets a node as the "closest to active" node in the tree, but making this particular
      * node itself *not* active.
-     *
-     * @param Node $n
      */
     public function setActivePath(Node $n)
     {
