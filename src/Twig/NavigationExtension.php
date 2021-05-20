@@ -52,7 +52,7 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
         $root,
         int $maxLevels = 1,
         int $expandedLevels = 1,
-        string $template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig'
+        string $template = '@WebfactoryNavigation/Navigation/navigation.html.twig'
     ): string {
         if (!($root instanceof Node)) {
             $root = $this->getTree()->find($root);
@@ -103,7 +103,7 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
         int $startLevel,
         int $maxLevels = 1,
         int $expandedLevels = 1,
-        string $template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig'
+        string $template = '@WebfactoryNavigation/Navigation/navigation.html.twig'
     ): string {
         $node = $this->getTree()->getActivePath();
         if (null === $node) {
@@ -120,7 +120,7 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
 
     public function renderBreadcrumbs(
         Environment $environment,
-        string $template = 'WebfactoryNavigationBundle:Navigation:breadcrumbs.html.twig'
+        string $template = '@WebfactoryNavigation/Navigation/breadcrumbs.html.twig'
     ): string {
         $node = $this->getTree()->getActivePath();
         if (null === $node) {

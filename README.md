@@ -22,7 +22,7 @@ Rendering navigation elements in Twig
 
 #### Syntax
 
-    {{ navigation_tree(root, maxLevels = 1, expandedLevel = 1, template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig') }}
+    {{ navigation_tree(root, maxLevels = 1, expandedLevel = 1, template = '@WebfactoryNavigation/Navigation/navigation.html.twig') }}
 
 #### Examples
     
@@ -39,24 +39,24 @@ An ancestry list is the active path from the given start level to the currently 
 e.g. the third level navigation outside of the regular navigation.
 
 #### Syntax
-    {{ navigation_ancestry(startLevel, maxLevels = 1, expandedLevels = 1, template = 'WebfactoryNavigationBundle:Navigation:navigation.html.twig') }}
+    {{ navigation_ancestry(startLevel, maxLevels = 1, expandedLevels = 1, template = '@WebfactoryNavigation/Navigation/navigation.html.twig') }}
 
 #### Examples
 
     {{ navigation_ancestry(startLevel = 1) }}
     
-    {{ navigation_ancestry(startLevel = 1, template = 'AppBundle:Navigation:secondaryNav.html.twig') }}
+    {{ navigation_ancestry(startLevel = 1, template = '@App/Navigation/secondaryNav.html.twig') }}
 
 ### Breadcrumbs
 
 #### Syntax
 
-    {{ navigation_breadcrumbs(template = 'WebfactoryNavigationBundle:Navigation:breadcrumbs.html.twig') }}
+    {{ navigation_breadcrumbs(template = '@WebfactoryNavigation/Navigation/breadcrumbs.html.twig') }}
 
 #### Examples
 
     {{ navigation_breadcrumbs() }}
-    {{ navigation_breadcrumbs(template = 'AppBundle:Navigation:breadcrumbs.html.twig') }}
+    {{ navigation_breadcrumbs(template = '@App/Navigation/breadcrumbs.html.twig') }}
 
 ### Customisation
 
@@ -76,7 +76,7 @@ Example:
 ```twig
 {# AppBundle:Navigation:navigation.html.twig: #}
 
-{% extends "WebfactoryNavigationBundle:Navigation:navigation.html.twig" %}
+{% extends "@WebfactoryNavigation/Navigation/navigation.html.twig" %}
 
 {% block navigation_list %}
     <nav class="project-specific-classes">

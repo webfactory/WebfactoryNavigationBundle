@@ -6,13 +6,13 @@ Changelog
 * Kompatibilität zu Twig 3
 * BC-Breaks:
   * Entfallener Twig-Tag: `navigation_theme` (z.B. `{% navigation_theme root "AppBundle:Navigation:navigation.html.twig" %}`).
-    Man kann im Projekt stattdessen direkt `WebfactoryNavigationBundle:Navigation:navigation.html.twig` extenden und
+    Man kann im Projekt stattdessen direkt `@WebfactoryNavigation/Navigation/navigation.html.twig` extenden und
     blockweise überschreiben. Beispiel:
       
     ```
     {# Datei: src/AppBundle/Resources/views/Navigation/navigation.html.twig #}
     
-    {% extends "WebfactoryNavigationBundle:Navigation:navigation.html.twig" %}
+    {% extends "@WebfactoryNavigation/Navigation/navigation.html.twig" %}
         
     {% block navigation_list %}
       <nav class="projektspezifische-wrapperklasse">
@@ -41,7 +41,7 @@ Changelog
     ```
     {{ render(
       controller(
-        'WebfactoryNavigationBundle:Navigation:tree',
+        'Webfactory\\Bundle\\NavigationBundle\\Controller\\NavigationController::treeAction',
         {
           root: {"webfactory_pages.page_id": root_page_id}
         }
@@ -59,7 +59,7 @@ Changelog
     ```
     {{ render(
       controller(
-        'WebfactoryNavigationBundle:Navigation:ancestry',
+        'Webfactory\\Bundle\\NavigationBundle\\Controller\\NavigationController::ancestryAction',
         {
           startLevel: 1
         }
@@ -77,7 +77,7 @@ Changelog
     ```
     {{ render(
       controller(
-        'WebfactoryNavigationBundle:Navigation:breadcrumbs'
+        'Webfactory\\Bundle\\NavigationBundle\\Controller\\NavigationController::breadcrumbsAction'
       )
     ) }}
     ```
