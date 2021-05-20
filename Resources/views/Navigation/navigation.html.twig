@@ -1,6 +1,6 @@
 {% if root is defined %}
 
-    {% navigation_theme root "WebfactoryNavigationBundle:Navigation:baseNavigationTheme.html.twig" %}
+    {% navigation_theme root "@WebfactoryNavigation/Navigation/baseNavigationTheme.html.twig" %}
     {{ navigation(root, maxLevels, expandedLevels) }}
 
 {% endif %}
