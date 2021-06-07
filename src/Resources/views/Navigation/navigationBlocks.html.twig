@@ -3,7 +3,7 @@
 {# maxLevels int #}
 {# expandedLevels int #}
 {% block navigation_if_visible %}
-    {% if level < maxLevels and (level < expandedLevels or node.parent.activePath) %}
+    {% if level < maxLevels and (level < expandedLevels or root.activePath) %}
         {% set visibleNodes = root.children | filter(node => node.visible) %}
         {% if visibleNodes is not empty %}
             {{ block('navigation_list') }}
