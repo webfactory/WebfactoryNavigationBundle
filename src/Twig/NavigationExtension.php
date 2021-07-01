@@ -174,7 +174,7 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
     public function getPowerSet(array $baseSet)
     {
         $count = \count($baseSet);
-        $members = pow(2, $count);
+        $members = 2 ** $count;
         $powerSet = [];
         for ($i = 0; $i < $members; ++$i) {
             $b = sprintf('%0'.$count.'b', $i);

@@ -53,7 +53,7 @@ class BuildDispatcher
      */
     private function getDirectorsOrderedByPriority()
     {
-        krsort($this->directors, SORT_NUMERIC);
+        krsort($this->directors, \SORT_NUMERIC);
         $buildDirectorsOrderedByPriority = [];
 
         foreach ($this->directors as $directors) {
