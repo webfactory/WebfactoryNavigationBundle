@@ -1,6 +1,17 @@
 Changelog
 =========
 
+## Version 5.0 Draft
+
+* BC-Breaks:
+  * Klassen wurden entfernt bzw. umbenannt. Bennung der Klassen nach BEM Methode. CSS muss ggf. angepasst werden.
+
+* Neu:
+  * Navigation und Breadcrumbs Klassen können geprefixed werden: `{% block prefix %}` in lokalen Templates
+  * Zusätzliche Klassen-Blöcke erlauben kontextuelles setzen von weiteren Klassen. Z.B. Util-Klassen oder JS-Hooks
+  * Blöcke in den Breadcrumbs lassen sich nun überschreiben
+    
+
 ## Version 4.0
 
 * Kompatibilität zu Twig 3
