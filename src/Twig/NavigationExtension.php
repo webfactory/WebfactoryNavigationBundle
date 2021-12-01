@@ -35,7 +35,6 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
             new TwigFunction('navigation_find', [$this, 'findNode']),
             new TwigFunction('navigation_active_node', [$this, 'getActiveNode']),
             new TwigFunction('navigation_active_path', [$this, 'getActivePath']),
-            new TwigFunction('power_set', [$this, 'getPowerSet']),
         ];
     }
 
@@ -169,24 +168,5 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
     public function findNode(array $provisions): ?Node
     {
         return $this->getTree()->find($provisions);
-    }
-
-    public function getPowerSet(array $baseSet)
-    {
-        $count = \count($baseSet);
-        $members = 2 ** $count;
-        $powerSet = [];
-        for ($i = 0; $i < $members; ++$i) {
-            $b = sprintf('%0'.$count.'b', $i);
-            $out = [];
-            for ($j = 0; $j < $count; ++$j) {
-                if ('1' == $b[$j]) {
-                    $out[] = $baseSet[$j];
-                }
-            }
-            $powerSet[] = $out;
-        }
-
-        return $powerSet;
     }
 }

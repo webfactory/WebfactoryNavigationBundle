@@ -4,12 +4,12 @@
 {# expandedLevels int #}
 {% block prefix %}{% endblock %}
 {% block prefix_separator %}-{% endblock %}
-{%- block navigation_prefix -%}
+{%- block prefix_final -%}
     {{ block('prefix') is not empty ? block('prefix') ~ block('prefix_separator') }}
 {%- endblock -%}
 
 {% block navigation_if_visible %}
-    {%- set navigation_base_class = block('navigation_prefix') ~ 'nav' -%}
+    {%- set navigation_base_class = block('prefix_final') ~ 'nav' -%}
 
     {% if level < maxLevels and (level < expandedLevels or root.activePath) %}
         {% set visibleNodes = root.children | filter(node => node.visible) %}
@@ -34,7 +34,7 @@
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
 {%- block navigation_list_class -%}
-    {%- set navigation_list_base_class = block('navigation_prefix') ~ 'nav__list' -%}
+    {%- set navigation_list_base_class = block('prefix_final') ~ 'nav__list' -%}
 
     {{ navigation_list_base_class }}
     {{ navigation_list_base_class }}--{{ level }}
@@ -60,7 +60,7 @@
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
 {%- block navigation_item_class -%}
-    {%- set navigation_item_base_class = block('navigation_prefix') ~ 'nav__item' -%}
+    {%- set navigation_item_base_class = block('prefix_final') ~ 'nav__item' -%}
 
     {{ navigation_item_base_class }}
     {{ navigation_item_base_class }}--{{ level }}
@@ -83,7 +83,7 @@
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
 {%- block navigation_text_class -%}
-    {%- set navigation_text_base_class = block('navigation_prefix') ~ 'nav__text' -%}
+    {%- set navigation_text_base_class = block('prefix_final') ~ 'nav__text' -%}
 
     {{ navigation_text_base_class }}
     {{ navigation_text_base_class }}--{{ level }}
