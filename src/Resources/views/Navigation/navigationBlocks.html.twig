@@ -37,7 +37,7 @@
     {%- set navigation_list_base_class = block('prefix_final') ~ 'nav__list' -%}
 
     {{ navigation_list_base_class }}
-    {{ navigation_list_base_class }}--{{ level }}
+    {{ navigation_list_base_class ~ '--' ~ level }}
     {% block navigation_list_additional_class -%}{%- endblock -%}
 {%- endblock -%}
 
@@ -63,7 +63,7 @@
     {%- set navigation_item_base_class = block('prefix_final') ~ 'nav__item' -%}
 
     {{ navigation_item_base_class }}
-    {{ navigation_item_base_class }}--{{ level }}
+    {{ navigation_item_base_class ~ '--' ~ level }}
     {{ node.isActiveNode ? navigation_item_base_class ~ '--is-active' }}
     {{ node.isActivePath ? navigation_item_base_class ~ '--is-active-path' }}
     {{ node.hasVisibleChildren ? navigation_item_base_class ~ '--has-visible-children' }}
@@ -86,7 +86,7 @@
     {%- set navigation_link_base_class = block('prefix_final') ~ 'nav__link' -%}
 
     {{ navigation_link_base_class }}
-    {{ navigation_link_base_class }}--{{ level }}
+    {{ navigation_link_base_class ~ '--' ~ level }}
     {% block navigation_link_additional_class -%}{%- endblock -%}
 {%- endblock -%}
 
@@ -98,5 +98,5 @@
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {%- block navigation_caption -%}
     {%- set navigation_text_base_class = block('prefix_final') ~ 'nav__text' -%}
-    <span class="{{ navigation_text_base_class }} {% block navigation_text_additional_class -%}{%- endblock -%}">{{ node.caption }}</span>
+    <span class="{{ navigation_text_base_class }} {{ navigation_text_base_class ~ '--' ~ level }} {% block navigation_text_additional_class -%}{%- endblock -%}">{{ node.caption }}</span>
 {%- endblock -%}
