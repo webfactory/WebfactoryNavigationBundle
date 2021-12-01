@@ -2,29 +2,43 @@
 {# level int #}
 {# maxLevels int #}
 {# expandedLevels int #}
+{% block prefix %}{% endblock %}
+{% block prefix_separator %}-{% endblock %}
+{%- block navigation_prefix -%}
+    {{ block('prefix') is not empty ? block('prefix') ~ block('prefix_separator') }}
+{%- endblock -%}
+
 {% block navigation_if_visible %}
+    {%- set navigation_base_class = block('navigation_prefix') ~ 'nav' -%}
+
     {% if level < maxLevels and (level < expandedLevels or root.activePath) %}
         {% set visibleNodes = root.children | filter(node => node.visible) %}
         {% if visibleNodes is not empty %}
-            {{ block('navigation_list') }}
+            <nav class="{{ navigation_base_class }} {% block navigation_additional_class %}{% endblock %}">
+                {{ block('navigation_list') }}
+            </nav>
         {% endif %}
     {% endif %}
 {% endblock %}
 
 {# visibleNodes \Webfactory\Bundle\NavigationBundle\Tree\Node[] #}
 {# level int #}
-{% block navigation_list %}
+{%- block navigation_list -%}
     <ul class="{{ block('navigation_list_class') }}">
         {% for node in visibleNodes %}
             {{ block('navigation_item') }}
         {% endfor %}
     </ul>
-{% endblock %}
+{%- endblock -%}
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
 {%- block navigation_list_class -%}
-    nl nl-{{ level }}
+    {%- set navigation_list_base_class = block('navigation_prefix') ~ 'nav__list' -%}
+
+    {{ navigation_list_base_class }}
+    {{ navigation_list_base_class }}--{{ level }}
+    {% block navigation_list_additional_class -%}{%- endblock -%}
 {%- endblock -%}
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
@@ -45,22 +59,15 @@
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
-{% block navigation_item_class -%}
-    ni ni-{{ level }}
+{%- block navigation_item_class -%}
+    {%- set navigation_item_base_class = block('navigation_prefix') ~ 'nav__item' -%}
 
-    {%- set classes = []
-        | merge( [(node.isActiveNode ? 'a' : 'na')] )
-        | merge( [(node.isActivePath ? 'ap' : 'nap')] )
-        | merge( [(loop.first ? 'f' : 'nf')] )
-        | merge( [(loop.last ? 'l' : 'nl')] )
-        | merge( [(node.hasVisibleChildren ? 'p' : 'np' )] )
-    -%}
-    {%- for set in power_set(classes) -%}
-        {%- set class = set | sort | join('-') -%}
-        {%- if not class is empty -%}
-            {# keep one space here -> #} ni-{{ class }}-{{ level }}
-        {%- endif -%}
-    {%- endfor -%}
+    {{ navigation_item_base_class }}
+    {{ navigation_item_base_class }}--{{ level }}
+    {{ node.isActiveNode ? navigation_item_base_class ~ '--is-active' }}
+    {{ node.isActivePath ? navigation_item_base_class ~ '--is-active-path' }}
+    {{ node.hasVisibleChildren ? navigation_item_base_class ~ '--has-visible-children' }}
+    {% block navigation_item_additional_class -%}{%- endblock -%}
 {%- endblock -%}
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
@@ -76,7 +83,11 @@
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
 {%- block navigation_text_class -%}
-    nt nt-{{ level }}
+    {%- set navigation_text_base_class = block('navigation_prefix') ~ 'nav__text' -%}
+
+    {{ navigation_text_base_class }}
+    {{ navigation_text_base_class }}--{{ level }}
+    {% block navigation_text_additional_class -%}{%- endblock -%}
 {%- endblock -%}
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
