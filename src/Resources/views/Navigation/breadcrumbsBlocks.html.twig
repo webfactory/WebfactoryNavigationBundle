@@ -7,16 +7,24 @@
 {% block breadcrumbs %}
     {% if breadcrumbs is defined and breadcrumbs|length > 1 %}
         <nav class="{{ block('prefix_final') }}breadcrumbs {% block breadcrumbs_class %}{% endblock %}">
-            <span class="{{ block('prefix_final') }}breadcrumbs__label {% block breadcrumbs_label_class %}{% endblock %}">{{ "webfactory_navigation.breadcrumb_label"|trans({}, 'webfactory-navigation') }}</span>
+            {% block breadcrumbs_label %}
+                <span class="{{ block('prefix_final') }}breadcrumbs__label {% block breadcrumbs_label_class %}{% endblock %}">{{ "webfactory_navigation.breadcrumb_label"|trans({}, 'webfactory-navigation') }}</span>
+            {% endblock %}
             <ul class="{{ block('prefix_final') }}breadcrumbs__list {% block breadcrumbs_list_class %}{% endblock %}">
                 {% for node in breadcrumbs %}
                     {% if node.caption|trim is not empty and ((node.breadcrumbsVisible is defined and node.breadcrumbsVisible) or node.visible) %}
                         <li class="{{ block('prefix_final') }}breadcrumbs__item {% block breadcrumbs_item_class %}{% endblock %}">
-                            {% if not node.activeNode %}
-                                <a class="{{ block('prefix_final') }}breadcrumbs__text {% block breadcrumbs_text_class %}{% endblock %}" href="{{ node.url }}">{% block breadcrumbs_caption %}{{ node.caption }}{% endblock %}</a> /
-                            {% else %}
-                                <span class="{{ block('prefix_final') }}breadcrumbs__text {{ block('breadcrumbs_text_class') }}">{{ block('breadcrumbs_caption') }}</span>
-                            {% endif %}
+                            <a class="{{ block('prefix_final') }}breadcrumbs__link {% block breadcrumbs_link_class %}{% endblock %}"
+                                {%- if not node.activeNode -%}
+                                    href="{{ node.url }}"
+                                {%- else -%}
+                                    aria-current="page"
+                                {%- endif  -%}>
+
+                                {%- block breadcrumbs_caption -%}
+                                    <span class="{{ block('prefix_final') }}breadcrumbs__text {% block breadcrumbs_text_class %}{% endblock %}">{{ node.caption }}</span>
+                                {%- endblock -%}
+                            </a>
                         </li>
                     {% endif %}
                 {% endfor %}

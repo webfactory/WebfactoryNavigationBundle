@@ -5,6 +5,9 @@ Changelog
 
 * BC-Breaks:
   * Klassen wurden entfernt bzw. umbenannt. Bennung der Klassen nach BEM Methode. CSS muss ggf. angepasst werden.
+  * Das `<nav>`-Element wird nun im Bundle erzeugt und muss ggf. aus der Base entfernt werden.
+  * Der aktive Navigationspunkt wird nun nicht mehr als `<span>`-Element ausgegeben sonder als `<a aria-current="page">`. Hier muss ggf. das Styling angepasst werden. Dies gilt für Navigation und Breadcrumbs.
+  * "navigation_text"- bzw. "breadcrumb_text"-Blocks werden `<span>`-Elementen um Captions. Sie werden ersetzt durch "*_link"-Blocks. 
 
 * Neu:
   * Navigation und Breadcrumbs Klassen können geprefixed werden: `{% block prefix %}` in lokalen Templates

@@ -46,7 +46,7 @@
 {% block navigation_item %}
     {% if node.visible %}
         <li class="{{ block('navigation_item_class') }}">
-            {{ block('navigation_text') }}
+            {{ block('navigation_link') }}
 
             {%- with {root: node, level: level + 1} %}
                 {{ block('navigation_if_visible') }}
@@ -72,22 +72,22 @@
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
-{%- block navigation_text -%}
+{%- block navigation_link -%}
     {%- if not node.isActiveNode and block('navigation_url') -%}
-        <a href="{{ block('navigation_url') }}" class="{{ block('navigation_text_class') }}">{{ block('navigation_caption') }}</a>
+        <a href="{{ block('navigation_url') }}" class="{{ block('navigation_link_class') }}">{{ block('navigation_caption') }}</a>
     {%- else -%}
-        <span class="{{ block('navigation_text_class') }}">{{ block('navigation_caption') }}</span>
+        <a aria-current="page" class="{{ block('navigation_link_class') }}">{{ block('navigation_caption') }}</a>
     {%- endif -%}
 {%- endblock -%}
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
-{%- block navigation_text_class -%}
-    {%- set navigation_text_base_class = block('prefix_final') ~ 'nav__text' -%}
+{%- block navigation_link_class -%}
+    {%- set navigation_link_base_class = block('prefix_final') ~ 'nav__link' -%}
 
-    {{ navigation_text_base_class }}
-    {{ navigation_text_base_class }}--{{ level }}
-    {% block navigation_text_additional_class -%}{%- endblock -%}
+    {{ navigation_link_base_class }}
+    {{ navigation_link_base_class }}--{{ level }}
+    {% block navigation_link_additional_class -%}{%- endblock -%}
 {%- endblock -%}
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
@@ -97,5 +97,6 @@
 
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {%- block navigation_caption -%}
-    {{ node.caption }}
+    {%- set navigation_text_base_class = block('prefix_final') ~ 'nav__text' -%}
+    <span class="{{ navigation_text_base_class }} {% block navigation_text_additional_class -%}{%- endblock -%}">{{ node.caption }}</span>
 {%- endblock -%}
