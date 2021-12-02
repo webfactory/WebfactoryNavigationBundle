@@ -73,10 +73,8 @@
 {# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
 {# level int #}
 {%- block navigation_link -%}
-    {%- if not node.isActiveNode and block('navigation_url') -%}
-        <a href="{{ block('navigation_url') }}" class="{{ block('navigation_link_class') }}">{{ block('navigation_caption') }}</a>
-    {%- else -%}
-        <a aria-current="page" class="{{ block('navigation_link_class') }}">{{ block('navigation_caption') }}</a>
+    {%- if block('navigation_url') -%}
+        <a {%- if node.isActiveNode and block('navigation_url') -%}aria-current="page"{%- endif %} href="{{ block('navigation_url') }}" class="{{ block('navigation_link_class') }}">{{ block('navigation_caption') }}</a>
     {%- endif -%}
 {%- endblock -%}
 
