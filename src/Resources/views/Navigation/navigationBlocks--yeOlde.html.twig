@@ -1,0 +1,90 @@
+{# root \Webfactory\Bundle\NavigationBundle\Tree\Node #}
+{# level int #}
+{# maxLevels int #}
+{# expandedLevels int #}
+{% block navigation_if_visible %}
+    {% if level < maxLevels and (level < expandedLevels or root.activePath) %}
+        {% set visibleNodes = root.children | filter(node => node.visible) %}
+        {% if visibleNodes is not empty %}
+            {{ block('navigation_list') }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{# visibleNodes \Webfactory\Bundle\NavigationBundle\Tree\Node[] #}
+{# level int #}
+{% block navigation_list %}
+    <ul class="{{ block('navigation_list_class') }}">
+        {% for node in visibleNodes %}
+            {{ block('navigation_item') }}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
+{# level int #}
+{%- block navigation_list_class -%}
+    nl nl-{{ level }}
+{%- endblock -%}
+
+{# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
+{# level int #}
+{% block navigation_item %}
+    {% if node.visible %}
+        <li class="{{ block('navigation_item_class') }}">
+            {{ block('navigation_text') }}
+
+            {%- with {root: node, level: level + 1} %}
+                {{ block('navigation_if_visible') }}
+            {% endwith %}
+        </li>
+    {% else %}
+        {% deprecated 'Passing invisible nodes into the navigation_item block is deprecated. Filter nodes in the navigation_list block.' %}
+    {% endif %}
+{% endblock %}
+
+{# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
+{# level int #}
+{% block navigation_item_class -%}
+    ni ni-{{ level }}
+
+    {%- set classes = []
+        | merge( [(node.isActiveNode ? 'a' : 'na')] )
+        | merge( [(node.isActivePath ? 'ap' : 'nap')] )
+        | merge( [(loop.first ? 'f' : 'nf')] )
+        | merge( [(loop.last ? 'l' : 'nl')] )
+        | merge( [(node.hasVisibleChildren ? 'p' : 'np' )] )
+    -%}
+    {%- for set in power_set(classes) -%}
+        {%- set class = set | sort | join('-') -%}
+        {%- if not class is empty -%}
+            {# keep one space here -> #} ni-{{ class }}-{{ level }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock -%}
+
+{# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
+{# level int #}
+{%- block navigation_text -%}
+    {%- if not node.isActiveNode and block('navigation_url') -%}
+        <a href="{{ block('navigation_url') }}" class="{{ block('navigation_text_class') }}">{{ block('navigation_caption') }}</a>
+    {%- else -%}
+        <span class="{{ block('navigation_text_class') }}">{{ block('navigation_caption') }}</span>
+    {%- endif -%}
+{%- endblock -%}
+
+{# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
+{# level int #}
+{%- block navigation_text_class -%}
+    nt nt-{{ level }}
+{%- endblock -%}
+
+{# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
+{%- block navigation_url -%}
+    {{ node.url }}
+{%- endblock -%}
+
+{# node \Webfactory\Bundle\NavigationBundle\Tree\Node #}
+{%- block navigation_caption -%}
+    {{ node.caption }}
+{%- endblock -%}
