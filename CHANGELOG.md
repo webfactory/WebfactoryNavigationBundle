@@ -1,18 +1,17 @@
 Changelog
 =========
 
-## Version 5.0
-
-* BC-Breaks:
-  * Klassen wurden entfernt bzw. umbenannt. Benennung der Klassen nach BEM Methode. CSS muss ggf. angepasst werden.
-  * Das `<nav>`-Element wird nun im Bundle erzeugt und muss ggf. aus dem Base-(Layout/Template/...) entfernt werden.
-  * Der aktive Navigationspunkt wird nun nicht mehr als `<span>`-Element ausgegeben sondern als `<a aria-current="page" href="">`. Hier muss ggf. das Styling angepasst werden. Dies gilt für Navigation und Breadcrumbs.
-  * `*_text`-Blocks werden zu `<span>`-Elementen, die die Captions beinhalten. Im Link-Kontext werden sie ersetzt durch `*_link`-Blocks. 
+## Version 4.1
 
 * Neu:
-  * Navigation- und Breadcrumbs-Klassen können geprefixed werden: `{% block prefix %}` in lokalen Templates.
-  * Zusätzliche Klassen-Blöcke erlauben kontextuelles Setzen weiterer Klassen wie z.B. Util-Klassen oder JS-Hooks.
-  * Blöcke in den Breadcrumbs lassen sich nun tatsächlich überschreiben.
+  * BEM-Templates: Navigation und Breadcrumbs können nun mit Klassen-Namen nach BEM Methode gerendert werden. Dabei ist zu beachten:
+      * Das `<nav>`-Element wird nun im Bundle erzeugt und muss ggf. aus dem Base-(Layout/Template/...) entfernt werden.
+      * Der aktive Navigationspunkt wird nun nicht mehr als `<span>`-Element ausgegeben sondern als `<a aria-current="page" href="">`. Hier muss ggf. das Styling angepasst werden. Dies gilt für Navigation und Breadcrumbs.
+      * `*_text`-Blocks werden zu `<span>`-Elementen, die die Captions beinhalten. Im Link-Kontext werden sie ersetzt durch `*_link`-Blocks.
+
+      * Navigation- und Breadcrumbs-Klassen können geprefixed werden: `{% block prefix %}` in lokalen Templates.
+      * Zusätzliche Klassen-Blöcke erlauben kontextuelles Setzen weiterer Klassen wie z.B. Util-Klassen oder JS-Hooks.
+      * Blöcke in den Breadcrumbs lassen sich nun tatsächlich überschreiben.
     
 
 ## Version 4.0
