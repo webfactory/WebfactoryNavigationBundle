@@ -74,7 +74,7 @@
 {# level int #}
 {%- block navigation_link -%}
     {%- if block('navigation_url') -%}
-        <a {%- if node.isActiveNode and block('navigation_url') -%}aria-current="page"{%- endif %} href="{{ block('navigation_url') }}" class="{{ block('navigation_link_class') }}">{{ block('navigation_caption') }}</a>
+        <a {% if node.isActiveNode and block('navigation_url') -%}aria-current="page"{%- endif %} href="{{ block('navigation_url') }}" class="{{ block('navigation_link_class') }}">{{ block('navigation_caption') }}</a>
     {%- endif -%}
 {%- endblock -%}
 
