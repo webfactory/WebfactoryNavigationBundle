@@ -14,9 +14,13 @@
     {% if level < maxLevels and (level < expandedLevels or root.activePath) %}
         {% set visibleNodes = root.children | filter(node => node.visible) %}
         {% if visibleNodes is not empty %}
-            <nav class="{{ navigation_base_class }} {% block navigation_additional_class %}{% endblock %}">
+            {% if level == 0  %}
+                <nav class="{{ navigation_base_class }} {% block navigation_additional_class %}{% endblock %}">
+                    {{ block('navigation_list') }}
+                </nav>
+            {% else %}
                 {{ block('navigation_list') }}
-            </nav>
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}
