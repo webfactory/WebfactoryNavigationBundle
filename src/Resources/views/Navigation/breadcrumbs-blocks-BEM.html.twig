@@ -6,7 +6,7 @@
 
 {% block breadcrumbs %}
     {% if breadcrumbs is defined and breadcrumbs|length > 1 %}
-        <nav aria-label="{{ breadcrumbs_landmark|default('Breadcrumbs') }}" class="{{ block('prefix_final') ~ 'breadcrumbs' }} {% block breadcrumbs_class %}{% endblock %}">
+        <nav aria-label="{{ breadcrumbs_landmark|default('Brotkrumenwegnavigation') }}" class="{{ block('prefix_final') ~ 'breadcrumbs' }} {% block breadcrumbs_class %}{% endblock %}">
             {% block breadcrumbs_label %}
                 <span class="{{ block('prefix_final') ~ 'breadcrumbs__label' }} {% block breadcrumbs_label_class %}{% endblock %}">{{ "webfactory_navigation.breadcrumb_label"|trans({}, 'webfactory-navigation') }}</span>
             {% endblock %}
