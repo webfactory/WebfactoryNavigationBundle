@@ -3,7 +3,7 @@ Changelog
 
 ## Version 5
 
-* Das Attribut `ally-label` macht die Navigationen für assistive Technologien lesbar. Dies ist insbesondere wertvoll, wenn es mehr als eine Navigation gibt.
+* Das Attribut `aria-label` macht die Navigationen für assistive Technologien lesbar. Dies ist insbesondere wertvoll, wenn es mehr als eine Navigation gibt.
 
 * BC-Break:
   * Das Template `navigation-BEM` wirft nun eine Exception wenn `navigation_landmark` nicht gesetzt wird. Es gibt bewusst keinen Default, um zu     verhindern, dass unter Umständen mehrere Navigationen den gleichen Landmark erhalten. 
