@@ -15,7 +15,7 @@
         {% set visibleNodes = root.children | filter(node => node.visible) %}
         {% if visibleNodes is not empty %}
             {% if level == 0  %}
-                <nav aria-label="{{ navigation_landmark|default() }}" class="{{ navigation_base_class }} {% block navigation_additional_class %}{% endblock %}">
+                <nav aria-label="{{ navigation_landmark }}" class="{{ navigation_base_class }} {% block navigation_additional_class %}{% endblock %}">
                     {{ block('navigation_list') }}
                 </nav>
             {% else %}
