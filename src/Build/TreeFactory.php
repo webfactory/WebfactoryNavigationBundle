@@ -114,7 +114,7 @@ class TreeFactory implements ServiceSubscriberInterface
             }
 
             if ($this->eventDispatcher) {
-                $this->eventDispatcher->dispatch('webfactory_navigation.tree_initialized', new TreeInitializedEvent($this->_tree));
+                $this->eventDispatcher->dispatch(new TreeInitializedEvent($this->_tree), 'webfactory_navigation.tree_initialized');
             }
         }
 
