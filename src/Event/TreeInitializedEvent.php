@@ -8,7 +8,7 @@
 
 namespace Webfactory\Bundle\NavigationBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
 class TreeInitializedEvent extends Event
