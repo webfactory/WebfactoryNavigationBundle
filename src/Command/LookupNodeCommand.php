@@ -16,7 +16,7 @@ class LookupNodeCommand extends TreeCommand
              ->addArgument('queryParam', InputArgument::IS_ARRAY, 'One or several key=value pairs to search in the node index');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $provisions = [];
 
@@ -35,5 +35,7 @@ class LookupNodeCommand extends TreeCommand
         } else {
             $output->writeln('No matching node found.');
         }
+
+        return 0;
     }
 }
