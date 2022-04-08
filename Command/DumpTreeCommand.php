@@ -19,7 +19,7 @@ class DumpTreeCommand extends TreeCommand
             ->addOption('short', null, InputOption::VALUE_NONE, 'Kompakte Ausgabe');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->shortOutput = $input->getOption('short');
 
@@ -28,6 +28,8 @@ class DumpTreeCommand extends TreeCommand
         foreach ($roots as $root) {
             $this->dumpNode($root, $output);
         }
+
+        return 0;
     }
 
     private function dumpNode(Node $n, OutputInterface $output, $depth = 0)
