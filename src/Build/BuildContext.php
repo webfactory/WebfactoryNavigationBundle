@@ -26,7 +26,7 @@ class BuildContext
     /**
      * @param array<string, mixed> $params
      */
-    public function change(array $params): BuildContext
+    public function change(array $params): self
     {
         return new self(array_merge($this->params, $params));
     }
