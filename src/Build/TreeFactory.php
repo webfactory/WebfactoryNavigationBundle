@@ -41,7 +41,7 @@ class TreeFactory implements ServiceSubscriberInterface
     /** @var ContainerInterface */
     protected $container;
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             BuildDispatcher::class,
@@ -64,7 +64,7 @@ class TreeFactory implements ServiceSubscriberInterface
         $this->stopwatch = $stopwatch;
     }
 
-    public function debug($msg): void
+    public function debug(string $msg): void
     {
         if ($this->logger) {
             $this->logger->debug("$msg (PID ".getmypid().', microtime '.microtime().')');
