@@ -21,10 +21,7 @@ class TreeInitializedEvent extends Event
         $this->tree = $tree;
     }
 
-    /**
-     * @return Tree
-     */
-    public function getTree()
+    public function getTree(): Tree
     {
         return $this->tree;
     }
