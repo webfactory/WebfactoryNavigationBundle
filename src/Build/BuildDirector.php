@@ -16,5 +16,8 @@ use Webfactory\Bundle\NavigationBundle\Tree\Tree;
  */
 interface BuildDirector
 {
+    /**
+     * @return void
+     */
     public function build(BuildContext $c, Tree $t, BuildDispatcher $d);
 }
