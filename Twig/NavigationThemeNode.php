@@ -22,7 +22,7 @@ class NavigationThemeNode extends Node
         parent::__construct(['navigation' => $navigation, 'resources' => $resources], [], $lineNumber, $tag);
     }
 
-    public function compile(Compiler $compiler)
+    public function compile(Compiler $compiler): void
     {
         $compiler
             ->addDebugInfo($this)
