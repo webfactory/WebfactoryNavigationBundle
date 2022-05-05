@@ -25,7 +25,7 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
         $this->container = $container;
     }
 
-    public function getFunctions(): array
+    public function getFunctions()
     {
         return [
             new TwigFunction('navigation_tree', [$this, 'renderTree'], ['needs_environment' => true, 'is_safe' => ['html']]),

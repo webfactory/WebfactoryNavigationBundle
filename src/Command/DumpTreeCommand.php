@@ -32,7 +32,7 @@ class DumpTreeCommand extends TreeCommand
         return 0;
     }
 
-    private function dumpNode(Node $n, OutputInterface $output, $depth = 0): void
+    private function dumpNode(Node $n, OutputInterface $output, $depth = 0)
     {
         $first = true;
 
