@@ -28,7 +28,7 @@ class Tree
      * because it results from user input and we cannot enumerate all the possible
      * nodes when building the tree.
      *
-     * @var Node|null
+     * @var ?Node
      */
     protected $activePath = null;
 
@@ -37,7 +37,7 @@ class Tree
         $this->finder = new Finder();
     }
 
-    public function addRoot(Node $r = null)
+    public function addRoot(Node $r = null): Node
     {
         if (null === $r) {
             $r = new Node();
@@ -48,27 +48,25 @@ class Tree
         return $r;
     }
 
-    public function getRootNodes()
+    public function getRootNodes(): array
     {
         return $this->roots;
     }
 
-    public function addFindIndex(Node $n, array $requirements)
+    public function addFindIndex(Node $n, array $requirements): void
     {
         $this->finder->add($n, $requirements);
     }
 
-    public function find(array $provisions)
+    public function find(array $provisions): ?Node
     {
         return $this->finder->lookup($provisions);
     }
 
     /**
      * Sets the active Node.
-     *
-     * @param Node $n
      */
-    public function setActiveNode(Node $n)
+    public function setActiveNode(Node $n): void
     {
         $this->activeNode = $this->activePath = $n;
     }
@@ -76,10 +74,8 @@ class Tree
     /**
      * Sets a node as the "closest to active" node in the tree, but making this particular
      * node itself *not* active.
-     *
-     * @param Node $n
      */
-    public function setActivePath(Node $n)
+    public function setActivePath(Node $n): void
     {
         $this->activeNode = null;
         $this->activePath = $n;
@@ -88,7 +84,7 @@ class Tree
     /**
      * @return Node|null returns the currently active node, if available
      */
-    public function getActiveNode()
+    public function getActiveNode(): ?Node
     {
         return $this->activeNode;
     }
@@ -97,10 +93,8 @@ class Tree
      * Returns the node that is currently active or comes closest to the actually active state. Use
      * \Webfactory\Bundle\NavigationBundle\Tree\Node::isActiveNode to query whether the node is indeed active
      * or not.
-     *
-     * @return Node|null
      */
-    public function getActivePath()
+    public function getActivePath(): ?Node
     {
         return $this->activePath;
     }

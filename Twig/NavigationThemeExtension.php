@@ -31,20 +31,20 @@ class NavigationThemeExtension extends AbstractExtension
         $this->blocks = new \SplObjectStorage();
     }
 
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [
             new NavigationThemeTokenParser(),
         ];
     }
 
-    public function setTheme(Node $themeRoot, array $resources)
+    public function setTheme(Node $themeRoot, array $resources): void
     {
         $this->themes->attach($themeRoot, $resources);
         $this->blocks = new \SplObjectStorage();
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('power_set', [$this, 'getPowerSet']),
@@ -60,7 +60,7 @@ class NavigationThemeExtension extends AbstractExtension
         ];
     }
 
-    public function getPowerSet(array $baseSet)
+    public function getPowerSet(array $baseSet): array
     {
         $count = \count($baseSet);
         $members = pow(2, $count);
@@ -79,7 +79,7 @@ class NavigationThemeExtension extends AbstractExtension
         return $powerSet;
     }
 
-    public function renderNavigation(Environment $env, Node $node, $maxLevels, $expandedLevels)
+    public function renderNavigation(Environment $env, Node $node, $maxLevels, $expandedLevels): string
     {
         return $this->renderNavigationList($env, $node, $node->getChildren(), 0, $maxLevels, $expandedLevels, $node);
     }
@@ -92,7 +92,8 @@ class NavigationThemeExtension extends AbstractExtension
         $maxLevels,
         $expandedLevels,
         Node $parentNode = null
-    ) {
+    ): string
+    {
         if ($nodes && $level < $maxLevels && ($level < $expandedLevels || $parentNode->isActivePath())) {
             return $this->renderBlock($env, $themeRoot, 'navigation_list', get_defined_vars());
         }
@@ -100,42 +101,42 @@ class NavigationThemeExtension extends AbstractExtension
         return '';
     }
 
-    public function renderNavigationListClass(Environment $env, Node $themeRoot, array $nodes, $level, Node $parentNode = null)
+    public function renderNavigationListClass(Environment $env, Node $themeRoot, array $nodes, $level, Node $parentNode = null): string
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_list_class', get_defined_vars());
     }
 
-    public function renderNavigationItem(Environment $env, Node $themeRoot, Node $node, $level, $maxLevels, $expandedLevels, $loop)
+    public function renderNavigationItem(Environment $env, Node $themeRoot, Node $node, $level, $maxLevels, $expandedLevels, $loop): string
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_item', get_defined_vars());
     }
 
-    public function renderNavigationItemClass(Environment $env, Node $themeRoot, Node $node, $level, $loop)
+    public function renderNavigationItemClass(Environment $env, Node $themeRoot, Node $node, $level, $loop): string
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_item_class', get_defined_vars());
     }
 
-    public function renderNavigationText(Environment $env, Node $themeRoot, Node $node, $level)
+    public function renderNavigationText(Environment $env, Node $themeRoot, Node $node, $level): string
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_text', get_defined_vars());
     }
 
-    public function renderNavigationTextClass(Environment $env, Node $themeRoot, Node $node, $level)
+    public function renderNavigationTextClass(Environment $env, Node $themeRoot, Node $node, $level): string
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_text_class', get_defined_vars());
     }
 
-    public function renderNavigationUrl(Environment $env, Node $themeRoot, Node $node, $level)
+    public function renderNavigationUrl(Environment $env, Node $themeRoot, Node $node, $level): string
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_url', get_defined_vars());
     }
 
-    public function renderNavigationCaption(Environment $env, Node $themeRoot, Node $node, $level)
+    public function renderNavigationCaption(Environment $env, Node $themeRoot, Node $node, $level): string
     {
         return $this->renderBlock($env, $themeRoot, 'navigation_caption', get_defined_vars());
     }
 
-    public function renderBlock(Environment $env, $themeRoot, $name, array $variables)
+    public function renderBlock(Environment $env, $themeRoot, $name, array $variables): string
     {
         if (!$this->template) {
             $this->template = $env->loadTemplate(reset($this->resources));
@@ -146,7 +147,7 @@ class NavigationThemeExtension extends AbstractExtension
         return $this->template->renderBlock($name, $variables, $blocks);
     }
 
-    protected function getBlocks(Environment $env, Node $themeRoot)
+    protected function getBlocks(Environment $env, Node $themeRoot): array
     {
         if (!$this->blocks->contains($themeRoot)) {
             $resources = $this->resources;

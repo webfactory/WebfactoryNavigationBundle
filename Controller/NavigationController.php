@@ -15,7 +15,7 @@ use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
 class NavigationController extends AbstractController
 {
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [
             Tree::class,
@@ -39,7 +39,8 @@ class NavigationController extends AbstractController
         $maxLevels = 1,
         $expandedLevels = 1,
         $template = '@WebfactoryNavigation/Navigation/navigation.html.twig'
-    ) {
+    ): Response
+    {
         if (\is_array($root)) {
             $node = $this->getTree()->find($root);
             if (!$node) {
@@ -81,7 +82,7 @@ class NavigationController extends AbstractController
      *
      * @return Response
      */
-    public function ancestryAction($startLevel, $maxLevels = 1, $expandedLevels = 1, $template = '@WebfactoryNavigation/Navigation/navigation.html.twig')
+    public function ancestryAction($startLevel, $maxLevels = 1, $expandedLevels = 1, $template = '@WebfactoryNavigation/Navigation/navigation.html.twig'): Response
     {
         if ($node = $this->getTree()->getActivePath()) {
             $path = $node->getPath();
@@ -101,7 +102,7 @@ class NavigationController extends AbstractController
      *
      * @return Response
      */
-    public function breadcrumbsAction($template = '@WebfactoryNavigation/Navigation/breadcrumbs.html.twig')
+    public function breadcrumbsAction($template = '@WebfactoryNavigation/Navigation/breadcrumbs.html.twig'): Response
     {
         if ($node = $this->getTree()->getActivePath()) {
             return $this->render($template, [

@@ -22,11 +22,7 @@ class Finder
     /** @var string[] */
     protected $idToHash = [];
 
-    /**
-     * @param Node  $object
-     * @param array $requirements
-     */
-    public function add($object, array $requirements)
+    public function add(Node $object, array $requirements): void
     {
         $hash = spl_object_hash($object);
         $this->objects[$hash] = $object;
@@ -48,10 +44,8 @@ class Finder
 
     /**
      * @param string|array|object $provided
-     *
-     * @return Node|null
      */
-    public function lookup($provided)
+    public function lookup($provided): ?Node
     {
         $remainingCount = [];
         $maxMatch = 0;

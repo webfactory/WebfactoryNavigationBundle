@@ -18,7 +18,7 @@ class NavigationExtension extends AbstractExtension
         $this->treeFactory = $treeFactory;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('navigation_active_at_level', [$this, 'getNavigationActiveAtLevel']),
@@ -30,20 +30,16 @@ class NavigationExtension extends AbstractExtension
 
     /**
      * Returns the currently active tree node.
-     *
-     * @return Node
      */
-    public function getActiveNode()
+    public function getActiveNode(): Node
     {
         return $this->getTree()->getActiveNode();
     }
 
     /**
      * Returns the currently active "path" node.
-     *
-     * @return Node
      */
-    public function getActivePath()
+    public function getActivePath(): Node
     {
         return $this->getTree()->getActivePath();
     }
@@ -51,11 +47,11 @@ class NavigationExtension extends AbstractExtension
     /**
      * Returns the navigation node which lies on the currently active path at the given level.
      *
-     * @param $level The level of the node to be returned
+     * @param int $level The level of the node to be returned
      *
-     * @return \Webfactory\Bundle\NavigationBundle\Tree\Node|null A node or null if no node at the given level exists
+     * @return ?Node A node or null if no node at the given level exists
      */
-    public function getNavigationActiveAtLevel($level)
+    public function getNavigationActiveAtLevel(int $level): ?Node
     {
         $activeNode = $this->getTree()->getActiveNode();
 
@@ -76,18 +72,13 @@ class NavigationExtension extends AbstractExtension
      * Finds a node indexed in the tree. See \Webfactory\Bundle\NavigationBundle\Tree\Tree::find.
      *
      * @param array $provisions parameters used to look up the node
-     *
-     * @return \Webfactory\Bundle\NavigationBundle\Tree\Node|null
      */
-    public function findNode(array $provisions)
+    public function findNode(array $provisions): ?Node
     {
         return $this->getTree()->find($provisions);
     }
 
-    /**
-     * @return Tree
-     */
-    private function getTree()
+    private function getTree(): Tree
     {
         return $this->treeFactory->getTree();
     }

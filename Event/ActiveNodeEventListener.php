@@ -20,7 +20,7 @@ class ActiveNodeEventListener
         $this->requestStack = $requestStack;
     }
 
-    public function initializeTree(TreeInitializedEvent $event)
+    public function initializeTree(TreeInitializedEvent $event): void
     {
         if ($masterRequest = $this->requestStack->getMasterRequest()) {
             if ($node = $event->getTree()->find($masterRequest->attributes->all())) {

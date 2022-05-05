@@ -14,7 +14,7 @@ use Twig\TokenParser\AbstractTokenParser;
 
 class NavigationThemeTokenParser extends AbstractTokenParser
 {
-    public function parse(Token $token)
+    public function parse(Token $token): Node
     {
         $lineNumber = $token->getLine();
         $stream = $this->parser->getStream();
@@ -30,7 +30,7 @@ class NavigationThemeTokenParser extends AbstractTokenParser
         return new NavigationThemeNode($navigation, new Node($resources), $lineNumber, $this->getTag());
     }
 
-    public function getTag()
+    public function getTag(): string
     {
         return 'navigation_theme';
     }
