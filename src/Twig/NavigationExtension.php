@@ -25,7 +25,7 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
         $this->container = $container;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('navigation_tree', [$this, 'renderTree'], ['needs_environment' => true, 'is_safe' => ['html']]),
@@ -171,7 +171,7 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
         return $this->getTree()->find($provisions);
     }
 
-    public function getPowerSet(array $baseSet)
+    public function getPowerSet(array $baseSet): array
     {
         $count = \count($baseSet);
         $members = 2 ** $count;

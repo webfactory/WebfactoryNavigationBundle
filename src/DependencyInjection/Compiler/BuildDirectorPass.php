@@ -15,7 +15,7 @@ use Webfactory\Bundle\NavigationBundle\Build\BuildDispatcher;
 
 class BuildDirectorPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasDefinition(BuildDispatcher::class)) {
             return;

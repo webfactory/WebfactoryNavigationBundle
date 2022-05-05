@@ -34,7 +34,7 @@ class Node implements \ArrayAccess
      *
      * @return Node returns the given or newly created node, for use in fluent notations
      */
-    public function addChild(self $n = null)
+    public function addChild(self $n = null): self
     {
         if (null === $n) {
             $n = new self();
@@ -47,12 +47,12 @@ class Node implements \ArrayAccess
         return $n;
     }
 
-    public function setTree(Tree $t)
+    public function setTree(Tree $t): void
     {
         $this->tree = $t;
     }
 
-    public function getTree()
+    public function getTree(): Tree
     {
         return $this->tree;
     }
@@ -64,7 +64,7 @@ class Node implements \ArrayAccess
      *
      * @return $this the node itself, for use in fluent notations
      */
-    public function index(array $requirements)
+    public function index(array $requirements): self
     {
         $this->tree->addFindIndex($this, $requirements);
 
@@ -72,7 +72,7 @@ class Node implements \ArrayAccess
     }
 
     /** @deprecated */
-    public function activateOn(array $requirements)
+    public function activateOn(array $requirements): self
     {
         return $this->index($requirements);
     }
@@ -85,7 +85,7 @@ class Node implements \ArrayAccess
      *
      * @return $this the node itself, for use in fluent notations
      */
-    public function set($name, $value)
+    public function set($name, $value): self
     {
         $this->data[$name] = $value;
 
@@ -99,25 +99,20 @@ class Node implements \ArrayAccess
      *
      * @return mixed|null the value, or null if the $name is unknown
      */
-    public function get($name)
+    public function get(string $name)
     {
         return isset($this->data[$name]) ? $this->data[$name] : null;
     }
 
     /**
      * Returns all data stored in this node.
-     *
-     * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
 
-    /**
-     * @return Node|null returns the parent node
-     */
-    public function getParent()
+    public function getParent(): ?self
     {
         return $this->parent;
     }
@@ -125,7 +120,7 @@ class Node implements \ArrayAccess
     /**
      * @return Node[] the array of all Nodes from the root towards this node
      */
-    public function getPath()
+    public function getPath(): array
     {
         if (null === $this->parent) {
             return [$this];
@@ -140,7 +135,7 @@ class Node implements \ArrayAccess
     /**
      * @return Node[] returns all child nodes
      */
-    public function getChildren()
+    public function getChildren(): array
     {
         return $this->children;
     }
@@ -148,7 +143,7 @@ class Node implements \ArrayAccess
     /**
      * @return bool whether the node has child nodes or not
      */
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         return (bool) $this->children;
     }
@@ -156,7 +151,7 @@ class Node implements \ArrayAccess
     /**
      * @return bool whether the node has visible child nodes or not
      */
-    public function hasVisibleChildren()
+    public function hasVisibleChildren(): bool
     {
         foreach ($this->children as $childNode) {
             if (true === $childNode->get('visible')) {
@@ -172,7 +167,7 @@ class Node implements \ArrayAccess
      *
      * @return bool true if the given node is an ancestor of the current node
      */
-    public function hasAncestor(self $ancestor)
+    public function hasAncestor(self $ancestor): bool
     {
         return $this->parent && (($this->parent === $ancestor) || $this->parent->hasAncestor($ancestor));
     }
@@ -182,7 +177,7 @@ class Node implements \ArrayAccess
      *
      * @return bool true if $descendant is a descendant of the current node
      */
-    public function hasDescendant(self $descendant)
+    public function hasDescendant(self $descendant): bool
     {
         return $descendant->hasAncestor($this);
     }
@@ -190,7 +185,7 @@ class Node implements \ArrayAccess
     /**
      * @return int returns the level of this node, with "0" being the root level
      */
-    public function getLevel()
+    public function getLevel(): int
     {
         if ($this->parent) {
             return $this->parent->getLevel() + 1;
@@ -204,7 +199,7 @@ class Node implements \ArrayAccess
      *
      * @return $this the node itself, for use in fluent notations
      */
-    public function setActive()
+    public function setActive(): self
     {
         $this->tree->setActiveNode($this);
 
@@ -225,7 +220,7 @@ class Node implements \ArrayAccess
      *
      * @return $this the node itself, for use in fluent notations
      */
-    public function setActivePath()
+    public function setActivePath(): self
     {
         $this->tree->setActivePath($this);
 
@@ -235,7 +230,7 @@ class Node implements \ArrayAccess
     /**
      * @return bool whether this is the currently active node in the tree
      */
-    public function isActiveNode()
+    public function isActiveNode(): bool
     {
         return $this->tree->getActiveNode() === $this;
     }
@@ -243,7 +238,7 @@ class Node implements \ArrayAccess
     /**
      * @return bool whether this node lies on the path from the Tree root towards the active node
      */
-    public function isActivePath()
+    public function isActivePath(): bool
     {
         if (!($ap = $this->tree->getActivePath())) {
             return false;
@@ -252,29 +247,43 @@ class Node implements \ArrayAccess
         return $this === $ap || $this->hasDescendant($ap);
     }
 
-    public function offsetExists($offset)
+    /**
+     * @param mixed $offset
+     */
+    public function offsetExists($offset): bool
     {
         return isset($this->data[$offset]);
     }
 
+    /**
+     * @param mixed $offset
+     *
+     * @return mixed|null
+     */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->get($offset);
     }
 
-    public function offsetSet($offset, $value)
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value): void
     {
-        return $this->set($offset, $value);
+        $this->set($offset, $value);
     }
 
-    public function offsetUnset($offset)
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);
-
-        return $this;
     }
 
-    protected function setParent(self $p)
+    protected function setParent(self $p): void
     {
         $this->parent = $p;
     }
