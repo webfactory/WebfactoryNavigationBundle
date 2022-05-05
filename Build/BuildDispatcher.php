@@ -17,12 +17,12 @@ class BuildDispatcher
     protected $resources = [];
     protected $queue;
 
-    public function addDirector(BuildDirector $director, $priority = 100)
+    public function addDirector(BuildDirector $director, $priority = 100): void
     {
         $this->directors[$priority][] = $director;
     }
 
-    public function start(Tree $tree)
+    public function start(Tree $tree): void
     {
         $directorsOrderedByPriority = $this->getDirectorsOrderedByPriority();
         $this->queue = [new BuildContext([])];
@@ -33,17 +33,17 @@ class BuildDispatcher
         }
     }
 
-    public function search(BuildContext $context)
+    public function search(BuildContext $context): void
     {
         $this->queue[] = $context;
     }
 
-    public function addResource(ResourceInterface $resource)
+    public function addResource(ResourceInterface $resource): void
     {
         $this->resources[] = $resource;
     }
 
-    public function getResources()
+    public function getResources(): array
     {
         return array_unique($this->resources);
     }
@@ -51,7 +51,7 @@ class BuildDispatcher
     /**
      * @return BuildDirector[]
      */
-    private function getDirectorsOrderedByPriority()
+    private function getDirectorsOrderedByPriority(): array
     {
         krsort($this->directors, SORT_NUMERIC);
         $buildDirectorsOrderedByPriority = [];
