@@ -25,20 +25,16 @@ class BuildContext
 
     /**
      * @param array<string, mixed> $params
-     *
-     * @return BuildContext
      */
-    public function change(array $params)
+    public function change(array $params): BuildContext
     {
         return new self(array_merge($this->params, $params));
     }
 
     /**
-     * @param string $name
-     *
      * @return mixed|null
      */
-    public function get($name)
+    public function get(string $name)
     {
         return isset($this->params[$name]) ? $this->params[$name] : null;
     }

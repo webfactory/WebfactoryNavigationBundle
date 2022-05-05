@@ -64,19 +64,14 @@ class TreeFactory implements ServiceSubscriberInterface
         $this->stopwatch = $stopwatch;
     }
 
-    public function debug($msg)
+    public function debug($msg): void
     {
         if ($this->logger) {
             $this->logger->debug("$msg (PID ".getmypid().', microtime '.microtime().')');
         }
     }
 
-    /**
-     * @param $sectionName
-     *
-     * @return StopwatchEvent|null
-     */
-    protected function startTiming($sectionName)
+    protected function startTiming(string $sectionName): ?StopwatchEvent
     {
         if ($this->stopwatch) {
             return $this->stopwatch->start('webfactory/navigation-bundle: '.$sectionName);
@@ -85,17 +80,14 @@ class TreeFactory implements ServiceSubscriberInterface
         return null;
     }
 
-    protected function stopTiming(StopwatchEvent $watch = null)
+    protected function stopTiming(StopwatchEvent $watch = null): void
     {
         if ($watch) {
             $watch->stop();
         }
     }
 
-    /**
-     * @return Tree
-     */
-    public function getTree()
+    public function getTree(): Tree
     {
         if (!$this->_tree) {
             $self = $this;
@@ -124,7 +116,7 @@ class TreeFactory implements ServiceSubscriberInterface
         return $this->_tree;
     }
 
-    public function buildTreeCache(ConfigCacheInterface $cache)
+    public function buildTreeCache(ConfigCacheInterface $cache): void
     {
         $this->_tree = new Tree();
         // Dynamic (runtime) lookup:
