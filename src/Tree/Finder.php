@@ -72,8 +72,10 @@ class Finder
             }
         }
 
-        if (null !== $bestId) {
-            return $this->objects[$this->idToHash[$bestId]];
+        if (null === $bestId) {
+            return null;
         }
+
+        return $this->objects[$this->idToHash[$bestId]];
     }
 }
