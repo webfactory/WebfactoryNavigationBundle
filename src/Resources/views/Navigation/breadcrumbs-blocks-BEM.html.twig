@@ -10,7 +10,7 @@
             {% block breadcrumbs_label %}
                 <span class="{{ block('prefix_final') ~ 'breadcrumbs__label' }} {% block breadcrumbs_label_class %}{% endblock %}">{{ "webfactory_navigation.breadcrumb_label"|trans({}, 'webfactory-navigation') }}</span>
             {% endblock %}
-            <ul class="{{ block('prefix_final') ~ 'breadcrumbs__list' }} {% block breadcrumbs_list_class %}{% endblock %}">
+            <ol class="{{ block('prefix_final') ~ 'breadcrumbs__list' }} {% block breadcrumbs_list_class %}{% endblock %}">
                 {% for node in breadcrumbs %}
                     {% if node.caption|trim is not empty and ((node.breadcrumbsVisible is defined and node.breadcrumbsVisible) or node.visible) %}
                         <li class="{{ block('prefix_final') ~ 'breadcrumbs__item' }} {% block breadcrumbs_item_class %}{% endblock %}">
@@ -24,7 +24,7 @@
                         </li>
                     {% endif %}
                 {% endfor %}
-            </ul>
+            </ol>
         </nav>
     {% endif %}
 {% endblock %}

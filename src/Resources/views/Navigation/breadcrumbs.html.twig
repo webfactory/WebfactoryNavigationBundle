@@ -1,7 +1,7 @@
 {% if breadcrumbs is defined and breadcrumbs|length > 1 %}
     <div class="breadcrumb-wrapper">
         <span class="breadcrumb-label">{{ "webfactory_navigation.breadcrumb_label"|trans({}, 'webfactory-navigation') }}</span>
-        <ul class="breadcrumbs">
+        <ol class="breadcrumbs">
             {% for node in breadcrumbs %}
                 {% if node.caption|trim is not empty and ((node.breadcrumbsVisible is defined and node.breadcrumbsVisible) or node.visible) %}
                     <li class="breadcrumb {% if loop.first %}breadcrumb-first{% endif %}">
@@ -13,6 +13,6 @@
                     </li>
                 {% endif %}
             {% endfor %}
-        </ul>
+        </ol>
     </div>
 {% endif %}
