@@ -1,7 +1,7 @@
 {% block prefix %}{% endblock %}
 {% block prefix_separator %}-{% endblock %}
 {%- block prefix_final -%}
- {{ block('prefix') is not empty ? block('prefix') ~ block('prefix_separator') }}
+    {{ block('prefix') is not empty ? block('prefix') ~ block('prefix_separator') }}
 {%- endblock -%}
 
 {% block breadcrumbs %}
@@ -15,7 +15,7 @@
                     {% if node.caption|trim is not empty and ((node.breadcrumbsVisible is defined and node.breadcrumbsVisible) or node.visible) %}
                         <li class="{{ block('prefix_final') ~ 'breadcrumbs__item' }} {% block breadcrumbs_item_class %}{% endblock %}">
                             <a class="{{ block('prefix_final') ~ 'breadcrumbs__link' }} {% block breadcrumbs_link_class %}{% endblock %}"
-                               href="{{ node.url }}" {% if node.activeNode -%}aria-current="page"{%- endif  -%}>
+                               href="{{ node.url }}" {% if node.activeNode -%}aria-current="page"{%- endif -%}>
 
                                 {%- block breadcrumbs_caption -%}
                                     <span class="{{ block('prefix_final') }}breadcrumbs__text {% block breadcrumbs_text_class %}{% endblock %}">{{ node.caption }}</span>
