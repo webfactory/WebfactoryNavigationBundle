@@ -28,7 +28,7 @@
 {# visibleNodes \Webfactory\Bundle\NavigationBundle\Tree\Node[] #}
 {# level int #}
 {%- block navigation_list -%}
-    <ul class="{{ block('navigation_list_class') }}">
+    <ul class="{{ block('navigation_list_class') }}" role="list">
         {% for node in visibleNodes %}
             {{ block('navigation_item') }}
         {% endfor %}
