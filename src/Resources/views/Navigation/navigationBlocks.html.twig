@@ -3,6 +3,9 @@
 {# maxLevels int #}
 {# expandedLevels int #}
 {% block navigation_if_visible %}
+    {% set maxLevels = maxLevels | default(1) %}
+    {% set expandedLevels = expandedLevels | default(1) %}
+    {% set level = level | default(0) %}
     {% if level < maxLevels and (level < expandedLevels or root.activePath) %}
         {% set visibleNodes = root.children | filter(node => node.visible) %}
         {% if visibleNodes is not empty %}
