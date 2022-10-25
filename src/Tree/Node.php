@@ -163,8 +163,6 @@ class Node implements \ArrayAccess
     }
 
     /**
-     * @param Node $ancestor
-     *
      * @return bool true if the given node is an ancestor of the current node
      */
     public function hasAncestor(self $ancestor): bool
@@ -173,8 +171,6 @@ class Node implements \ArrayAccess
     }
 
     /**
-     * @param Node $descendant
-     *
      * @return bool true if $descendant is a descendant of the current node
      */
     public function hasDescendant(self $descendant): bool
