@@ -23,41 +23,23 @@ Changelog
 
 ## Version 4.0
 
+### Features
+
 * Kompatibilität zu Twig 3
-* BC-Breaks:
-  * Entfallener Twig-Tag: `navigation_theme` (z.B. `{% navigation_theme root "AppBundle:Navigation:navigation.html.twig" %}`).
-    Man kann im Projekt stattdessen direkt `@WebfactoryNavigation/Navigation/navigation.html.twig` extenden und
-    blockweise überschreiben. Beispiel:
-      
-    ```
-    {# Datei: src/AppBundle/Resources/views/Navigation/navigation.html.twig #}
-    
-    {% extends "@WebfactoryNavigation/Navigation/navigation.html.twig" %}
-        
-    {% block navigation_list %}
-      <nav class="projektspezifische-wrapperklasse">
-        {{ parent() }}
-      </nav>
-    {% endblock %}
-    
-    {%- block navigation_caption -%}
-        {{ node.caption |upper }}
-    {%- endblock -%}
-    ```
+* Mit Version 4 entfernen wir das `navigation_theme`-Eigengebräu und ersetzen es durch Standard-Twig-Mechanismen:
+  * Die separaten Theme-Dateien (z.B. `main-nav-theme.html.twig` neben einer weiterhin bestehenden
+    `main-nav-layout.html.twig`) entfallen.
+  * Das Styling von Menüs ist künftig/für neue Mitarbeiter leichter verständlich.
+  * Im Projekt definierte Blöcke können oftmals entfallen, die wir schon im NavigationBundle bereitstellen - und dort zentral
+    weiterentwickeln können.
 
-  * Entfallene Twig-Funktionen: `navigation_list`, `navigation_list_class`, `navigation_item`, `navigation_item_class`,
-    `navigation_text`, `navigation_text_class`, `navigation_url`, `navigation_caption`. Aufrufe dieser
-    Wrapper-Funktionen wie z.B. `{{ navigation_caption(themeRoot, node, level) }}` durch
-    `{{ block('navigation_caption') }}` (ohne Parameter) ersetzen.
-     
-     Ersatzlos entfallen: `navigation`.
-
-  * Entfallene Services: `webfactory_navigation.twig_theme_extension`, `Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension`
-    (waren vermutlich nur intern genutzt).
-
-  * Entfallender Controller: NavigationController. Aufrufe wie folgt ersetzen:
-  
-    Alt:
+### Vorschlag für Vorgehensweise
+* `composer update webfactory/navigation-bundle` auf `^4.0`
+* Alle Navigation-Aufrufe in Twig erstmal auskommentieren, damit wir sicher sind, dass die Seite lokal sonst
+  funktioniert und wir auftretende Fehler in der Benutzung des NavigationBundles suchen müssen. 
+* Dann pro auskommentiertem Navigation-Aufruf:
+  * Aufruf wieder aktivieren und für Version 4 anpassen. Der NavigationController ist entfallen, dafür gibt es jetzt
+    Twig-Funktionen. Aus:
     ```
     {{ render(
       controller(
@@ -68,14 +50,12 @@ Changelog
       )
     ) }}
     ```
-    
-    Neu:
+    wird:
     ```
     {{ navigation_tree(root = {"webfactory_pages.page_id": root_page_id}) }}
     ```
-    (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderTree)
-    
-    Alt:
+
+    Aus:
     ```
     {{ render(
       controller(
@@ -86,14 +66,12 @@ Changelog
       )
     ) }}
     ```
-    
-    Neu:
+    wird:
     ```
     {{ navigation_ancestry(startLevel = 1) }}
     ```
-    (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderAncestry)
-    
-    alt:
+
+    Und aus:
     ```
     {{ render(
       controller(
@@ -101,15 +79,64 @@ Changelog
       )
     ) }}
     ```
-    
-    neu:
-     ```
-     {{ navigation_breadcrumbs() }}`
+    wird:
     ```
-    (für weitere Parameter siehe \Webfactory\Bundle\NavigationBundle\Twig\NavigationExtension::renderBreadcrumbs)
+    {{ navigation_breadcrumbs() }}`
+    ```
 
-  * Entfallender Parameter `webfactory_navigation.default_theme.file` (war vermutlich nur intern genutzt)
+    Parameter der alten Aufrufe kannst Du übernehmen, musst dabei nur die Syntax anpassen: etwa im ersten Beispiel wird
+    `root` ein named Parameter, dessen Wert mit `=` statt `:` wie in der Object-Notation zugewiesen wird). Details zu
+    den Parametern findest Du in `NavigationExtension::renderTree`, `NavigationExtension::renderAncestry` und
+    `NavigationExtension::renderBreadcrumbs`.
+  * Falls in einer `main-nav-layout.html.twig` ein eigenes Theme verwendet wurde, sah die Datei beispielsweise so aus:
+    ```
+    {% if root is defined %}
+      {% navigation_theme root "AppBundle:Navigation:main-nav-theme.html.twig" %}
+      {{ navigation(root, maxLevels, expandedLevels) }}
+    {% endif %}
+    ```
+    und in `main-nav-theme.html.twig` waren dann Twig-Blöcke definiert. In diesem Fall solltest Du den Inhalt der
+    `main-nav-layout.html.twig` durch
+    ```
+    {% extends '@WebfactoryNavigation/Navigation/navigation.html.twig' %} 
+    ```
+    ersetzen. Wenn Du die Seite lokal aufrufst, solltest Du ein Vanilla-Navigation-Bundle-Rendering des jeweiligen Menüs
+    sehen.
+  * Kopiere dann die Blöcke aus der `main-nav-theme.html.twig` in die `main-nav-layout.html.twig` und kommentiere sie da
+    erstmal aus.
+  * Für jeden auskommentierten Block:
+    * Wenn Du den gleichen bzw. einen besseren gleichnamigen Block in `navigationBlocks.html.twig` (via
+      `@WebfactoryNavigation/Navigation/navigation.html.twig` genutzt), findest, kannst ihn aus Deiner
+      `main-nav-layout.html.twig` löschen.
+    * Wenn der Block z.B. eigene CSS-Klassen setzt, willst Du ihn wieder aktivieren und für Version 4 aktualisieren.
+      Dazu musst Du die Aufrufe der entfallenen Twig-Funktionen `navigation_list`, `navigation_list_class`, `navigation_item`,
+      `navigation_item_class`, `navigation_text`, `navigation_text_class`, `navigation_url` und `navigation_caption` durch
+      entsprechende Aufrufe der `block()`-Funktion (ohne Parameter) ersetzen:
 
+      Aus `{{ navigation_caption(themeRoot, node, level) }}` wird `{{ block('navigation_caption') }}`.
+    * Falls es dabei zu einem Fehler kommt, z.B. die Variable `nodes` nicht gefunden wurde, sollte ein Blick in die neuen
+      Blöcke in `navigationBlocks.html.twig` helfen. Dann sieht man z.B. schnell, dass jetzt die `visibleNodes` verwendet
+      werden sollten. 
+    * Nach jeder Block-Aktualisierung solltest Du die Seite lokal aufrufen können.
+  * Lösche die `main-nav-layout.html.twig`.
+  * Jetzt hast Du eine Navigation aktualisiert: guter Zeitpunkt zum Comitten.
+
+### Tipps
+* Achte darauf, dass Du lokal eine Seite aufrufst, die die zu aktualisierende Navigation auch rendert. Beispielsweise
+  haben Startseiten nicht immer eine Breadcrumb-Navigation. Passende Seiten kann man i.d.R. auf der Live-Seite suchen.
+* Wenn Dir die aktualisierten Navigationen visuell falsch vorkommen, kannst Du Dich dem Fehler möglicherweise schnell
+  über ein Diff des Production- und lokalen HTMLs annähern. 
+* Mit Version 4.1 (s.o.) wurden BEM-Templates eingeführt. Du kannst via `{% extends '@WebfactoryNavigation/Navigation/navigation-BEM.html.twig' %}`
+  die Blöcke aus `navigation-blocks-BEM.html.twig` zu nutzen, bzw. via `breadcrumbs-BEM.html.twig` die aus `breadcrumbs-blocks-BEM.html.twig`. 
+ 
+### BC-Breaks
+* Entfallener Twig-Tag: `navigation_theme`
+* Entfallene Twig-Funktionen: `navigation_list`, `navigation_list_class`, `navigation_item`, `navigation_item_class`,
+  `navigation_text`, `navigation_text_class`, `navigation_url`, `navigation_caption`
+* Ersatzlos entfallene Twig-Funktion: `navigation`.
+* Entfallene Services: `webfactory_navigation.twig_theme_extension`, `Webfactory\Bundle\NavigationBundle\Twig\NavigationThemeExtension`
+  (waren vermutlich nur intern genutzt).
+* Entfallender Parameter `webfactory_navigation.default_theme.file` (war vermutlich nur intern genutzt)
 
 ## Version 3.1.0
 
