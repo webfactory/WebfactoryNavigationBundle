@@ -81,7 +81,7 @@ Changelog
     ```
     wird:
     ```
-    {{ navigation_breadcrumbs() }}`
+    {{ navigation_breadcrumbs() }}
     ```
 
     Die Parameter der alten Aufrufe kannst Du übernehmen, dabei musst Du nur die Syntax anpassen: etwa im ersten Beispiel wird
