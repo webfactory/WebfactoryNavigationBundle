@@ -12,6 +12,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\ConfigCacheFactoryInterface;
 use Symfony\Component\Config\ConfigCacheInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -24,6 +25,7 @@ final class TreeFactory implements ServiceSubscriberInterface
     /** @var ConfigCacheFactoryInterface */
     private $configCacheFactory;
 
+    /** @var string */
     private $cacheFile;
 
     /** @var LoggerInterface */
@@ -50,14 +52,15 @@ final class TreeFactory implements ServiceSubscriberInterface
 
     public function __construct(
         ConfigCacheFactoryInterface $configCacheFactory,
-        $cacheFile,
+        string $kernelCacheDirectory,
+        RequestStack $requestStack,
         ContainerInterface $container,
         EventDispatcherInterface $eventDispatcher = null,
         LoggerInterface $logger = null,
         Stopwatch $stopwatch = null
     ) {
         $this->configCacheFactory = $configCacheFactory;
-        $this->cacheFile = $cacheFile;
+        $this->cacheFile = $this->getCacheFile($kernelCacheDirectory, $requestStack);
         $this->container = $container;
         $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
@@ -124,5 +127,17 @@ final class TreeFactory implements ServiceSubscriberInterface
         $dispatcher->start($this->_tree);
         $cache->write("<?php return unserialize(<<<EOD\n".serialize($this->_tree)."\nEOD\n);",
             $dispatcher->getResources());
+    }
+
+    private function getCacheFile(string $kernelCacheDirectory, RequestStack $requestStack): string
+    {
+        $cacheDirectory = $kernelCacheDirectory.'/webfactory_navigation_tree/';
+
+        $mainRequest = $requestStack->getMainRequest();
+        if (null !== $mainRequest) {
+            $cacheDirectory .= $mainRequest->getHttpHost().'/';
+        }
+
+        return $cacheDirectory . 'tree.php';
     }
 }
