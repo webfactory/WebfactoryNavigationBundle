@@ -19,7 +19,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Webfactory\Bundle\NavigationBundle\Event\TreeInitializedEvent;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
-class TreeFactory implements ServiceSubscriberInterface
+final class TreeFactory implements ServiceSubscriberInterface
 {
     /** @var ConfigCacheFactoryInterface */
     private $configCacheFactory;
@@ -27,19 +27,19 @@ class TreeFactory implements ServiceSubscriberInterface
     private $cacheFile;
 
     /** @var LoggerInterface */
-    protected $logger;
+    private $logger;
 
     /** @var Tree */
-    protected $_tree;
+    private $_tree;
 
     /** @var Stopwatch */
-    protected $stopwatch;
+    private $stopwatch;
 
     /** @var EventDispatcherInterface */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /** @var ContainerInterface */
-    protected $container;
+    private $container;
 
     public static function getSubscribedServices(): array
     {
@@ -71,7 +71,7 @@ class TreeFactory implements ServiceSubscriberInterface
         }
     }
 
-    protected function startTiming(string $sectionName): ?StopwatchEvent
+    private function startTiming(string $sectionName): ?StopwatchEvent
     {
         if ($this->stopwatch) {
             return $this->stopwatch->start('webfactory/navigation-bundle: '.$sectionName);
@@ -80,7 +80,7 @@ class TreeFactory implements ServiceSubscriberInterface
         return null;
     }
 
-    protected function stopTiming(StopwatchEvent $watch = null): void
+    private function stopTiming(StopwatchEvent $watch = null): void
     {
         if ($watch) {
             $watch->stop();
