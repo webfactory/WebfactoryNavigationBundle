@@ -20,7 +20,10 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Webfactory\Bundle\NavigationBundle\Event\TreeInitializedEvent;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
-final class TreeFactory implements ServiceSubscriberInterface
+/**
+ * @final (not actually declared final to allow it being used as a lazy service)
+ */
+class TreeFactory implements ServiceSubscriberInterface
 {
     /** @var ConfigCacheFactoryInterface */
     private $configCacheFactory;
@@ -138,6 +141,6 @@ final class TreeFactory implements ServiceSubscriberInterface
             $cacheDirectory .= $mainRequest->getHttpHost().'/';
         }
 
-        return $cacheDirectory.'tree.php';
+        return $cacheDirectory . 'tree.php';
     }
 }
