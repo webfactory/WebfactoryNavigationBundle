@@ -11,7 +11,8 @@
 
         <service id="Webfactory\Bundle\NavigationBundle\Build\TreeFactory" lazy="true">
             <argument type="service" id="config_cache_factory" />
-            <argument>%kernel.cache_dir%/webfactory_navigation/tree.php</argument>
+            <argument>%kernel.cache_dir%</argument>
+            <argument type="service" id="Symfony\Component\HttpFoundation\RequestStack"/>
             <argument type="service" id="Psr\Container\ContainerInterface"/>
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="logger" on-invalid="null"/>

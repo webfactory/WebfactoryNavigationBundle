@@ -12,6 +12,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\ConfigCacheFactoryInterface;
 use Symfony\Component\Config\ConfigCacheInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -19,27 +20,31 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Webfactory\Bundle\NavigationBundle\Event\TreeInitializedEvent;
 use Webfactory\Bundle\NavigationBundle\Tree\Tree;
 
+/**
+ * @final (not actually declared final to allow it being used as a lazy service)
+ */
 class TreeFactory implements ServiceSubscriberInterface
 {
     /** @var ConfigCacheFactoryInterface */
     private $configCacheFactory;
 
+    /** @var string */
     private $cacheFile;
 
     /** @var LoggerInterface */
-    protected $logger;
+    private $logger;
 
     /** @var Tree */
-    protected $_tree;
+    private $_tree;
 
     /** @var Stopwatch */
-    protected $stopwatch;
+    private $stopwatch;
 
     /** @var EventDispatcherInterface */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /** @var ContainerInterface */
-    protected $container;
+    private $container;
 
     public static function getSubscribedServices(): array
     {
@@ -50,14 +55,15 @@ class TreeFactory implements ServiceSubscriberInterface
 
     public function __construct(
         ConfigCacheFactoryInterface $configCacheFactory,
-        $cacheFile,
+        string $kernelCacheDirectory,
+        RequestStack $requestStack,
         ContainerInterface $container,
         EventDispatcherInterface $eventDispatcher = null,
         LoggerInterface $logger = null,
         Stopwatch $stopwatch = null
     ) {
         $this->configCacheFactory = $configCacheFactory;
-        $this->cacheFile = $cacheFile;
+        $this->cacheFile = $this->getCacheFile($kernelCacheDirectory, $requestStack);
         $this->container = $container;
         $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
@@ -71,7 +77,7 @@ class TreeFactory implements ServiceSubscriberInterface
         }
     }
 
-    protected function startTiming(string $sectionName): ?StopwatchEvent
+    private function startTiming(string $sectionName): ?StopwatchEvent
     {
         if ($this->stopwatch) {
             return $this->stopwatch->start('webfactory/navigation-bundle: '.$sectionName);
@@ -80,7 +86,7 @@ class TreeFactory implements ServiceSubscriberInterface
         return null;
     }
 
-    protected function stopTiming(StopwatchEvent $watch = null): void
+    private function stopTiming(StopwatchEvent $watch = null): void
     {
         if ($watch) {
             $watch->stop();
@@ -124,5 +130,17 @@ class TreeFactory implements ServiceSubscriberInterface
         $dispatcher->start($this->_tree);
         $cache->write("<?php return unserialize(<<<EOD\n".serialize($this->_tree)."\nEOD\n);",
             $dispatcher->getResources());
+    }
+
+    private function getCacheFile(string $kernelCacheDirectory, RequestStack $requestStack): string
+    {
+        $cacheDirectory = $kernelCacheDirectory.'/webfactory_navigation_tree/';
+
+        $mainRequest = $requestStack->getMainRequest();
+        if (null !== $mainRequest) {
+            $cacheDirectory .= $mainRequest->getHttpHost().'/';
+        }
+
+        return $cacheDirectory.'tree.php';
     }
 }
