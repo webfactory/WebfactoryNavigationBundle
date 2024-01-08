@@ -141,6 +141,6 @@ class TreeFactory implements ServiceSubscriberInterface
             $cacheDirectory .= $mainRequest->getHttpHost().'/';
         }
 
-        return $cacheDirectory . 'tree.php';
+        return $cacheDirectory.'tree.php';
     }
 }
