@@ -177,7 +177,7 @@ class NavigationExtension extends AbstractExtension implements ServiceSubscriber
         $members = 2 ** $count;
         $powerSet = [];
         for ($i = 0; $i < $members; ++$i) {
-            $b = sprintf('%0'.$count.'b', $i);
+            $b = \sprintf('%0'.$count.'b', $i);
             $out = [];
             for ($j = 0; $j < $count; ++$j) {
                 if ('1' == $b[$j]) {

@@ -18,7 +18,7 @@ class Node implements \ArrayAccess
     /**
      * @var Node|null
      */
-    protected $parent = null;
+    protected $parent;
 
     protected $data = ['visible' => false, 'breadcrumbsVisible' => true, 'url' => false, 'caption' => ''];
 
@@ -34,7 +34,7 @@ class Node implements \ArrayAccess
      *
      * @return Node returns the given or newly created node, for use in fluent notations
      */
-    public function addChild(self $n = null): self
+    public function addChild(?self $n = null): self
     {
         if (null === $n) {
             $n = new self();
@@ -243,17 +243,12 @@ class Node implements \ArrayAccess
         return $this === $ap || $this->hasDescendant($ap);
     }
 
-    /**
-     * @param mixed $offset
-     */
     public function offsetExists($offset): bool
     {
         return isset($this->data[$offset]);
     }
 
     /**
-     * @param mixed $offset
-     *
      * @return mixed|null
      */
     #[\ReturnTypeWillChange]
@@ -262,18 +257,11 @@ class Node implements \ArrayAccess
         return $this->get($offset);
     }
 
-    /**
-     * @param mixed $offset
-     * @param mixed $value
-     */
     public function offsetSet($offset, $value): void
     {
         $this->set($offset, $value);
     }
 
-    /**
-     * @param mixed $offset
-     */
     public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);
