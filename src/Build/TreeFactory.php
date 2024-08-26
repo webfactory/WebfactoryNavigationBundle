@@ -52,9 +52,9 @@ class TreeFactory implements ServiceSubscriberInterface
         ConfigCacheFactoryInterface $configCacheFactory,
         $cacheFile,
         ContainerInterface $container,
-        EventDispatcherInterface $eventDispatcher = null,
-        LoggerInterface $logger = null,
-        Stopwatch $stopwatch = null
+        ?EventDispatcherInterface $eventDispatcher = null,
+        ?LoggerInterface $logger = null,
+        ?Stopwatch $stopwatch = null
     ) {
         $this->configCacheFactory = $configCacheFactory;
         $this->cacheFile = $cacheFile;
@@ -80,7 +80,7 @@ class TreeFactory implements ServiceSubscriberInterface
         return null;
     }
 
-    protected function stopTiming(StopwatchEvent $watch = null): void
+    protected function stopTiming(?StopwatchEvent $watch = null): void
     {
         if ($watch) {
             $watch->stop();

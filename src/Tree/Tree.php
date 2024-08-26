@@ -19,7 +19,7 @@ class Tree
      *
      * @var Node|null
      */
-    protected $activeNode = null;
+    protected $activeNode;
 
     /**
      * The "closest to active" node in this tree.
@@ -30,14 +30,14 @@ class Tree
      *
      * @var ?Node
      */
-    protected $activePath = null;
+    protected $activePath;
 
     public function __construct()
     {
         $this->finder = new Finder();
     }
 
-    public function addRoot(Node $r = null): Node
+    public function addRoot(?Node $r = null): Node
     {
         if (null === $r) {
             $r = new Node();
