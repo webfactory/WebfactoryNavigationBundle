@@ -11,7 +11,7 @@ class DumpTreeCommand extends TreeCommand
 {
     private $shortOutput = false;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('webfactory:navigation:dump-tree')
